@@ -27,6 +27,9 @@ function frontmatter(post)
     println(io, "rss = \"", post.rss, "\"")
     println(io, "tags = ", post.tags)
     println(io, "+++")
+    println(io, "# Table of Contents")
+    println(io, "\\toc")
+    println(io, "")
     String(take!(io))
 end
 

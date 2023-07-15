@@ -187,8 +187,15 @@ td {
 }
 
 .franklin-content a {
-  color: #004de6;
   text-decoration: none;
+  color: black;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.franklin-content a:hover {
+    color: grey;
 }
 
 .franklin-content a:hover {

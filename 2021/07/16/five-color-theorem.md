@@ -5,6 +5,9 @@ hascode = true
 rss = "The Five Color Theorem asserts that no planar graphs are 5-colorable."
 tags = ["math"]
 +++
+# Table of Contents
+\toc
+
 # Theorem
 
 For every [planar graph](planar_graph.md.html), there exists a coloring of its vertices using

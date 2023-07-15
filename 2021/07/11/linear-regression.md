@@ -5,6 +5,9 @@ hascode = true
 rss = ""
 tags = ["math"]
 +++
+# Table of Contents
+\toc
+
 # Theory
 
 We are trying to find the line of best fit given a collection of coordinates. 
