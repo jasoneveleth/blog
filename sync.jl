@@ -80,8 +80,11 @@ function copy_files!(data::Vector{Tuple{String, String, String}})
 
         make_space!(dest)
         outfile = open(dest, "w")
-        write(outfile, frontmatter)
-        write(outfile, processed)
+
+        print(outfile, frontmatter)
+        print(outfile, processed)
+        println(outfile, "{{ addcomments }}")
+
         close(outfile)
         println("written ", dest)
     end
