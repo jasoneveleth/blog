@@ -3,6 +3,10 @@
 
 # How to use Franklin
 
+- [5 color theorem](/2021/07/16/five-color-theorem)
+- [linear regression](2021/07/11/linear-regression)
+- [pick's theorem](/2021/09/03/picks-theorem)
+
 \tableofcontents <!-- you can use \toc as well -->
 
 This section is meant as a refresher if you're new to Franklin.
