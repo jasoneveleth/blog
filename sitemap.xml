@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>https://tlienart.github.io/FranklinTemplates.jl/menu1/index.html</loc>
-    <lastmod>2023-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://tlienart.github.io/FranklinTemplates.jl/menu3/index.html</loc>
-    <lastmod>2023-07-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://tlienart.github.io/FranklinTemplates.jl/index.html</loc>
     <lastmod>2023-07-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://tlienart.github.io/FranklinTemplates.jl/menu2/index.html</loc>
+    <loc>https://tlienart.github.io/FranklinTemplates.jl/2021/07/11/linear-regression/index.html</loc>
+    <lastmod>2023-07-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://tlienart.github.io/FranklinTemplates.jl/2021/09/03/picks-theorem/index.html</loc>
+    <lastmod>2023-07-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://tlienart.github.io/FranklinTemplates.jl/2021/07/16/five-color-theorem/index.html</loc>
     <lastmod>2023-07-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
