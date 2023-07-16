@@ -1,12 +1,17 @@
 +++
 title = "Linear Regression"
-date = Date(2021, 7, 11)
-hascode = true
+date = Date("2021/07/11", "yyyy/mm/dd")
 rss = ""
 tags = ["math"]
 +++
-# Table of Contents
+~~~
+<details>
+<summary>Table of Contents</summary>
+~~~
 \toc
+~~~
+</details>
+~~~
 
 # Theory
 
@@ -44,20 +49,20 @@ To minimize this, we find the critical points of the function. We do this by fin
 the derivative of $L$ with respect to $\alpha$ is $0$.
 
 $$
-\begin{align}
+\begin{align*}
 0 &= L'(\alpha)\\
 &= D (y^Ty - \alpha^TX^Ty - y^TX\alpha + \alpha^TX^TX\alpha)\\
 &=D (y^Ty) - D (\alpha^TX^Ty) - D (y^TX\alpha) + D (\alpha^TX^TX\alpha)\\
-\end{align}$$
+\end{align*}$$
 Apply fun fact #4:
 $$
-\begin{align}
+\begin{align*}
 &= 0 - (X^Ty)^T - y^TX + D (\alpha^TX^TX\bar{\alpha}) + D (\bar{\alpha}^TX^TX\alpha)\\
 &= -y^TX - y^TX + (X^TX\alpha)^T + \alpha^TX^TX\\
 &=-2y^TX + \alpha^T(X^TX)^T + \alpha^TX^TX\\
 &=-2y^TX + \alpha^TX^TX + \alpha^TX^TX\\
 &=-2y^TX + 2\alpha^TX^TX\\
-\end{align}
+\end{align*}
 $$
 
 And now for the glorious part (who am I kidding, this whole thing has been
@@ -84,5 +89,6 @@ Which gives us our desired line of best fit: $y = 0.962823x + 0.122874$.
 
 
 [^1]: The bar in $\bar{\alpha}$ or $\bar{x}$ means treat it as a constant, in the same way, that you would if you were doing the product rule with single-valued functions: $D(f(x)g(x)) = D(f(x)\bar{g}(x)) + D(\bar{f}(x) g(x)) = (Df(x))g(x) + (Dg(x))f(x)$.
+
 
 {{ addcomments }}

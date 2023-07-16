@@ -1,12 +1,17 @@
 +++
 title = "Pick's Theorem"
-date = Date(2021, 9, 3)
-hascode = true
+date = Date("2021/09/03", "yyyy/mm/dd")
 rss = "Pick's Theorem is a formula for the area of a closed polygon with integer vertices."
 tags = ["math"]
 +++
-# Table of Contents
+~~~
+<details>
+<summary>Table of Contents</summary>
+~~~
 \toc
+~~~
+</details>
+~~~
 
 # Theorem
 
@@ -41,5 +46,6 @@ the area remains the same, so all triangles that are just sheared versions of ea
 other have area $\frac{1}{2}$. 
 
 ## Inductive Step
+
 
 {{ addcomments }}

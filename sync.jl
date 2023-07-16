@@ -18,22 +18,25 @@ const posts = [
 const notes_dir = "/users/jason/.root/notes/"
 
 function frontmatter(post)
-    io = IOBuffer()
-    println(io, "+++")
-    println(io, "title = \"", post.title, "\"")
-    date = map(x -> parse(Int64, x), split(post.date, "/"))
-    println(io, "date = Date(", join(date, ", "), ")")
-    println(io, "hascode = true")
-    println(io, "rss = \"", post.rss, "\"")
-    println(io, "tags = ", post.tags)
-    println(io, "+++")
-    println(io, "# Table of Contents")
-    println(io, "\\toc")
-    println(io, "")
-    String(take!(io))
+    """+++
+    title = "$(post.title)"
+    date = Date("$(post.date)", "yyyy/mm/dd")
+    rss = "$(post.rss)"
+    tags = $(post.tags)
+    +++
+    ~~~
+    <details>
+    <summary>Table of Contents</summary>
+    ~~~
+    \\toc
+    ~~~
+    </details>
+    ~~~
+    """
 end
 
 function remove_existing!()
+    # all years are 20xx
     existing_folders = filter(x -> x[1:2] == "20", readdir("."))
     if length(existing_folders) == 0
         return
@@ -51,7 +54,7 @@ function remove_existing!()
     end
 end
 
-function construct_data(posts_list)::Vector{Tuple{String, String, String}}
+function filepaths_and_frontmatter(posts_list)::Vector{Tuple{String, String, String}}
     ret = []
     for p in posts_list
         src = notes_dir * p.name * ".md"
@@ -70,36 +73,39 @@ function make_space!(file_path)
     mkpath(directory_path)
 end
 
+function make_contents(note_contents, frontmatter)
+    """
+    $(frontmatter)
+    $(process_file(note_contents))
+    {{ addcomments }}
+    """
+end
+
 function copy_files!(data::Vector{Tuple{String, String, String}})
     for (src, dest, frontmatter) in data
-        infile = open(src, "r")
-        contents = read(infile, String)
-        close(infile)
-
-        processed = process_file(contents)
+        newcontent = make_contents(read(src, String), frontmatter)
 
         make_space!(dest)
-        outfile = open(dest, "w")
-
-        print(outfile, frontmatter)
-        print(outfile, processed)
-        println(outfile, "{{ addcomments }}")
-
-        close(outfile)
-        println("written ", dest)
+        oldcontent = read(dest, String)
+        if cmp(oldcontent, newcontent) == 0
+            println("skipped: ", dest)
+        else
+            write(dest, newcontent)
+            println("written ", dest)
+        end
     end
 end
 
 function main()
     println("syncing...")
-    data::Vector{Tuple{String, String, String}} = construct_data(posts)
+    data = filepaths_and_frontmatter(posts)
     for (src, _, _) in data
         if !isfile(src)
             println("not found: ", src)
             return 1
         end
     end
-    remove_existing!()
+    # remove_existing!()
     copy_files!(data)
 end
 

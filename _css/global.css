@@ -77,14 +77,9 @@ table {
   border-collapse: collapse;
 }
 
-html {
-  font-family: sans-serif;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-}
-
 body {
   margin: 0;
+  font-size: 16rem;
 }
 
 article,
@@ -98,9 +93,13 @@ hgroup,
 main,
 menu,
 nav,
-section,
-summary {
+section {
   display: block;
+}
+
+summary {
+    cursor: pointer;
+    user-select: none;
 }
 
 audio,
