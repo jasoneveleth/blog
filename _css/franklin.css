@@ -113,6 +113,7 @@ html {
 .franklin-content h2 { 
     font-size: 21rem; 
     font-weight: 600;
+    color: #444;
     /* letter-spacing: -0.2rem; */
 }
 
@@ -205,7 +206,7 @@ td {
 }
 
 .franklin-content a:hover {
-    color: grey;
+    color: blue;
 }
 
 .franklin-content a:hover {

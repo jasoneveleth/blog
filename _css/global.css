@@ -14,10 +14,6 @@ a {
   text-underline-offset: 3px;
 }
 
-a:hover {
-    color: grey;
-}
-
 .logo {
     margin: 0 16px;
     position: fixed;
@@ -1215,9 +1211,9 @@ strong {
 }
 
 hr {
-  height: 0;
+  height: 1px;
   border: 0;
-  box-shadow: 0 0 5px 1px #2579c7;
+  background-color: #ccc;
 }
 
 hr::after {
