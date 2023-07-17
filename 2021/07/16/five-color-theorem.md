@@ -15,7 +15,7 @@ tags = ["math"]
 
 # Theorem
 
-For every [planar graph](planar_graph.md.html), there exists a coloring of its vertices using
+For every planar graph, there exists a coloring of its vertices using
 at most 5 colors such that no two adjacent vertices have the same color.
 
 ## Lemma: degree 5 vertex

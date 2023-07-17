@@ -12,6 +12,7 @@ tags = ["math"]
 ~~~
 </details>
 ~~~
+
 # Motivating example
 
 Let's say you're a doctor. A woman with no symptoms comes into your office, after she's tested positive for breast cancer. Let's say the prevalence of breast cancer at her age is $1$ in $100$. Imagine we have a test that is $90\%$ accurate when the person has cancer and $91\%$ accurate when they don't have cancer.
@@ -24,7 +25,7 @@ The woman is stressed out that she tested positive. She asks you, "How likely is
 
 My dad came up with a great way to think about it. Imagine a population of 1000 people and do the calculations on that. You know the prior is $1\%$, so $10$ people have cancer, and $990$ people don't. Our test is $90\%$ accurate when they have cancer, so $9$ people who have cancer test positive, $1$ person who has cancer and tests negative. Of the $990$, our test is $91\%$ accurate, so about $901$ people test negative, and about $89$ people test positive.
 
-We know the woman tested positive, she is either one of $9$ who has it, or $89$ who doesn't. $\frac{9}{9+89}\approx \frac{1}{11}$ so she is about $10\%$ likely to have cancer. That was a lot of calculation, and directly applying Bayes' rule isn't much simpler. We will create a framework for making these kinds of decisions which is mathematically sound, and easy to use in real life, even if you don't like [math](/2021/07/11/%5C1).
+We know the woman tested positive, she is either one of $9$ who has it, or $89$ who doesn't. $\frac{9}{9+89}\approx \frac{1}{11}$ so she is about $10\%$ likely to have cancer. That was a lot of calculation, and directly applying Bayes' rule isn't much simpler. We will create a framework for making these kinds of decisions which is mathematically sound, and easy to use in real life, even if you don't like [math](/2021/07/11/math).
 
 # An aside about odds
 
@@ -70,20 +71,20 @@ $$
 &= P(C\mid +):P(\lnot C|+)\\
 \end{align}
 $$
-- - -
+---
 
 The last wrinkle to that calculation I showed earlier is how to calculate $O_{pos}=P(+\mid C):P(+\mid \lnot C).$ The trick is that usually this is given to you or easy to calculate. $P(+\mid \lnot C)$ is the false positive rate, which if the test is $91\%$ accurate when they don't have cancer is $9\%$. And $P(+|C)$, which is the true positive rate, or sensitivity of the test, $90\%$. Thus, the $O_{pos}=90:9=10:1.$
 
 It should be clear now, that $$O_{new} = O_{old}O_{pos}= (1:99)(10:1) = 10:99 \approx 9.2\%.$$
-What is amazing about this formula, is that it is very easy to add on more evidence to update your understanding.
+This formula is amazing because it is very easy to add more evidence to update your understanding.
 
-Let's say you reassure the woman. It was a routine checkup, you have no symptoms, we just need to run another test, it was probably a mistake. She does it again, and comes back positive again. Now, she should start to get worried: $$O_{newer}=O_{new}O_{pos}=(10:99)(10:1)=(100:99)\approx 50\%.$$
+Let's say you reassure the woman. "It was a routine checkup, you have no symptoms, we just need to run another test, it was probably a mistake." She does it again and comes back positive again. Now, she should start to get worried: $$O_{newer}=O_{new}O_{pos}=(10:99)(10:1)=(100:99)\approx 50\%.$$
 Almost even odds. Okay, sure, but let's imagine that the second test came back negative. To understand the odds, we need to calculate the odds for a negative test. **Try this on your own and I'll see you in the next paragraph.**
 
 Now, let's calculate this, $$O_{neg}=P(-\mid C):P(-\mid \lnot C)=10:91.$$
-This isn't as nice, but it allows us to calculate:
+This isn't as nice and round a  number, but it allows us to calculate:
 $$O = O_{old}O_{pos}O_{neg}=(1:99)(10:1)(10:91)=100:9009 \approx 1\%$$
-Another great thing about this, is let's say we get more information that the prevalence in her age group is actually $1:10$. How to we incorporate that? Well it replaces our prior estimate. So, $O_{old} = 1:10$ rather than $1:99$. Now,
+Another great thing about this, is let's say we get more information that the prevalence in her age group is actually $1:10$. How do we incorporate that? Well, it replaces our prior estimate. So, $O_{old} = 1:10$ rather than $1:99$. Now,
 $$
 \begin{align}
 O_{old}O_{pos} &=(1:10)(10:1)=10:10=50\%\\
@@ -91,7 +92,6 @@ O_{old}O_{pos}O_{pos} &=(1:10)(10:1)(10:1)=100:1=99\%\\
 O_{old}O_{pos}O_{neg} &=(1:10)(10:1)(10:91)=100:910\approx10\%
 .\end{align}
 $$
-
 
 
 # What does multiplying odds do usually?
@@ -105,5 +105,5 @@ $$
 &= P(A\cap B):P(\lnot (A\cup B))
 \end{align}
 $$
-This might be better understood by a very poorly drawn powerpoint slide: ![union and intersection.png](/2021/07/11/%5C1)
+This might be better understood by a very poorly drawn powerpoint slide: ![union and intersection.png](/2021/07/11/union-and-intersection.png)
 {{ addcomments }}

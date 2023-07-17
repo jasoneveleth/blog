@@ -59,26 +59,33 @@ function filepaths_and_frontmatter(posts_list)::Vector{Tuple{String, String, Str
     ret = []
     for p in posts_list
         src = notes_dir * p.name * ".md"
-        dest = p.date * "/" * fuckwith(p.name) * ".md"
+        dest = p.date * "/" * generate_blog_url(p.name) * ".md"
         push!(ret, (src, dest, frontmatter(p)))
     end
     ret
 end
 
-function fuckwith(str)
+function generate_blog_url(str)
     URIs.escapeuri(replace(str, " " => "-"))
 end
 
-function process_file(s)
-    function f(x)
-        SubstitutionString("[$(x)](/2021/07/11/$(fuckwith(x)))")
-    end
+function process_file(file_contents)
     # we can't use replace(s, regex => substituionstr ) because we 
     # need the capture group to be evaluated before we URI encode it
-    # this function assumes that we are returning a substitution string
+    # replace() assumes that the second part of the pair is a string
     # so there's no way to arrange the computation such that the URI encode 
     # happens after the capture
-    replace(s, r"\[\[([a-zA-Z0-9 .'-=!]*)\]\]" => f(s"\1"))
+    function f(m)
+        x = m.captures[1]
+        "[$(x)](/2021/07/11/$(generate_blog_url(x)))"
+    end
+
+    # rx = r"\[\[([a-zA-Z0-9 .'-=!]+(|[a-zA-Z]*)?)\]\]"
+    rx = r"\[\[([a-zA-Z0-9 .'-=!]+)\]\]"
+    # links = eachmatch(rx, file_contents, overlap = false)
+    # fixed = Iterators.Stateful(map(f, links))
+    # popfirst!(fixed)
+    replace(file_contents, rx => s -> f(match(rx, s)))
 end
 
 function make_space!(file_path)
@@ -88,7 +95,8 @@ end
 
 function make_contents(note_contents, frontmatter)
     """
-    $(frontmatter)$(process_file(note_contents))
+    $(frontmatter)
+    $(process_file(note_contents))
     {{ addcomments }}
     """
 end
@@ -98,12 +106,16 @@ function copy_files!(data::Vector{Tuple{String, String, String}})
         newcontent = make_contents(read(src, String), frontmatter)
 
         make_space!(dest)
-        if isfile(dest) && read(dest, String) == newcontent
-            println("skipped: ", dest)
-        else
-            write(dest, newcontent)
-            println("written ", dest)
-        end
+        overwrite_if_diff!(dest, newcontent)
+    end
+end
+
+function overwrite_if_diff!(file_path, content)
+    if isfile(file_path) && read(file_path, String) == content
+        println("skipped: ", file_path)
+    else
+        write(file_path, content)
+        println("written ", file_path)
     end
 end
 
@@ -118,6 +130,17 @@ function main()
     end
     # remove_existing!()
     copy_files!(data)
+
+    index = """
+    @def title = "Jason's Blog"
+
+    # Archive
+
+    """
+    for p in posts
+        index *= "- [$(p.name)]($(p.date)/$(generate_blog_url(p.name)))\n"
+    end
+    overwrite_if_diff!("index.md", index)
 end
 
 main()
