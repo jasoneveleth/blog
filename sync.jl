@@ -10,6 +10,7 @@ struct Post
 end
 
 const posts = [
+    Post("bayes rule", "2023/07/17", ["math"], "", "Bayes' Rule (in real life)"),
     Post("five color theorem",  "2021/07/16", ["math"], "The Five Color Theorem asserts that no planar graphs are 5-colorable.", "Five Color Theorem"),
     Post("linear regression", "2021/07/11", ["math"], "", "Linear Regression"),
     Post("picks theorem", "2021/09/03", ["math"], "Pick's Theorem is a formula for the area of a closed polygon with integer vertices.", "Pick's Theorem"),
@@ -58,14 +59,26 @@ function filepaths_and_frontmatter(posts_list)::Vector{Tuple{String, String, Str
     ret = []
     for p in posts_list
         src = notes_dir * p.name * ".md"
-        dest = p.date * "/" * URIs.escapeuri(replace(p.name, " " => "-")) * ".md"
+        dest = p.date * "/" * fuckwith(p.name) * ".md"
         push!(ret, (src, dest, frontmatter(p)))
     end
     ret
 end
 
+function fuckwith(str)
+    URIs.escapeuri(replace(str, " " => "-"))
+end
+
 function process_file(s)
-    s
+    function f(x)
+        SubstitutionString("[$(x)](/2021/07/11/$(fuckwith(x)))")
+    end
+    # we can't use replace(s, regex => substituionstr ) because we 
+    # need the capture group to be evaluated before we URI encode it
+    # this function assumes that we are returning a substitution string
+    # so there's no way to arrange the computation such that the URI encode 
+    # happens after the capture
+    replace(s, r"\[\[([a-zA-Z0-9 .'-=!]*)\]\]" => f(s"\1"))
 end
 
 function make_space!(file_path)
@@ -75,8 +88,7 @@ end
 
 function make_contents(note_contents, frontmatter)
     """
-    $(frontmatter)
-    $(process_file(note_contents))
+    $(frontmatter)$(process_file(note_contents))
     {{ addcomments }}
     """
 end
@@ -86,8 +98,7 @@ function copy_files!(data::Vector{Tuple{String, String, String}})
         newcontent = make_contents(read(src, String), frontmatter)
 
         make_space!(dest)
-        oldcontent = read(dest, String)
-        if cmp(oldcontent, newcontent) == 0
+        if isfile(dest) && read(dest, String) == newcontent
             println("skipped: ", dest)
         else
             write(dest, newcontent)
