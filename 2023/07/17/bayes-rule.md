@@ -58,18 +58,24 @@ We start with our prior odds, cancer:not cancer, will be written $O_{old}=P(C):P
 
 We want to know the probability of **cancer** *given* she **is positive**. In probability form, we write that $P(C\mid +).$ This kind of conditional probability is really important to understand, and I can't explain it to thoroughly here, but the idea is when you say "A given B", you are restricting your universe of possible events to only ones where B is true, and you're asking, out of those times, how often is A true. That is, $P(A\mid B) = \frac{P(A\cap B)}{P(B)}.$ We can rewrite this as $P(A\mid B)P(B) = P(A\cap B)$. This formula will be very important. You should also know that we can rename the A's to B's, so $P(B\mid A)P(A) = P(B\cap A)=P(A \cap B)$. We will use this later.
 
-The odds we want to know about can be written $O_{new} = P(C\mid +):P(\lnot C\mid +)$. Which will tell us our new estimate of the likelihood that the woman has cancer, given that she tested positive.
+The odds we want to know about can be written $O_{new} = P(C\mid +):P(\lnot C\mid +)$. This will tell us our new estimate of the likelihood that the woman has cancer, given that she tested positive.
 
-I claim that the question mark is true. $$O_{old}O_{pos}=(P(C):P(\lnot C))\cdot \left(P(+\mid C):P(+\mid \lnot C)\right)\stackrel{?}{=} P(C\mid+):P(\lnot C\mid+)=O_{new}$$
+I claim that the question mark is true. 
+
+$$
+\begin{align*}
+&O_{old}O_{pos}\\&=(P(C):P(\lnot C))\cdot \left(P(+\mid C):P(+\mid \lnot C)\right)\\ &\stackrel{?}{=} P(C\mid+):P(\lnot C\mid+)\\&=O_{new}
+\end{align*}
+$$
 
 Here is the proof:
 $$
-\begin{align}
-(P(C):P(\lnot C))\cdot \left(P(+\mid C):P(+\mid \lnot C)\right)&=P(C)P(+\mid C):P(\lnot C)P(+\mid \lnot C)\\
+\begin{align*}
+(&P(C):P(\lnot C))\cdot \left(P(+\mid C):P(+\mid \lnot C)\right)\\&=P(C)P(+\mid C):P(\lnot C)P(+\mid \lnot C)\\
 &= P(+\cap C):P(+\cap \lnot C) \\
 &= P(+)P(C\mid +):P(+)P(\lnot C|+)\\
 &= P(C\mid +):P(\lnot C|+)\\
-\end{align}
+\end{align*}
 $$
 ---
 
@@ -99,11 +105,11 @@ $$
 The rule $(n:m) \cdot (a:b) = an:mb,$ can be justified as follows:
 
 $$
-\begin{align}
+\begin{align*}
 (P(A):P(\lnot A))(P(B):P(\lnot B)) &= P(A)P(B):P(\lnot A)P(\lnot B)\\
 &= P(A\cap B):P(\lnot A \,\cap \,\lnot B)\\
 &= P(A\cap B):P(\lnot (A\cup B))
-\end{align}
+\end{align*}
 $$
 This might be better understood by a very poorly drawn powerpoint slide: ![union and intersection.png](/2021/07/11/union-and-intersection.png)
 {{ addcomments }}
