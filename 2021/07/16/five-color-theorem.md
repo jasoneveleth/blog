@@ -22,24 +22,20 @@ at most 5 colors such that no two adjacent vertices have the same color.
 
 ![](../images/five_color_theorem1.svg)
 
-To show that every planar graph has at least 1 vertex of degree $\leq 5$, we assume [euler's formula](euler_formula.md.html), that given $F$ faces, $V$
-vertices, and $E$ edges of a planar graph, that $$F + V = E + 2.$$
+To show that every planar graph has at least 1 vertex of degree $\leq 5$, we assume euler's formula, that given $F$ faces, $V$ vertices, and $E$ edges of a planar graph, that $$F + V = E + 2.$$
 
-We assume for contradiction, there exists a planar graph $G = (F, V, E)$ with all vertices of
-degree $\geq 6$. Then let us consider the size of this set:
+We assume for contradiction, there exists a planar graph $G = (F, V, E)$ with all vertices of degree $\geq 6$. Then let us consider the size of this set:
 
 $$VE = \{(v,e) : v \in V, e \in E, v \text{ is adjacent to } e\}$$
 
-Every edge will be in there twice, so $$|VE| = 2|E|.$$ Also, we know that all
-vertices have at least 6 edges, so $$|VE| \geq 6|V|.$$ Thus, $$2|E| \geq 6|V|
+Every edge will be in there twice, so $$|VE| = 2|E|.$$ Also, we know that all vertices have at least 6 edges, so $$|VE| \geq 6|V|.$$ Thus, $$2|E| \geq 6|V|
 \implies \frac{1}{3}|E| \geq |V|.$$
 
 Next, consider the set:
 
 $$FE = \{(f,e) : e \in E, f \in F, f \text{ is adjacent to } e\}$$
 
-Every edge can see 2 faces, so $$|FE| = 2|E|,$$ and every face has at least 3
-edges, so $$|FE| \geq 3|F|.$$ Putting this together, $$2|E| \geq 3|F| \implies
+Every edge can see 2 faces, so $$|FE| = 2|E|,$$ and every face has at least 3 edges, so $$|FE| \geq 3|F|.$$ Putting this together, $$2|E| \geq 3|F| \implies
 \frac{2}{3}|E| \geq |F|.$$
 
 Now, we apply Euler's formula to get:

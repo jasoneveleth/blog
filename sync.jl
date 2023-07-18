@@ -76,13 +76,20 @@ function process_file(file_contents)
     # so there's no way to arrange the computation such that the URI encode 
     # happens after the capture
     function f(m)
-        x = m.captures[1]
-        "[$(x)](/2021/07/11/$(generate_blog_url(x)))"
+        x, y = m.captures
+        if y === nothing
+            "[$(x)](/2021/07/11/$(generate_blog_url(x)))"
+        else
+            "[$(y)](/2021/07/11/$(generate_blog_url(x)))"
+        end
     end
 
-    # rx = r"\[\[([a-zA-Z0-9 .'-=!]+(|[a-zA-Z]*)?)\]\]"
-    rx = r"\[\[([a-zA-Z0-9 .'-=!]+)\]\]"
-    replace(file_contents, rx => s -> f(match(rx, s)))
+    # nuclear option
+    # rx = r"\[\[([^\]\|]*)\|?([^\]]*)\]\]"
+    rx = r"\[\[([a-zA-Z0-9 .'-=!]+)\|?(\w+)?\]\]"
+    file_contents = replace(file_contents, rx => s -> f(match(rx, s)))
+
+
 end
 
 function make_space!(file_path)

@@ -56,7 +56,7 @@ If the only thing we care about is the odds at the end (i.e. the ratio of red to
 
 We start with our prior odds, cancer:not cancer, will be written $O_{old}=P(C):P(\lnot C),$ 
 
-We want to know the probability of **cancer** *given* she **is positive**. In probability form, we write that $P(C\mid +).$ This kind of conditional probability is really important to understand, and I can't explain it to thoroughly here, but the idea is when you say "A given B", you are restricting your universe of possible events to only ones where B is true, and you're asking, out of those times, how often is A true. That is, $P(A\mid B) = \frac{P(A\cap B)}{P(B)}.$ We can rewrite this as $P(A\mid B)P(B) = P(A\cap B)$. This formula will be very important. You should also know that we can rename the A's to B's, so $P(B\mid A)P(A) = P(B\cap A)=P(A \cap B)$. We will use this later.
+We want to know the probability of **cancer** *given* she **is positive**. In probability form, we write that $P(C\mid +).$ This kind of conditional probability is really important to understand, and I can't explain it too thoroughly here, but the idea is when you say "A given B", you are restricting your universe of possible events to only ones where B is true, and you're asking, out of those times, how often is A true. That is, $P(A\mid B) = \frac{P(A\cap B)}{P(B)}.$ We can rewrite this as $P(A\mid B)P(B) = P(A\cap B)$. This formula will be very important. You should also know that we can rename the A's to B's, so $P(B\mid A)P(A) = P(B\cap A)=P(A \cap B)$. We will use this later.
 
 The odds we want to know about can be written $O_{new} = P(C\mid +):P(\lnot C\mid +)$. This will tell us our new estimate of the likelihood that the woman has cancer, given that she tested positive.
 
@@ -100,7 +100,7 @@ O_{old}O_{pos}O_{neg} &=(1:10)(10:1)(10:91)=100:910\approx10\%
 $$
 
 
-# What does multiplying odds do usually?
+# Unrelated: What does multiplying odds usually do?
 
 The rule $(n:m) \cdot (a:b) = an:mb,$ can be justified as follows:
 
@@ -111,5 +111,5 @@ $$
 &= P(A\cap B):P(\lnot (A\cup B))
 \end{align*}
 $$
-This might be better understood by a very poorly drawn powerpoint slide: ![union and intersection.png](/2021/07/11/union-and-intersection.png)
+This might be better understood by a very poorly drawn PowerPoint slide: ![union and intersection.png](/2021/07/11/union-and-intersection.png)
 {{ addcomments }}

@@ -17,6 +17,10 @@ website_title = "Franklin Template"
 website_descr = "Example website using Franklin"
 website_url   = "https://tlienart.github.io/FranklinTemplates.jl/"
 prepath = "blog"
+
+# table of contents levels
+mintoclevel = 1
+maxtoclevel = 3
 +++
 
 <!--
