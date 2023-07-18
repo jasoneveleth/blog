@@ -14,6 +14,7 @@ const posts = [
     Post("five color theorem",  "2021/07/16", ["math"], "The Five Color Theorem asserts that no planar graphs are 5-colorable.", "Five Color Theorem"),
     Post("linear regression", "2021/07/11", ["math"], "", "Linear Regression"),
     Post("picks theorem", "2021/09/03", ["math"], "Pick's Theorem is a formula for the area of a closed polygon with integer vertices.", "Pick's Theorem"),
+    Post("chicken coop website", "2023/07/18", [], "", "Hilarious Random Number Generator"),
 ]
 
 const notes_dir = "/users/jason/.root/notes/"
