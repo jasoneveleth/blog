@@ -1171,6 +1171,7 @@ a.pure-button-selected {
 html {
   font-family: Roboto, sans-serif;
   line-height: 1.4;
+  overflow-x: hidden
 }
 
 h1 {

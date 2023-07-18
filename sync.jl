@@ -82,9 +82,6 @@ function process_file(file_contents)
 
     # rx = r"\[\[([a-zA-Z0-9 .'-=!]+(|[a-zA-Z]*)?)\]\]"
     rx = r"\[\[([a-zA-Z0-9 .'-=!]+)\]\]"
-    # links = eachmatch(rx, file_contents, overlap = false)
-    # fixed = Iterators.Stateful(map(f, links))
-    # popfirst!(fixed)
     replace(file_contents, rx => s -> f(match(rx, s)))
 end
 
