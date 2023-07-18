@@ -92,11 +92,11 @@ This isn't as nice and round a  number, but it allows us to calculate:
 $$O = O_{old}O_{pos}O_{neg}=(1:99)(10:1)(10:91)=100:9009 \approx 1\%$$
 Another great thing about this, is let's say we get more information that the prevalence in her age group is actually $1:10$. How do we incorporate that? Well, it replaces our prior estimate. So, $O_{old} = 1:10$ rather than $1:99$. Now,
 $$
-\begin{align}
+\begin{align*}
 O_{old}O_{pos} &=(1:10)(10:1)=10:10=50\%\\
 O_{old}O_{pos}O_{pos} &=(1:10)(10:1)(10:1)=100:1=99\%\\
 O_{old}O_{pos}O_{neg} &=(1:10)(10:1)(10:91)=100:910\approx10\%
-.\end{align}
+.\end{align*}
 $$
 
 
@@ -106,10 +106,11 @@ The rule $(n:m) \cdot (a:b) = an:mb,$ can be justified as follows:
 
 $$
 \begin{align*}
-(P(A):P(\lnot A))(P(B):P(\lnot B)) &= P(A)P(B):P(\lnot A)P(\lnot B)\\
+&(P(A):P(\lnot A))(P(B):P(\lnot B))\\
+&= P(A)P(B):P(\lnot A)P(\lnot B)\\
 &= P(A\cap B):P(\lnot A \,\cap \,\lnot B)\\
 &= P(A\cap B):P(\lnot (A\cup B))
 \end{align*}
 $$
-This might be better understood by a very poorly drawn PowerPoint slide: ![union and intersection.png](/2021/07/11/union-and-intersection.png)
+This might be better understood by a very poorly drawn PowerPoint slide: ![](/assets/union-and-intersection.png)
 {{ addcomments }}

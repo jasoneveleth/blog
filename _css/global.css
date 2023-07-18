@@ -35,15 +35,13 @@ nav {
 h1.page.title,
 hr {
   position relative
-  padding-left: 12.5%;
-  padding-right: 12.5%;
   line-height: 1.35em;
 }
 
 @media (min-width: 940px) {
   h1.page.title,
   hr {
-    width: 705px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
   }
@@ -75,7 +73,7 @@ table {
 
 body {
   margin: 0;
-  font-size: 16rem;
+  font-size: 1rem;
 }
 
 article,

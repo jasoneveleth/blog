@@ -84,12 +84,23 @@ function process_file(file_contents)
         end
     end
 
-    # nuclear option
-    # rx = r"\[\[([^\]\|]*)\|?([^\]]*)\]\]"
-    rx = r"\[\[([a-zA-Z0-9 .'-=!]+)\|?(\w+)?\]\]"
+    # wikilinks: [[link name|alias]]
+    rx = r"\[\[([a-zA-Z0-9 .'=!-]+)\|?(\w+)?\]\]"
     file_contents = replace(file_contents, rx => s -> f(match(rx, s)))
 
+    rx = r"!\[([a-zA-Z0-9 .'-=!]*)\]\((images/)?([a-zA-Z0-9 .'=!-]+)\)"
+    file_contents = replace(file_contents, rx => s"![\1](/assets/\3)")
+end
 
+function copy_images!(file_contents)
+    # images: ![](images/file-path.jpg)
+    rx = r"!\[[a-zA-Z0-9 .'=!-]*\]\(/assets/([a-zA-Z0-9 .'=!-]+)\)"
+    for m in eachmatch(rx, file_contents)
+        x = m.captures[1]
+        if !isfile("_assets/$(x)")
+            cp(notes_dir * "images/$(x)", "_assets/$(x)")
+        end
+    end
 end
 
 function make_space!(file_path)
@@ -111,6 +122,7 @@ function copy_files!(data::Vector{Tuple{String, String, String}})
 
         make_space!(dest)
         overwrite_if_diff!(dest, newcontent)
+        copy_images!(newcontent)
     end
 end
 

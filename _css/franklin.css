@@ -15,7 +15,6 @@
 
 html {
   font-family: Helvetica, Arial, sans-serif;
-  font-size: var(--normal);
   color: var(--text-color);
 }
 
@@ -75,28 +74,30 @@ html {
 
 .franklin-toc li {
   /* Avoid clickable elements being too close together. */
-  margin: 0.6rem 0;
+  /* margin: 0.6rem 0; */
 }
 
 .franklin-content {
   position: relative;
-  max-width: 600rem;
+  /* ~90ch */
+  max-width: 37rem;
   margin: auto;
+  font-size: 1.3125rem; 
   line-height: 1.35em;
 }
 
 /* On narrow device, reduce margins. */
 @media (max-width: 600px) {
   .franklin-content {
-    padding-left: 16rem;
-    padding-right: 16rem;
+    padding-left: 16px;
+    padding-right: 16px;
   }
   .logo {
     position: static !important;
     left: 0;
   }
   p {
-    font-size: 16rem !important;
+    font-size: 1rem !important;
   }
 }
 
@@ -106,14 +107,13 @@ html {
 
 .franklin-content h1 { 
     font-weight: 800;
-    font-size: 21rem; 
-    letter-spacing: -0.2rem;
+    font-size: 1.3125rem; 
     margin-bottom: .2em;
 }
 .franklin-content h2 { 
-    font-size: 21rem; 
     font-weight: 600;
     color: #444;
+    font-size: 1.3125rem; 
     /* letter-spacing: -0.2rem; */
 }
 
@@ -190,7 +190,7 @@ td {
 }
 
 .franklin-content p {
-    font-size: 21rem;
+    font-size: 1.3125rem;
     line-height: 1.4em;
     margin-top: 0;
     margin-bottom: 1em;
@@ -312,7 +312,7 @@ code {
   background-color: var(--block-background);
   padding: 0.1em 0.2em;
   border-radius: 2px;
-  font-size: 16rem;
+  font-size: 1rem;
 }
 
 /* .franklin-content code { */
@@ -326,7 +326,7 @@ code {
 /* font-size: 90%; } */
 
 .hljs {
-  font-size: 16rem;
+  font-size: 1rem;
   line-height: 1.35em;
   border-radius: 10px;
 }
