@@ -15,7 +15,7 @@ tags = ["math"]
 
 # Motivating example
 
-Let's say you're a doctor. A woman with no symptoms comes into your office, after she's tested positive for breast cancer. Let's say the prevalence of breast cancer at her age is $1$ in $100$. Imagine we have a test that is $90\%$ accurate when the person has cancer and $91\%$ accurate when they don't have cancer.
+Let's say you're a doctor. A woman with no symptoms comes into your office after she's tested positive for breast cancer. Let's say the prevalence of breast cancer at her age is $1$ in $100$. Imagine we have a test that is $90\%$ accurate when the person has cancer and $91\%$ accurate when they don't have cancer.
 
 We often refer to $90\%$ as the "sensitivity" (since it's how *sensitive* the test is to the disease). We call the $91\%$, "specificity", since it's how specific the test is for the disease.
 
@@ -23,13 +23,13 @@ The woman is stressed out that she tested positive. She asks you, "How likely is
 
 # A perspective on why this is wrong
 
-My dad came up with a great way to think about it. Imagine a population of 1000 people and do the calculations on that. You know the prior is $1\%$, so $10$ people have cancer, and $990$ people don't. Our test is $90\%$ accurate when they have cancer, so $9$ people who have cancer test positive, $1$ person who has cancer and tests negative. Of the $990$, our test is $91\%$ accurate, so about $901$ people test negative, and about $89$ people test positive.
+My dad came up with a great way to think about it. Imagine a population of 1000 people and do the calculations on that. You know the prior is $1\%$, so $10$ people have cancer, and $990$ people don't. Our test is $90\%$ accurate when they have cancer; so, $9$ people who have cancer test positive, and $1$ person who has cancer tests negative. Of the $990$, our test is $91\%$ accurate, so about $901$ people test negative, and about $89$ people test positive.
 
-We know the woman tested positive, she is either one of $9$ who has it, or $89$ who doesn't. $\frac{9}{9+89}\approx \frac{1}{11}$ so she is about $10\%$ likely to have cancer. That was a lot of calculation, and directly applying Bayes' rule isn't much simpler. We will create a framework for making these kinds of decisions which is mathematically sound, and easy to use in real life, even if you don't like [math](/2021/07/11/math).
+We know the woman tested positive, so she is either one of $9$ who has it, or $89$ who doesn't have it. $\frac{9}{9+89}\approx \frac{1}{11}$ so she is about $10\%$ likely to have cancer. That was a lot of calculation, and directly applying Bayes' rule isn't much simpler. We will create a framework for making these kinds of decisions that is mathematically sound, and easy to use in real life, even if you don't like [math](/2021/07/11/math).
 
 # An aside about odds
 
-You may have heard your friends bet on something with $1:1$ odds (or even odds). This means the event has a $50\%$ chance of happening. It is similar to the idea of "parts" in a cooking recipe, "3 parts water" and "2 parts wine" means the mixture will be $2:3=\frac{2}{5}=40\%$ wine. It's exactly the same happening here. $1:1$ is $50\%$, $1:2$ is about $33.3\%$, $1:3$ odds are $25\%$. The idea is to go from the odds of: "it happens $n$ times":"it happens $m$ times", we go $$n:m = \frac{\text{times it happens}}{\text{all the times}}=\frac{n}{n+m}.$$
+You may have heard your friends bet on something with $1:1$ odds (or even odds). This means the event has a $50\%$ chance of happening. It is similar to the idea of "parts" in a cooking recipe, "3 parts water" and "2 parts wine" means the mixture will be $2:3=\frac{2}{5}=40\%$ wine. It's exactly the same happening here. $1:1$ is $50\%$, $1:2$ is about $33.3\%$, $1:3$ odds are $25\%$. The idea is to go from the odds of: "it happens $n$ times": "it happens $m$ times", we go $$n:m = \frac{\text{times it happens}}{\text{all the times}}=\frac{n}{n+m}.$$
 This is how you can convert odds to probability.
 
 You can convert probability to odds using the following formula. Let's say the probability of an event $A$ happening is $P(A)$. The odds of it happening are $P(A):P(\text{not } A).$
@@ -38,10 +38,10 @@ One nice thing about odds is you can cancel out common factors, so $2:4=1:2.$
 
 # How do we fix our intuition?
 
-You should think about the test---not as *determining* if she has breast cancer---but as *updating* your guess that she has breast cancer. Since the prevalence of breast cancer at her age (with no symptoms) is $1\%$. she has the odds of breast cancer of $1:99$.
+You should think about the test---not as *determining* if she has breast cancer---but as *updating* your guess that she has breast cancer. Since the prevalence of breast cancer at her age (with no symptoms) is $1\%,$ she has the odds of breast cancer of $1:99$.
 
 Now, apply this formula (with $O$ representing odds): $$O_{new} = O_{old}O_{evidence}.$$
-So, $$O_{new} = O_{old}O_{pos}= (1:99)(10:1) = 10:99 \approx \frac{1}{11}=0.09090909.$$ Thus, the chance that she has the disease is $10:99,$ about $\textbf{9\%}$. This is the key formula, which you should use in your everyday life. It allows to you quickly incorporate more evidence into your calculation, or change your prior odds.
+So, $$O_{new} = O_{old}O_{pos}= (1:99)(10:1) = 10:99 \approx \frac{1}{11}=0.09090909.$$ Thus, the chance that she has the disease is $10:99,$ about $\textbf{9\%}$. This is the key formula that you should use in your everyday life. It allows to you quickly incorporate more evidence into your calculation, or change your prior odds.
 
 Where the hell does this come from? Don't worry, I will explain.
 
