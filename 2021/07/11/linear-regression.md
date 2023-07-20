@@ -28,8 +28,8 @@ We will use the notation from [here](/2021/07/11/calculus-notation). Here are so
 4. $D ( u^Tx) = u^T$, $D (x^Tu) = u^T$, and $D(x^Tx) = D(\bar{x}^Tx) + D(x^T\bar{x})$.[^1]
 
 We need to set up some definitions. Let
-$$y = \begin{bmatrix}y_1\\y_2\\y_3\\y_4\\\vdots\end{bmatrix},
-X = \begin{bmatrix}x_1 & 1\\x_2 & 1\\x_3 & 1\\x_4 & 1\\\vdots & \vdots\end{bmatrix},
+$$y = \begin{bmatrix}y_1\\ y_2\\ y_3\\ y_4\\ \vdots\end{bmatrix},
+X = \begin{bmatrix}x_1 & 1\\ x_2 & 1\\ x_3 & 1\\ x_4 & 1\\ \vdots & \vdots\end{bmatrix},
 \alpha = \begin{bmatrix}m\\b\end{bmatrix}.$$
 
 So our goal is:
