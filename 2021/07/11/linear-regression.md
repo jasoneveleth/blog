@@ -37,7 +37,7 @@ So our goal is:
 $$\underset{\alpha}{\text{argmin}}\, L(\alpha)$$
 $$=\underset{\alpha}{\text{argmin}}\, \sum ((y_i) - (m x_i + b))^2$$
 Apply fun fact number #1:
-$$=\underset{\alpha}{\text{argmin}}\, \left\lVert \begin{bmatrix}(y_1 - (m x_1 + b))\\(y_2 - (m x_2 + b))\\(y_3 - (m x_3 + b))\\(y_4 - (m x_4 + b))\\\vdots\end{bmatrix}\right\rVert^2$$
+$$=\underset{\alpha}{\text{argmin}}\, \left\lVert \begin{bmatrix}(y_1 - (m x_1 + b))\\ (y_2 - (m x_2 + b))\\ (y_3 - (m x_3 + b))\\ (y_4 - (m x_4 + b))\\ \vdots\end{bmatrix}\right\rVert^2$$
 $$=\underset{\alpha}{\text{argmin}}\, \lVert y - X\alpha\rVert^2$$
 Apply fun fact #2:
 $$=\underset{\alpha}{\text{argmin}}\, (y-X\alpha)^T(y - X\alpha)$$

@@ -85,12 +85,19 @@ function process_file(file_contents)
         end
     end
 
-    # wikilinks: [[link name|alias]]
+    # wikilinks: [[link name|alias]] => [alias](/2021/07/11/link-name/)
+    #            [[link name]] => [link name](/2021/07/11/link-name/)
     rx = r"\[\[([a-zA-Z0-9 .'=!-]+)\|?(\w+)?\]\]"
     file_contents = replace(file_contents, rx => s -> f(match(rx, s)))
 
+    # convert images
+    # ![stuff](images/something) => ![stuff](/assets/something)
     rx = r"!\[([a-zA-Z0-9 .'-=!]*)\]\((images/)?([a-zA-Z0-9 .'=!-]+)\)"
     file_contents = replace(file_contents, rx => s"![\1](/assets/\3)")
+
+    # remove `dot` code block
+    rx = r"```dot"
+    file_contents = replace(file_contents, rx => s"```")
 end
 
 function copy_images!(file_contents)

@@ -55,7 +55,7 @@ a planar graph:
 
 Base case: $|V|=1$, it is clear that this is 5-colorable with just 1 color.
 
-```dot
+```
 graph g {
 layout = "neato"
 node [

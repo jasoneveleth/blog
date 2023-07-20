@@ -3,7 +3,6 @@ Add here global page variables to use throughout your website.
 -->
 +++
 author = "Jason Eveleth"
-mintoclevel = 2
 
 # Add here files or directories that should be ignored by Franklin, otherwise
 # these files might be copied and, if markdown, processed by Franklin which
@@ -13,9 +12,10 @@ ignore = ["node_modules/"]
 
 # RSS (the website_{title, descr, url} must be defined to get RSS)
 generate_rss = true
-website_title = "Franklin Template"
-website_descr = "Example website using Franklin"
-website_url   = "https://tlienart.github.io/FranklinTemplates.jl/"
+website_title = "Jason's Blog"
+website_descr = "A blog on whatever I'm thinking about."
+website_url   = "https://www.jasoneveleth.com/blog"
+
 prepath = "blog"
 
 # table of contents levels
