@@ -9,14 +9,14 @@
 
   <channel>
     <title>
-      <![CDATA[  Franklin Template  ]]>
+      <![CDATA[  Jason&#39;s Blog  ]]>
     </title>
-    <link> https://tlienart.github.io/FranklinTemplates.jl/ </link>
+    <link> https://www.jasoneveleth.com/blog </link>
     <description>
-      <![CDATA[  Example website using Franklin  ]]>
+      <![CDATA[  A blog on whatever I&#39;m thinking about.  ]]>
     </description>
     <atom:link
-      href="https://tlienart.github.io/FranklinTemplates.jl/feed.xml"
+      href="https://www.jasoneveleth.com/blog/feed.xml"
       rel="self"
       type="application/rss+xml" />
 
@@ -25,8 +25,8 @@
   <title>
     <![CDATA[  Pick&#39;s Theorem  ]]>
   </title>
-  <link> https://tlienart.github.io/FranklinTemplates.jl/2021/09/03/picks-theorem/index.html </link>
-  <guid> https://tlienart.github.io/FranklinTemplates.jl/2021/09/03/picks-theorem/index.html </guid>
+  <link> https://www.jasoneveleth.com/blog/2021/09/03/picks-theorem/index.html </link>
+  <guid> https://www.jasoneveleth.com/blog/2021/09/03/picks-theorem/index.html </guid>
   <description>
     <![CDATA[  Pick&#39;s Theorem is a formula for the area of a closed polygon with integer vertices.  ]]>
   </description>  
@@ -44,8 +44,8 @@
   <title>
     <![CDATA[  Five Color Theorem  ]]>
   </title>
-  <link> https://tlienart.github.io/FranklinTemplates.jl/2021/07/16/five-color-theorem/index.html </link>
-  <guid> https://tlienart.github.io/FranklinTemplates.jl/2021/07/16/five-color-theorem/index.html </guid>
+  <link> https://www.jasoneveleth.com/blog/2021/07/16/five-color-theorem/index.html </link>
+  <guid> https://www.jasoneveleth.com/blog/2021/07/16/five-color-theorem/index.html </guid>
   <description>
     <![CDATA[  The Five Color Theorem asserts that no planar graphs are 5-colorable.  ]]>
   </description>  
