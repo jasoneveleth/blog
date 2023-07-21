@@ -15,6 +15,9 @@ const posts = [
     Post("linear regression", "2021/07/11", ["math"], "", "Linear Regression"),
     Post("picks theorem", "2021/09/03", ["math"], "Pick's Theorem is a formula for the area of a closed polygon with integer vertices.", "Pick's Theorem"),
     Post("chicken coop website", "2023/07/18", [], "", "Hilarious Random Number Generator"),
+    Post("why a blog", "2023/07/20", ["website"], "", "Why a Blog?"),
+    Post("confetti", "2023/07/20", ["website"], "", "Confetti"),
+    Post("voronoi", "2023/07/20", ["website"], "", "Voronoi Diagrams")
 ]
 
 const notes_dir = "/users/jason/.root/notes/"

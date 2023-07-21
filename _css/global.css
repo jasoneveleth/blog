@@ -53,6 +53,9 @@ hr {
     padding-left: 6%;
     padding-right: 6%;
   }
+  nav {
+        justify-content: flex-between;
+    }
 }
 
 /*
