@@ -3,37 +3,55 @@
 
 <url>
     <loc>https://www.jasoneveleth.com/blog/index.html</loc>
-    <lastmod>2023-07-20</lastmod>
+    <lastmod>2023-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://www.jasoneveleth.com/blog/2023/07/17/bayes-rule/index.html</loc>
-    <lastmod>2023-07-20</lastmod>
+    <lastmod>2023-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://www.jasoneveleth.com/blog/2021/07/11/linear-regression/index.html</loc>
-    <lastmod>2023-07-20</lastmod>
+    <lastmod>2023-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://www.jasoneveleth.com/blog/2021/09/03/picks-theorem/index.html</loc>
-    <lastmod>2023-07-20</lastmod>
+    <lastmod>2023-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://www.jasoneveleth.com/blog/2021/07/16/five-color-theorem/index.html</loc>
-    <lastmod>2023-07-20</lastmod>
+    <lastmod>2023-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://www.jasoneveleth.com/blog/2023/07/20/confetti/index.html</loc>
+    <lastmod>2023-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://www.jasoneveleth.com/blog/2023/07/18/chicken-coop-website/index.html</loc>
-    <lastmod>2023-07-20</lastmod>
+    <lastmod>2023-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://www.jasoneveleth.com/blog/2023/07/20/voronoi/index.html</loc>
+    <lastmod>2023-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://www.jasoneveleth.com/blog/2023/07/20/why-a-blog/index.html</loc>
+    <lastmod>2023-07-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
