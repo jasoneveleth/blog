@@ -80,7 +80,7 @@ html {
 .franklin-content {
   position: relative;
   /* ~90ch */
-  max-width: 37rem;
+  max-width: var(--content-width);
   margin: auto;
   font-size: 1.3125rem; 
   line-height: 1.35em;

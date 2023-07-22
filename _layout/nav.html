@@ -1,14 +1,22 @@
-<div class="main-nav">
-  <nav class="flex-container">
-    <div class="logo"><a href="https://www.jasoneveleth.com">Jason's</a>
-      <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
-    <ul id="menu" class="flex-container">
-      <li> <a href="/">Posts</a> </li>
-      <li> <a href="/">Search</a> </li>
-      <li> <a href="/">Tags</a> </li>
-    </ul>
-  </nav>
-</div> <!-- main nav menu -->
+<nav class="flex-container">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/">Posts</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a nav-link"><a href="/">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a nav-link"><a href="/">Tags</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
 
 <main id="panel" class="slidout-panel slideout-panel-left">
   <!-- <h1 class="page title">{{isdef title}}{{fill title}}{{end}}</h1> -->
