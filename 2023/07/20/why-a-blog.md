@@ -22,7 +22,5 @@ tags = ["website"]
 
 # What can you find on this blog?
 
-- Anything that I wanted to explain something more in-depth.
-
-Mockup from [rawpixel.com/Freepik](https://www.freepik.com/free-psd/digital-device-mockup_4264999.htm#query=mac%20mockup&position=3&from_view=keyword&track=ais).
+- Computer science, math, and whatever I'm currently interested in
 {{ addcomments }}
