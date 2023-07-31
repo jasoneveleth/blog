@@ -13,7 +13,7 @@ tags = String[]
 </details>
 ~~~
 
-I have been working on a small project to learn [OpenGL](/2021/07/11/OpenGL). I decided to use Rust since it is the best programming language ever conceived by man. The obvious choice for an OpenGL project in Rust is to use [`glium`](https://github.com/glium/glium/) for interacting with OpenGL. However, I found their API a little confusing. I thought it would be useful to have a guide on how to deal with colorspaces in `glium` and OpenGL. This is that guide. **Note: This is my first foray into graphics, if anything is wrong, or hints at a misunderstanding on my part, please let me know.**
+I have been working on a small project to learn [OpenGL](/2021/07/11/OpenGL). I decided to use Rust since it is the best programming language ever conceived by man. The obvious choice for an OpenGL project in Rust is to use [`glium`](https://github.com/glium/glium/). However, I found their API a little confusing. I thought it would be useful to have a guide on how to deal with colorspaces in `glium` and OpenGL. This is that guide. **Note: This is my first foray into graphics, if anything is wrong, or hints at a misunderstanding on my part, please let me know.**
 
 # Concepts involved
 
