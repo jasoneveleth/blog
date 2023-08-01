@@ -91,7 +91,7 @@ main {
 
 /* On narrow device, reduce margins. */
 @media (max-width: 600px) {
-  .franklin-content {
+  main {
     padding-left: 16px;
     padding-right: 16px;
   }
