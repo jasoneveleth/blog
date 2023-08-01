@@ -1,4 +1,5 @@
 import URIs
+import Base64
 import Base.Filesystem
 
 struct Post
@@ -117,9 +118,21 @@ function process_file(file_contents)
         # want to recurse, but we can't call process_file() since we 
         # only want to do the other substitutions once (once all of the
         # file has been assembled)
-        @assert match(r"\!\[\[([a-zA-Z0-9 .'=!-]+)\]\]", included_text) == nothing
+        @assert match(r"\!\[\[([a-zA-Z0-9 .'=!-]+)\]\]", included_text) === nothing
 
         included_text
+    end
+
+    function dotsrc2imgsrc(m)
+        text = m.captures[1]
+        inpath, io = mktemp()
+        write(io, text)
+        close(io)
+        outpath, io = mktemp()
+        close(io)
+        run(pipeline(`dot -Tpng`, stdin=inpath, stdout=pipeline(`base64`, outpath)))
+
+        "![](data:image/png;base64,$(read(outpath, String)))"
     end
 
     # note inclusion: ![[note]]
@@ -141,8 +154,8 @@ function process_file(file_contents)
     file_contents = replace(file_contents, rx => s"![\1](/assets/\3)")
 
     # remove `dot` code block
-    rx = r"```dot"
-    file_contents = replace(file_contents, rx => s"```")
+    rx = r"```dot\n([\s\S]*)\n```\n"
+    file_contents = replace(file_contents, rx => s -> dotsrc2imgsrc(match(rx, s)))
 end
 
 function copy_images!(file_contents)
