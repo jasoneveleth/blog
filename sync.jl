@@ -154,7 +154,7 @@ function process_file(file_contents)
     file_contents = replace(file_contents, rx => s"![\1](/assets/\3)")
 
     # remove `dot` code block
-    rx = r"```dot\n([\s\S]*)\n```\n"
+    rx = r"```dot\n([\s\S]*)\n```"
     file_contents = replace(file_contents, rx => s -> dotsrc2imgsrc(match(rx, s)))
 end
 
