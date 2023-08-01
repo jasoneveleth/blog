@@ -4,20 +4,22 @@ import Base.Filesystem
 struct Post
     name::String
     date::String
+    title::String
     tags::Vector{String}
     rss::String
-    title::String
 end
 
 const posts = [
-    Post("bayes rule", "2023/07/17", ["math"], "", "Bayes' Rule (in real life)"),
-    Post("five color theorem",  "2021/07/16", ["math"], "The Five Color Theorem asserts that no planar graphs are 5-colorable.", "Five Color Theorem"),
-    Post("linear regression", "2021/07/11", ["math"], "", "Linear Regression"),
-    Post("picks theorem", "2021/09/03", ["math"], "Pick's Theorem is a formula for the area of a closed polygon with integer vertices.", "Pick's Theorem"),
-    Post("chicken coop website", "2023/07/18", [], "", "Hilarious Random Number Generator"),
-    Post("why a blog", "2023/07/20", ["website"], "", "Why a Blog?"),
-    Post("confetti", "2023/07/20", ["website"], "", "Confetti"),
-    Post("voronoi", "2023/07/20", ["website"], "", "Voronoi Diagrams")
+    # NEWEST TO OLDESTS
+    Post("understanding GLFRAMEBUFFERSRGB in glium", "2023/07/31", "Colorspace in glium", [], ""),
+    Post("voronoi", "2023/07/20", "Voronoi Diagrams", ["website"], ""),
+    Post("confetti", "2023/07/20", "Confetti", ["website"], ""),
+    Post("why a blog", "2023/07/20", "Why a Blog?", ["website"], ""),
+    Post("chicken coop website", "2023/07/18", "Hilarious Random Number Generator", [], ""),
+    Post("bayes rule", "2023/07/17", "Bayes' Rule (in real life)", ["math"], ""),
+    Post("picks theorem", "2021/09/03", "Pick's Theorem", ["math"], "Pick's Theorem is a formula for the area of a closed polygon with integer vertices.", ),
+    Post("five color theorem",  "2021/07/16", "Five Color Theorem", ["math"], "The Five Color Theorem asserts that no planar graphs are 5-colorable.", ),
+    Post("linear regression", "2021/07/11", "Linear Regression", ["math"], ""),
 ]
 
 const notes_dir = "/users/jason/.root/notes/"
@@ -40,8 +42,17 @@ function frontmatter(post)
     """
 end
 
+function resolve_post_title(title)
+    for post in posts
+        if post.name == title
+            return post2filename(post)
+        end
+    end
+    "404"
+end
+
 function remove_existing!()
-    # all years are 20xx
+    # all years are 20xx, I want to make my own millenium problem
     existing_folders = filter(x -> x[1:2] == "20", readdir("."))
     if length(existing_folders) == 0
         return
@@ -59,11 +70,15 @@ function remove_existing!()
     end
 end
 
+function post2filename(p)
+    p.date * "/" * generate_blog_url(p.name) * ".md"
+end
+
 function filepaths_and_frontmatter(posts_list)::Vector{Tuple{String, String, String}}
     ret = []
     for p in posts_list
         src = notes_dir * p.name * ".md"
-        dest = p.date * "/" * generate_blog_url(p.name) * ".md"
+        dest = post2filename(p)
         push!(ret, (src, dest, frontmatter(p)))
     end
     ret
@@ -82,9 +97,9 @@ function process_file(file_contents)
     function f(m)
         x, y = m.captures
         if y === nothing
-            "[$(x)](/2021/07/11/$(generate_blog_url(x)))"
+            "[$(x)](/$(resolve_post_title(x)))"
         else
-            "[$(y)](/2021/07/11/$(generate_blog_url(x)))"
+            "[$(y)](/$(resolve_post_title(x)))"
         end
     end
 
