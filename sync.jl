@@ -12,6 +12,7 @@ end
 
 const posts = [
     # NEWEST TO OLDESTS
+    Post("hashfs", "2023/07/31", "hashfs", ["website"], ""),
     Post("understanding GLFRAMEBUFFERSRGB in glium", "2023/07/31", "Colorspace in glium", [], ""),
     Post("voronoi blog post", "2023/07/20", "Voronoi Diagrams", ["website"], ""),
     Post("confetti", "2023/07/20", "Confetti", ["website"], ""),

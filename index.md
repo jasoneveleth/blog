@@ -2,6 +2,7 @@
 
 # Archive
 
+- [hashfs](2023/07/31/hashfs)
 - [Colorspace in glium](2023/07/31/understanding-GLFRAMEBUFFERSRGB-in-glium)
 - [Voronoi Diagrams](2023/07/20/voronoi-blog-post)
 - [Confetti](2023/07/20/confetti)
