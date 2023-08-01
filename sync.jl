@@ -105,9 +105,7 @@ function process_file(file_contents)
     end
 
     function h(m)
-        println("here!")
         x, y = m.captures
-        println("title: ", resolve_post_title(x))
         "[$(y)](/$(resolve_post_title(x))/#$(replace(lowercase(y), ' ' => '_')))"
     end
 
