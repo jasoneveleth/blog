@@ -71,14 +71,14 @@ function remove_existing!()
 end
 
 function post2filename(p)
-    p.date * "/" * generate_blog_url(p.name) * ".md"
+    p.date * "/" * generate_blog_url(p.name)
 end
 
 function filepaths_and_frontmatter(posts_list)::Vector{Tuple{String, String, String}}
     ret = []
     for p in posts_list
         src = notes_dir * p.name * ".md"
-        dest = post2filename(p)
+        dest = post2filename(p) * ".md"
         push!(ret, (src, dest, frontmatter(p)))
     end
     ret
@@ -104,6 +104,13 @@ function process_file(file_contents)
         end
     end
 
+    function h(m)
+        println("here!")
+        x, y = m.captures
+        println("title: ", resolve_post_title(x))
+        "[$(y)](/$(resolve_post_title(x))/#$(replace(lowercase(y), ' ' => '_')))"
+    end
+
     function g(m)
         note_name = m.captures[1]
         # TODO: this won't work for recursive includes, we want to 
@@ -118,9 +125,13 @@ function process_file(file_contents)
     rx = r"\!\[\[([a-zA-Z0-9 .'=!-]+)\]\]"
     file_contents = replace(file_contents, rx => s -> g(match(rx, s)))
 
+    # section links: [[link name#section title]] => [section](/2021/07/11/link-name/#section)
+    rx = r"\[\[([a-zA-Z0-9 .'=!-]+)#([a-zA-Z0-9 ]+)\]\]"
+    file_contents = replace(file_contents, rx => s -> h(match(rx, s)))
+
     # wikilinks: [[link name|alias]] => [alias](/2021/07/11/link-name/)
     #            [[link name]] => [link name](/2021/07/11/link-name/)
-    rx = r"\[\[([a-zA-Z0-9 .'=!-]+)\|?(\w+)?\]\]"
+    rx = r"\[\[([a-zA-Z0-9 .'=!-]+)\|?([a-zA-Z0-9 ]+)?\]\]"
     file_contents = replace(file_contents, rx => s -> f(match(rx, s)))
 
     # convert images
