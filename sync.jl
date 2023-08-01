@@ -1,4 +1,5 @@
 import URIs
+import Base64
 import Base.Filesystem
 
 struct Post
@@ -111,15 +112,30 @@ function process_file(file_contents)
 
     function g(m)
         note_name = m.captures[1]
-        # TODO: this won't work for recursive includes, we want to 
-        # recurse, but we can't call process_file() since we only
-        # want to do the other substitutions once (once all of the
+        included_text = read(notes_dir * note_name * ".md", String)
+
+        # TODO: this function won't work for recursive includes, we 
+        # want to recurse, but we can't call process_file() since we 
+        # only want to do the other substitutions once (once all of the
         # file has been assembled)
-        read(notes_dir * note_name * ".md", String)
+        @assert match(r"\!\[\[([a-zA-Z0-9 .'=!-]+)\]\]", included_text) === nothing
+
+        included_text
     end
 
-    # note inclusion
-    # ![[note]]
+    function dotsrc2imgsrc(m)
+        text = m.captures[1]
+        inpath, io = mktemp()
+        write(io, text)
+        close(io)
+        outpath, io = mktemp()
+        close(io)
+        run(pipeline(`dot -Tpng`, stdin=inpath, stdout=pipeline(`base64`, outpath)))
+
+        "![](data:image/png;base64,$(read(outpath, String)))"
+    end
+
+    # note inclusion: ![[note]]
     rx = r"\!\[\[([a-zA-Z0-9 .'=!-]+)\]\]"
     file_contents = replace(file_contents, rx => s -> g(match(rx, s)))
 
@@ -138,8 +154,8 @@ function process_file(file_contents)
     file_contents = replace(file_contents, rx => s"![\1](/assets/\3)")
 
     # remove `dot` code block
-    rx = r"```dot"
-    file_contents = replace(file_contents, rx => s"```")
+    rx = r"```dot\n([\s\S]*)\n```\n"
+    file_contents = replace(file_contents, rx => s -> dotsrc2imgsrc(match(rx, s)))
 end
 
 function copy_images!(file_contents)
