@@ -12,8 +12,9 @@ end
 
 const posts = [
     # NEWEST TO OLDESTS
+    Post("hashfs", "2023/07/31", "hashfs", ["website"], ""),
     Post("understanding GLFRAMEBUFFERSRGB in glium", "2023/07/31", "Colorspace in glium", [], ""),
-    Post("voronoi", "2023/07/20", "Voronoi Diagrams", ["website"], ""),
+    Post("voronoi blog post", "2023/07/20", "Voronoi Diagrams", ["website"], ""),
     Post("confetti", "2023/07/20", "Confetti", ["website"], ""),
     Post("why a blog", "2023/07/20", "Why a Blog?", ["website"], ""),
     Post("chicken coop website", "2023/07/18", "Hilarious Random Number Generator", [], ""),
@@ -72,7 +73,7 @@ function remove_existing!()
 end
 
 function post2filename(p)
-    p.date * "/" * generate_blog_url(p.name)
+    p.date * "/" * escape_uri(p.name)
 end
 
 function filepaths_and_frontmatter(posts_list)::Vector{Tuple{String, String, String}}
@@ -85,7 +86,7 @@ function filepaths_and_frontmatter(posts_list)::Vector{Tuple{String, String, Str
     ret
 end
 
-function generate_blog_url(str)
+function escape_uri(str)
     URIs.escapeuri(replace(str, " " => "-"))
 end
 
@@ -150,8 +151,8 @@ function process_file(file_contents)
 
     # convert images
     # ![stuff](images/something) => ![stuff](/assets/something)
-    rx = r"!\[([a-zA-Z0-9 .'-=!]*)\]\((images/)?([a-zA-Z0-9 .'=!-]+)\)"
-    file_contents = replace(file_contents, rx => s"![\1](/assets/\3)")
+    rx = r"!\[([a-zA-Z0-9 .'-=!|]*)\]\(images/([a-zA-Z0-9 .'_=!-]+)\)"
+    file_contents = replace(file_contents, rx => s"![\1](/assets/\2)")
 
     # remove `dot` code block
     rx = r"```dot\n([\s\S]*)\n```"
@@ -160,7 +161,7 @@ end
 
 function copy_images!(file_contents)
     # images: ![](images/file-path.jpg)
-    rx = r"!\[[a-zA-Z0-9 .'=!-]*\]\(/assets/([a-zA-Z0-9 .'=!-]+)\)"
+    rx = r"!\[[a-zA-Z0-9 .'=!-|]*\]\(/assets/([a-zA-Z0-9 .'_=!-]+)\)"
     for m in eachmatch(rx, file_contents)
         x = m.captures[1]
         if !isfile("_assets/$(x)")
@@ -220,7 +221,7 @@ function main()
 
     """
     for p in posts
-        index *= "- [$(p.name)]($(p.date)/$(generate_blog_url(p.name)))\n"
+        index *= "- [$(p.title)]($(p.date)/$(escape_uri(p.name)))\n"
     end
     overwrite_if_diff!("index.md", index)
 end
