@@ -94,6 +94,7 @@ function process_file(file_contents)
     # replace() assumes that the second part of the pair is a string
     # so there's no way to arrange the computation such that the URI encode 
     # happens after the capture
+
     function f(m)
         x, y = m.captures
         if y === nothing
@@ -102,6 +103,20 @@ function process_file(file_contents)
             "[$(y)](/$(resolve_post_title(x)))"
         end
     end
+
+    function g(m)
+        note_name = m.captures[1]
+        # TODO: this won't work for recursive includes, we want to 
+        # recurse, but we can't call process_file() since we only
+        # want to do the other substitutions once (once all of the
+        # file has been assembled)
+        read(notes_dir * note_name * ".md", String)
+    end
+
+    # note inclusion
+    # ![[note]]
+    rx = r"\!\[\[([a-zA-Z0-9 .'=!-]+)\]\]"
+    file_contents = replace(file_contents, rx => s -> g(match(rx, s)))
 
     # wikilinks: [[link name|alias]] => [alias](/2021/07/11/link-name/)
     #            [[link name]] => [link name](/2021/07/11/link-name/)
