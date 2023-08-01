@@ -25,7 +25,7 @@ The woman is stressed out that she tested positive. She asks you, "How likely is
 
 My dad came up with a great way to think about it. Imagine a population of 1000 people and do the calculations on that. You know the prior is $1\%$, so $10$ people have cancer, and $990$ people don't. Our test is $90\%$ accurate when they have cancer; so, $9$ people who have cancer test positive, and $1$ person who has cancer tests negative. Of the $990$, our test is $91\%$ accurate, so about $901$ people test negative, and about $89$ people test positive.
 
-We know the woman tested positive, so she is either one of $9$ who has it, or $89$ who doesn't have it. $\frac{9}{9+89}\approx \frac{1}{11}$ so she is about $10\%$ likely to have cancer. That was a lot of calculation, and directly applying Bayes' rule isn't much simpler. We will create a framework for making these kinds of decisions that is mathematically sound, and easy to use in real life, even if you don't like [math](/2021/07/11/math).
+We know the woman tested positive, so she is either one of $9$ who has it, or $89$ who doesn't have it. $\frac{9}{9+89}\approx \frac{1}{11}$ so she is about $10\%$ likely to have cancer. That was a lot of calculation, and directly applying Bayes' rule isn't much simpler. We will create a framework for making these kinds of decisions that is mathematically sound, and easy to use in real life, even if you don't like [math](/404).
 
 # An aside about odds
 

@@ -42,8 +42,17 @@ function frontmatter(post)
     """
 end
 
+function resolve_post_title(title)
+    for post in posts
+        if post.name == title
+            return post2filename(post)
+        end
+    end
+    "404"
+end
+
 function remove_existing!()
-    # all years are 20xx
+    # all years are 20xx, I want to make my own millenium problem
     existing_folders = filter(x -> x[1:2] == "20", readdir("."))
     if length(existing_folders) == 0
         return
@@ -61,11 +70,15 @@ function remove_existing!()
     end
 end
 
+function post2filename(p)
+    p.date * "/" * generate_blog_url(p.name) * ".md"
+end
+
 function filepaths_and_frontmatter(posts_list)::Vector{Tuple{String, String, String}}
     ret = []
     for p in posts_list
         src = notes_dir * p.name * ".md"
-        dest = p.date * "/" * generate_blog_url(p.name) * ".md"
+        dest = post2filename(p)
         push!(ret, (src, dest, frontmatter(p)))
     end
     ret
@@ -84,9 +97,9 @@ function process_file(file_contents)
     function f(m)
         x, y = m.captures
         if y === nothing
-            "[$(x)](/2021/07/11/$(generate_blog_url(x)))"
+            "[$(x)](/$(resolve_post_title(x)))"
         else
-            "[$(y)](/2021/07/11/$(generate_blog_url(x)))"
+            "[$(y)](/$(resolve_post_title(x)))"
         end
     end
 

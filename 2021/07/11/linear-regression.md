@@ -21,7 +21,7 @@ find $m,b$ such that $y = mx + b$ minimizes the sum of the residuals squared. By
 that I mean we want to minimize a function $L(\alpha) = \sum_i (y_i - (mx_i + b))^2$, by
 finding the best $m$ and $b$.
 
-We will use the notation from [here](/2021/07/11/calculus-notation). Here are some fun facts we'll need to know:
+We will use the notation from [here](/404). Here are some fun facts we'll need to know:
 1. $\sum_i x_i^2 =\lVert x \rVert^2$
 2. $\lVert x \rVert^2 = x^Tx$
 3.  $(A + B)^T = A^T + B^T$ and $(AB)=B^TA^T$.
