@@ -54,7 +54,7 @@ If the only thing we care about is the odds at the end (i.e. the ratio of red to
 
 # The proof
 
-We start with our prior odds, cancer:not cancer, will be written $O_{old}=P(C):P(\lnot C),$ 
+We start with our prior odds, cancer:not cancer, which is written $O_{old}=P(C):P(\lnot C).$ 
 
 We want to know the probability of **cancer** *given* she **is positive**. In probability form, we write that $P(C\mid +).$ This kind of conditional probability is really important to understand, and I can't explain it too thoroughly here, but the idea is when you say "A given B", you are restricting your universe of possible events to only ones where B is true, and you're asking, out of those times, how often is A true. That is, $P(A\mid B) = \frac{P(A\cap B)}{P(B)}.$ We can rewrite this as $P(A\mid B)P(B) = P(A\cap B)$. This formula will be very important. You should also know that we can rename the A's to B's, so $P(B\mid A)P(A) = P(B\cap A)=P(A \cap B)$. We will use this later.
 

@@ -23,4 +23,35 @@ I choose to write this up in Rust since I love Rust. The code can be found on [g
 
 This utility ended up not being useful since iCloud automatically frees up space by replacing files with a `file.ext.icloud` file, which ruins the whole hashing system. Regardless, I am very proud of it, and I think it could be useful to others.
 
+# In action
+
+For a directory tree like:
+```
+b
+|- a.txt
+|- b.txt
+|- c.txt
+|- d.txt
+|- e.txt
+|- f.txt
+|- g.txt
+|- j.txt
+```
+It would produce this (hashes have been elided for space):
+~~~
+<details class="d"><summary class="s">
+<strong>b</strong> 7a9b89fa674b0b703eaafca2e79e474a55...
+</summary>
+<strong>a.txt</strong> 86bfc753650b4b730b7177b9e665dbe100...</br>
+<strong>b.txt</strong> 86bfc753650b4b730b7177b9e665dbe100...</br>
+<strong>c.txt</strong> a380d5f755183c7c0f05a327e7094c9e98...</br>
+<strong>d.txt</strong> a380d5f755183c7c0f05a327e7094c9e98...</br>
+<strong>e.txt</strong> 5c836f02b0d2653274fefab5e108d3e78c...</br>
+<strong>f.txt</strong> ecef6bf3c9100c87aaeb4fae46b23f23d6...</br>
+<strong>g.txt</strong> 9d1af65406716fd984b640f7f24b43ccd6...</br>
+<strong>j.txt</strong> 79a2f595545dd08b508c2a808e543befcb...</br>
+</details><style>:root{--l: 25px}details > details{margin-left: var(--l);}.s{margin-left: calc(0px - var(--l))}.d{font-family: monospace;margin-left: var(--l);font-size: 70%;}</style>
+~~~
+
+
 {{ addcomments }}
