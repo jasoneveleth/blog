@@ -3,8 +3,9 @@
 
   <!-- if we're in an iframe -->
   <script>
-    if (window.self == window.top) {
-      document.getElementsByTagName("nav")[0].style.display = "none"
+    if (window.self != window.top) {
+      a = document.getElementsByTagName("nav")
+      a[0].style.display = "none"
     }
   </script>
 

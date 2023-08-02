@@ -12,7 +12,7 @@ end
 
 const posts = [
     # NEWEST TO OLDESTS
-    Post("wave equation", "2023/08/01", "wave equation simulation", ["website"], ""),
+    Post("wave equation", "2023/08/01", "Wave equation simulation", ["website"], ""),
     Post("hashfs", "2023/07/31", "hashfs", ["website"], ""),
     Post("understanding GLFRAMEBUFFERSRGB in glium", "2023/07/31", "Colorspace in glium", [], ""),
     Post("voronoi blog post", "2023/07/20", "Voronoi Diagrams", ["website"], ""),
