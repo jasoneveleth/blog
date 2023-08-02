@@ -41,17 +41,17 @@ So,
 $$D_{tt}u_{1,i,j} = \frac{\Delta_t D_t u_{1,i,j}}{dt}=\frac{\frac{u_{0,i,j} - u_{1, i, j}}{dt}-\frac{u_{1,i,j} - u_{2, i, j}}{dt}}{dt} = \frac{u_{0,i,j}-2u_{1,i,j}+u_{2,i,j}}{(dt)^2}$$
 Next, we do space derivatives (ignoring $c^2$ for now),
 $$
-\begin{align}
+\begin{align*}
 D_{xx}u_{1,i,j} &+ D_{yy}u_{1,i,j} = \frac{\Delta_x D_x u_{1,i,j}}{dx} + \frac{\Delta_y D_y u_{1,i,j}}{dy}\\ &= \frac{u_{1,i-1,j} - 2u_{1,i,j} + u_{1,i+1,j}}{(dx)^2} + \frac{u_{1,i,j-1} - 2u_{1,i,j} + u_{1,i,j+1}}{(dy)^2}
-\end{align}$$
+\end{align*}$$
 
 Returning to the wave equation,
 $$
-\begin{align}
+\begin{align*}
 D_{tt}u &= c^2 ( D_{xx}u + D_{yy}u)\\
 \frac{u_{0,i,j}-2u_{1,i,j}+u_{2,i,j}}{(dt)^2} &= c^2\left(\frac{u_{1,i-1,j} - 2u_{1,i,j} + u_{1,i+1,j}}{(dx)^2} + \frac{u_{1,i,j-1} - 2u_{1,i,j} + u_{1,i,j+1}}{(dy)^2}\right)\\
 u_{0,i,j} &= 2u_{1,i,j} - u_{2,i,j} +c^2 (dt)^2\left( \frac{u_{1,i-1,j} - 2u_{1,i,j} + u_{1,i+1,j}}{(dx)^2} + \frac{u_{1,i,j-1} - 2u_{1,i,j} + u_{1,i,j+1}}{(dy)^2}\right)
-\end{align}
+\end{align*}
 $$
 
 If we assume $dx = dy$ and $\alpha = \frac{c^2 (dt)^2}{(dx)^2}$ then
