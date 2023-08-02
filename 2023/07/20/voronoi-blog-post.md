@@ -22,4 +22,5 @@ Motivated by Voronoi diagrams in the study of soap foams, I (along with my mento
 The objective function is highly nonlinear and nonconvex, so different methods and initial conditions yield different solutions. For each of these methods, we collect geometrical and topological statistics about the boundary network over time. Our goal is to understand how these diagrams change over time. Overall, it is important to understand the evolution of Voronoi diagrams because of the implications in metallurgy and the study of soap foams.
 
 The source for this project can be found on [github](https://github.com/jasoneveleth/voronoi2).
+
 {{ addcomments }}

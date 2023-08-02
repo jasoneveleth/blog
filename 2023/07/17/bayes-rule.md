@@ -113,4 +113,5 @@ $$
 \end{align*}
 $$
 This might be better understood by a very poorly drawn PowerPoint slide: ![](/assets/union-and-intersection.png)
+
 {{ addcomments }}

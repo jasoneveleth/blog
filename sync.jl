@@ -185,6 +185,7 @@ function make_contents(note_contents, frontmatter)
     """
     $(frontmatter)
     $(process_file(note_contents))
+
     {{ addcomments }}
     """
 end

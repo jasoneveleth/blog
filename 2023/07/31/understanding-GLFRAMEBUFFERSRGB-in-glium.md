@@ -129,4 +129,5 @@ We also should remove `clear_color_srgb()` since users shouldn't worry about `GF
 
 - simplicity: there's only 1 mode to worry about
 - backward compatibility with old `glium` programs since this is doesn't change the fundamental model
+
 {{ addcomments }}

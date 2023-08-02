@@ -91,4 +91,5 @@ Which gives us our desired line of best fit: $y = 0.962823x + 0.122874$.
 [^1]: The bar in $\bar{\alpha}$ or $\bar{x}$ means treat it as a constant, in the same way, that you would if you were doing the product rule with single-valued functions: $D(f(x)g(x)) = D(f(x)\bar{g}(x)) + D(\bar{f}(x) g(x)) = (Df(x))g(x) + (Dg(x))f(x)$.
 
 
+
 {{ addcomments }}

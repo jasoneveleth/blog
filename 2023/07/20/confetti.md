@@ -43,4 +43,5 @@ The main approach is to keep a big array of confetti, and on each rendering step
 - draw the quadrilaterals from those image coordinates.
 
 Since we are calculating how each confetti would fall in real-time, large amounts of confetti (or badly optimized browsers), can really slow down a machine. Something to keep in mind if you use the website. Overall, I really enjoyed this project.
+
 {{ addcomments }}

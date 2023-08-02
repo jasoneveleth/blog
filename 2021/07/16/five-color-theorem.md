@@ -93,4 +93,5 @@ This that case leads to a contradiction, so any planar graph must've fallen into
 one of the cases that was 5 colorable. Thus, every planar graph is 5 colorable. This concludes the proof.
 
 ---
+
 {{ addcomments }}
