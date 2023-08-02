@@ -4,8 +4,8 @@
   <!-- if we're in an iframe -->
   <script>
     if (window.self != window.top) {
-      a = document.getElementsByTagName("nav")
-      a[0].style.display = "none"
+      a = document.getElementsByClassName("the-nav")
+      a.forEach(i => i.style.display = "none")
     }
   </script>
 
