@@ -4,9 +4,8 @@
   <!-- if we're in an iframe -->
   <script>
     if (window.self != window.top) {
-      a = document.getElementsByClassName("blog-nav")
-      console.log("we're in an iframe!!!")
-      a.forEach(i => i.style.display = "none")
+      document.getElementsByClassName("blog-nav").forEach(i => i.style.display = "none");
+      console.log("we're in an iframe!!!");
     }
   </script>
 
