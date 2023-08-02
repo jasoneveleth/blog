@@ -50,7 +50,7 @@ It would produce this (hashes have been elided for space):
 <strong>f.txt</strong> ecef6bf3c9100c87aaeb4fae46b23f23d6...</br>
 <strong>g.txt</strong> 9d1af65406716fd984b640f7f24b43ccd6...</br>
 <strong>j.txt</strong> 79a2f595545dd08b508c2a808e543befcb...</br>
-</details><style>:root{--l: 25px}details > details{margin-left: var(--l);}.s{margin-left: calc(0px - var(--l))}.d{font-family: monospace;margin-left: var(--l);font-size: 70%;}</style>
+</details><style>:root{--l: 25px}details > details{margin-left: var(--l);}.s{margin-left: calc(0px - var(--l))}.d{font-family: monospace;margin-left: var(--l);font-size: 70%;}details > strong{font-weight: 700;}</style>
 ~~~
 
 
