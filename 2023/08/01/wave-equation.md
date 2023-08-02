@@ -23,7 +23,9 @@ At first I tried to figure out the finite difference equations, but I got stuck.
 
 # In action
 
-![](/assets/wave-equation.mov)
+~~~
+<video controls src="/assets/wave-equation.mov" alt=""></video>
+~~~
 
 # The rederivation
 
