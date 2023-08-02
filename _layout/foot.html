@@ -1,5 +1,13 @@
 <!-- CONTENT ENDS HERE -->
   </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+    if (window.self == window.top) {
+      document.getElementsByTagName("nav")[0].style.display = "none"
+    }
+  </script>
+
   <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
   <!-- <script src="/libs/vela/slideout.min.js"></script> -->
   {{ if hasmath }}
