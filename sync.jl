@@ -155,6 +155,11 @@ function process_file(file_contents)
     rx = r"!\[([a-zA-Z0-9 .'-=!|]*)\]\(images/([a-zA-Z0-9 .'_=!-]+)\)"
     file_contents = replace(file_contents, rx => s"![\1](/assets/\2)")
 
+    # videos
+    # ![stuff](videos/something) => ~~~\n<videos>stuff](/assets/something)</video>\n~~~
+    rx = r"!\[([a-zA-Z0-9 .'-=!|]*)\]\(videos/([a-zA-Z0-9 .'_=!-]+)\)"
+    file_contents = replace(file_contents, rx => s"~~~\n<video controls src=\"/assets/\2\" alt=\"\1\"></video>\n~~~")
+
     # remove `dot` code block
     rx = r"```dot\n([\s\S]*)\n```"
     file_contents = replace(file_contents, rx => s -> dotsrc2imgsrc(match(rx, s)))
