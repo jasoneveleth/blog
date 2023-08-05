@@ -217,18 +217,7 @@ function get_posts(posts, year)
     end
 end
 
-function main()
-    println("syncing...")
-    data = filepaths_and_frontmatter(posts)
-    for (src, _, _) in data
-        if !isfile(src)
-            println("not found: ", src)
-            return 1
-        end
-    end
-    # remove_existing!()
-    copy_files!(data)
-
+function new_index!()
     index = """
     @def title = "Archive"
 
@@ -243,6 +232,52 @@ function main()
         end
     end
     overwrite_if_diff!("index.md", index)
+end
+
+function new_search!()
+    search = """
+    @def title = "Search"
+
+    ~~~
+    <script>
+    const mystuff = [
+    """
+    for p in posts
+        contents = read(post2filename(p) * ".md", String)
+        contents = replace(contents, "\\" => "\\\\")
+        contents = replace(contents, "\"" => "\\\"")
+        contents = replace(contents, "~~~" => "")
+        contents = replace(contents, r"\+\+\+[^+]*\+\+\+" => "")
+        contents = replace(contents, "```" => "")
+        contents = replace(contents, "\n" => " ")
+        # this is the beginning of every document: "  <details> <summary>Table of Contents</summary>  \\toc  </details>   "
+        contents = contents[70:end]
+        search *= "{title: \"$(p.title)\", content: \"$(contents)\"},\n"
+    end
+    search *= """
+    ]
+    </script>
+    <input oninput="search(this.value, mystuff)"/>
+    <div id="results-div"></div>
+    ~~~
+    """
+    overwrite_if_diff!("search.md", search)
+end
+
+function main()
+    println("syncing...")
+    data = filepaths_and_frontmatter(posts)
+    for (src, _, _) in data
+        if !isfile(src)
+            println("not found: ", src)
+            return 1
+        end
+    end
+    # remove_existing!()
+    copy_files!(data)
+
+    new_index!()
+    new_search!()
 end
 
 main()
