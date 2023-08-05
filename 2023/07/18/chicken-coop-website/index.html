@@ -1,1 +1,82 @@
-<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link href="/blog/css/franklin.css" rel=stylesheet > <link href="/blog/css/global.css" rel=stylesheet > <link rel=icon  href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>"> <title>Hilarious Random Number Generator</title> <nav class="flex-container blog-nav"> <!-- type-c start at 0 and absorb remaining space--> <div class=type-c ></div> <div class="type-b link-spacer"></div> <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div> <div class="type-b content-spacer"></div> <div class="type-a nav-link"><a href="/blog/">Search</a></div> <div class="type-b link-spacer"></div> <div class=type-c ></div> </nav> <main id=panel > <h1 class=post-title >Hilarious Random Number Generator</h1> <div class=franklin-content ><p> <details> <summary>Table of Contents</summary> </details> </p> <p>I was searching for a chicken coop &#40;as one does&#41;. I stumbled across a Facebook marketplace ad:</p> <p><img src="/blog/assets/1story.png" alt="" /></p> <p>The website it linked to had a live updating &quot;people viewing this item&quot; count:</p> <p><img src="/blog/assets/2story.png" alt="" /></p> <p>That seemed suspicious, so I looked into it.</p> <p><img src="/blog/assets/3story.png" alt="" /></p> <p><img src="/blog/assets/4story.png" alt="" /></p> <p>They were just setting a random integer with jquery on a <code>setTimeout&#40;&#41;</code>.</p> <script src="https://utteranc.es/client.js" repo="jasoneveleth/blog" issue-term=pathname  label=Comment  theme=github-light  crossorigin=anonymous  async> </script> <div class=page-foot > © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: August 05, 2023 </div> </div> </main> <script> if (window.self != window.top) { console.log("we're in an iframe!!!"); document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none"); } </script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  <link href="/blog/css/franklin.css" rel="stylesheet">
+<link href="/blog/css/global.css" rel="stylesheet">
+<!-- <script src="/blog/libs/jquery/jquery.min.js"></script> -->
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+
+  <title>Hilarious Random Number Generator</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/blog/">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">Hilarious Random Number Generator</h1>
+<!-- <hr> -->
+<!-- Content appended here -->
+<div class="franklin-content"><p> 
+<details>
+<summary>Table of Contents</summary>
+  
+</details>
+</p>
+<p>I was searching for a chicken coop &#40;as one does&#41;. I stumbled across a Facebook marketplace ad:</p>
+<p><img src="/blog/assets/1story.png" alt="" /></p>
+<p>The website it linked to had a live updating &quot;people viewing this item&quot; count:</p>
+<p><img src="/blog/assets/2story.png" alt="" /></p>
+<p>That seemed suspicious, so I looked into it.</p>
+<p><img src="/blog/assets/3story.png" alt="" /></p>
+<p><img src="/blog/assets/4story.png" alt="" /></p>
+<p>They were just setting a random integer with jquery on a <code>setTimeout&#40;&#41;</code>.</p>
+    <script src="https://utteranc.es/client.js"
+        repo="jasoneveleth/blog"
+        issue-term="pathname"
+        label="Comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+
+<div class="page-foot">
+    © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: August 05, 2023
+</div>
+</div><!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+    if (window.self != window.top) {
+      console.log("we're in an iframe!!!");
+      document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+    }
+  </script>
+
+  <!-- <script src="/blog/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/blog/libs/vela/slideout.min.js"></script> -->
+  
+  
+</body>
+</html>

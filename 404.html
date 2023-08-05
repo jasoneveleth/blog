@@ -1,1 +1,61 @@
-<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link href="/blog/css/franklin.css" rel=stylesheet > <link href="/blog/css/global.css" rel=stylesheet > <link rel=icon  href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>"> <title>404</title> <nav class="flex-container blog-nav"> <!-- type-c start at 0 and absorb remaining space--> <div class=type-c ></div> <div class="type-b link-spacer"></div> <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div> <div class="type-b content-spacer"></div> <div class="type-a nav-link"><a href="/blog/">Search</a></div> <div class="type-b link-spacer"></div> <div class=type-c ></div> </nav> <main id=panel > <h1 class=post-title >404</h1> <div class=franklin-content ><p>The requested page was not found. </p> <p>If you clicked on a link from my blog to get here, it&#39;s likely just unpublished. You can ask me to publish it by creating an issue on github <a href="https://github.com/jasoneveleth/blog/issues/new">here</a>. Click <a href="/blog/">here</a> to go back to the homepage.</p> <div class=page-foot > © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: August 05, 2023 </div> </div> </main> <script> if (window.self != window.top) { console.log("we're in an iframe!!!"); document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none"); } </script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  <link href="/blog/css/franklin.css" rel="stylesheet">
+<link href="/blog/css/global.css" rel="stylesheet">
+<!-- <script src="/blog/libs/jquery/jquery.min.js"></script> -->
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+
+  <title>404</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/blog/">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">404</h1>
+<!-- <hr> -->
+<!-- Content appended here -->
+<div class="franklin-content"><p>The requested page was not found. </p>
+<p>If you clicked on a link from my blog to get here, it&#39;s likely just unpublished. You can ask me to publish it by creating an issue on github <a href="https://github.com/jasoneveleth/blog/issues/new">here</a>. Click <a href="/blog/">here</a> to go back to the homepage.</p>
+<div class="page-foot">
+    © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: August 05, 2023
+</div>
+</div><!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+    if (window.self != window.top) {
+      console.log("we're in an iframe!!!");
+      document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+    }
+  </script>
+
+  <!-- <script src="/blog/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/blog/libs/vela/slideout.min.js"></script> -->
+  
+  
+</body>
+</html>
