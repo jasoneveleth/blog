@@ -209,6 +209,14 @@ function overwrite_if_diff!(file_path, content)
     end
 end
 
+function get_posts(posts, year)
+    for p in posts
+        if p.date[1:4] == year
+
+        end
+    end
+end
+
 function main()
     println("syncing...")
     data = filepaths_and_frontmatter(posts)
@@ -222,13 +230,17 @@ function main()
     copy_files!(data)
 
     index = """
-    @def title = "Jason's Blog"
-
-    # Archive
+    @def title = "Archive"
 
     """
-    for p in posts
-        index *= "- [$(p.title)]($(p.date)/$(escape_uri(p.name)))\n"
+
+    f(l, x) = push!(l, x.date[1:4])
+    years = unique(foldl(f, posts, init=[]))
+    for y in years
+        index *= "## $(y)\n"
+        for p in filter(x-> x.date[1:4] == y, posts)
+            index *= "~~~<span class='date'>$(p.date[6:end])</span>~~~ [$(p.title)]($(p.date)/$(escape_uri(p.name)))\n\n"
+        end
     end
     overwrite_if_diff!("index.md", index)
 end
