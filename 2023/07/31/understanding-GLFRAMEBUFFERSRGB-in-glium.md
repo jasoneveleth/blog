@@ -19,8 +19,8 @@ I have been working on a small project to learn [OpenGL](/404). I decided to use
 
 - `GL_FRAMEBUFFER_SRGB`: A global parameter, associated with an OpenGL context. It comes up so much, I will refer to it as `GFS`. How it affects gamma correction is explained in the [Summary of literature](/2023/07/31/understanding-GLFRAMEBUFFERSRGB-in-glium/#summary_of_literature).
 - Texture: a place to store image data/raster graphics (pixel values)
-	- can come in 2 variants: regular and sRGB
-	- can be used as a render target (in which case the texture will be attached on an FBO, mentioned below) or as a source of image data
+    - can come in 2 variants: regular and sRGB
+    - can be used as a render target (in which case the texture will be attached on an FBO, mentioned below) or as a source of image data
 - Framebuffer: a collection of buffers used as a destination for rendering. Can be the Default Framebuffer or a user-created Framebuffer Object (FBO).
 
 # "help my colors are broken" flowchart (for the current glium way)

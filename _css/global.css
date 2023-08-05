@@ -147,11 +147,6 @@ dfn {
   font-style: italic;
 }
 
-h1 {
-  font-size: 2em;
-  margin: 0.67em 0;
-}
-
 mark {
   color: #000;
   background: #ff0;
@@ -272,8 +267,9 @@ html {
   overflow-x: hidden
 }
 
-h1 {
-  font-weight: 500;
+.date {
+    font-family: monospace;
+    color: rgb(75, 85, 99);
 }
 
 .page-title {

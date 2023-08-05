@@ -17,9 +17,9 @@ tags = ["website"]
 
 Imagine your worst enemy is playing a constant frequency in the center of her room. You're allowed to put speakers (which don't take up space) wherever you want in the room. The question is, what's the best place to put them and what should they play?
 
-To be fair this is not the question that I'll be answering in this post, but it was the inspiration. We first simplify the problem into 2D so your enemy is now vibrating a surface with constant frequency. To simulate this problem, we need to solve the wave equation and that is what I do in this post.
+To be fair, this is not the question that I'll be answering in this post, but it was the inspiration. We first simplify the problem into 2D so your enemy is now vibrating a surface with constant frequency. To simulate this problem, we need to solve the wave equation, which I do in this post.
 
-At first I tried to figure out the finite difference equations, but I got stuck. Then, I looked it up and I found [this wonderful blog post](https://beltoforion.de/en/recreational_mathematics/2d-wave-equation.php). I've rederived the equations to make sure I believed it and I wrote the code in Julia, which you can find it on [GitHub](). My first attempt at figuring out the finite differences is in the Python notebook, and the final code is in `simulation.jl`.
+At first, I tried to figure out the finite difference equations, but I got stuck. Then, I looked it up and I found [this wonderful blog post](https://beltoforion.de/en/recreational_mathematics/2d-wave-equation.php). I've rederived the equations to make sure I believed it and I wrote the code in Julia, which you can find it on [GitHub](). My first attempt at figuring out the finite differences is in the Python notebook, and the final code is in `simulation.jl`.
 
 # In action
 
@@ -60,7 +60,7 @@ If we assume $dx = dy$ and $\alpha = \frac{c^2 (dt)^2}{(dx)^2}$ then
 $$u_{0,i,j} = 2u_{1,i,j} - u_{2,i,j} +\alpha\left( u_{1,i-1,j}+u_{1,i,j-1} - 4u_{1,i,j} + u_{1,i+1,j} + u_{1,i,j+1}\right)$$
 There are no $u_{0,\_,\_}$ on the RHS. Thus, every value in the newest level can be calculated by the ones in previous levels.
 
-We deal with the boundary by only calculating `u[0,1:lx,1:ly]`, and leaving the rest 0. So shifts are calculated like so: `u[1,0:lx-2,1:ly`.
+We deal with the boundary by only calculating `u[0,1:lx,1:ly]`, and leaving the rest 0. So shifts are calculated like so: `u[1,0:lx-2,1:ly]`.
 
 Note: this is actually [Verlet integration](https://en.wikipedia.org/wiki/Verlet_integration) (a trick for solving for the next state in terms of the finite differences and the second derivatives).
 
