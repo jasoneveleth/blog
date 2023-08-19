@@ -53,5 +53,10 @@ It would produce this (hashes have been elided for space):
 </details><style>:root{--l: 25px}details > details{margin-left: var(--l);}.s{margin-left: calc(0px - var(--l))}.d{font-family: monospace;margin-left: var(--l);font-size: 70%;}details > strong{font-weight: 700;}</style>
 ~~~
 
+# Update 8/9/2023
+
+One of my friends let me know that I have implemented a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree). Merkle trees are trees whose leaves store the hash of their contents, and whose interior nodes store the hashes of their children. 
+
+They are often used in cryptocurrencies because you can prove the inclusion of a leaf in the tree by just providing the child nodes corresponding to the path from that leaf to the root. This works in log time because the tree is $log(N)$ tall.
 
 {{ addcomments }}
