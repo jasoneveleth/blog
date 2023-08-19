@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
+   <link rel="stylesheet" href="/blog/libs/katex/katex.min.css">
+   
    <link rel="stylesheet" href="/blog/libs/highlight/styles/github.min.css">
    
 
@@ -41,7 +42,7 @@
 <div class="franklin-content"><p> 
 <details>
 <summary>Table of Contents</summary>
- <div class="franklin-toc"><ol><li><a href="#in_action">In action</a></li></ol></div> 
+ <div class="franklin-toc"><ol><li><a href="#in_action">In action</a></li><li><a href="#update_892023">Update 8/9/2023</a></li></ol></div> 
 </details>
 </p>
 <p>This weekend I was helping my aunt make sure that her files were syncing correctly between two laptops. I&#39;d been thinking about git a lot, and I realized recursive hashing was the way to go.</p>
@@ -74,6 +75,9 @@
 <strong>j.txt</strong> 79a2f595545dd08b508c2a808e543befcb...</br>
 </details><style>:root{--l: 25px}details > details{margin-left: var(--l);}.s{margin-left: calc(0px - var(--l))}.d{font-family: monospace;margin-left: var(--l);font-size: 70%;}details > strong{font-weight: 700;}</style>
 </p>
+<h1 id="update_892023"><a href="#update_892023" class="header-anchor">Update 8/9/2023</a></h1>
+<p>One of my friends let me know that I have implemented a <a href="https://en.wikipedia.org/wiki/Merkle_tree">Merkle tree</a>. Merkle trees are trees whose leaves store the hash of their contents, and whose interior nodes store the hashes of their children. </p>
+<p>They are often used in cryptocurrencies because you can prove the inclusion of a leaf in the tree by just providing the child nodes corresponding to the path from that leaf to the root. This works in log time because the tree is <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>o</mi><mi>g</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">log(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span> tall.</p>
     <script src="https://utteranc.es/client.js"
         repo="jasoneveleth/blog"
         issue-term="pathname"
@@ -84,7 +88,7 @@
     </script>
 
 <div class="page-foot">
-    © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: August 05, 2023
+    © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: August 19, 2023
 </div>
 </div><!-- CONTENT ENDS HERE -->
   </main> <!-- end of id=main -->
@@ -99,6 +103,11 @@
 
   <!-- <script src="/blog/libs/vela/metisMenu.min.js"></script> -->
   <!-- <script src="/blog/libs/vela/slideout.min.js"></script> -->
+  
+    
+
+
+
   
   
     <script src="/blog/libs/highlight/highlight.min.js"></script>
