@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Asymptotic Analysis of Dijkstras in Haskell  ]]>
+  </title>
+  <link> https://www.jasoneveleth.com/blog/2023/11/05/purely-functional-dijkstras/index.html </link>
+  <guid> https://www.jasoneveleth.com/blog/2023/11/05/purely-functional-dijkstras/index.html </guid>
+  <description>
+    <![CDATA[  My analysis of whether it is possible to have optimal* Dijkstras in Haskell  ]]>
+  </description>  
+    
+  <pubDate>Sun, 05 Nov 2023 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Jason Eveleth</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Pick&#39;s Theorem  ]]>
   </title>
   <link> https://www.jasoneveleth.com/blog/2021/09/03/picks-theorem/index.html </link>
