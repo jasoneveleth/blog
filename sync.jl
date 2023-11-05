@@ -12,6 +12,7 @@ end
 
 const posts = [
     # NEWEST TO OLDESTS
+    Post("purely functional dijkstras", "2023/11/05", "Asymptotic Analysis of Dijkstras in Haskell", [], "My analysis of whether it is possible to have optimal* Dijkstras in Haskell"),
     Post("wave equation", "2023/08/01", "Wave equation simulation", ["website"], ""),
     Post("hashfs", "2023/07/31", "hashfs", ["website"], ""),
     Post("understanding GLFRAMEBUFFERSRGB in glium", "2023/07/31", "Colorspace in glium", [], ""),
@@ -25,7 +26,7 @@ const posts = [
     Post("linear regression", "2021/07/11", "Linear Regression", ["math"], ""),
 ]
 
-const notes_dir = "/users/jason/.root/notes/"
+const notes_dir = "/users/jason/notes/"
 
 function frontmatter(post)
     """+++
@@ -161,7 +162,7 @@ function process_file(file_contents)
     file_contents = replace(file_contents, rx => s"~~~\n<video controls src=\"/assets/\2\" alt=\"\1\"></video>\n~~~")
 
     # remove `dot` code block
-    rx = r"```dot\n([\s\S]*)\n```"
+    rx = r"```dot\n([^`]*)\n```"
     file_contents = replace(file_contents, rx => s -> dotsrc2imgsrc(match(rx, s)))
 end
 
