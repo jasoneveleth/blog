@@ -8,12 +8,6 @@
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>https://www.jasoneveleth.com/blog/2023/11/16/professor-chan%2527s-band-coloring/index.html</loc>
-    <lastmod>2023-11-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
     <loc>https://www.jasoneveleth.com/blog/2023/07/31/hashfs/index.html</loc>
     <lastmod>2023-11-16</lastmod>
     <changefreq>monthly</changefreq>
@@ -75,6 +69,12 @@
 </url>
 <url>
     <loc>https://www.jasoneveleth.com/blog/2023/11/05/purely-functional-dijkstras/index.html</loc>
+    <lastmod>2023-11-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://www.jasoneveleth.com/blog/2023/11/16/professor-chans-band-coloring/index.html</loc>
     <lastmod>2023-11-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

@@ -90,7 +90,7 @@ function filepaths_and_frontmatter(posts_list)::Vector{Tuple{String, String, Str
 end
 
 function escape_uri(str)
-    URIs.escapeuri(replace(str, " " => "-"))
+    URIs.escapeuri(replace(str, " " => "-", "'" => ""))
 end
 
 function process_file(file_contents)
@@ -134,7 +134,21 @@ function process_file(file_contents)
         close(io)
         outpath, io = mktemp()
         close(io)
-        run(pipeline(`dot -Tpng`, stdin=inpath, stdout=pipeline(`base64`, outpath)))
+        run(pipeline(inpath, `dot -Tpng`, `base64`, outpath))
+
+        "![](data:image/png;base64,$(read(outpath, String)))"
+    end
+
+    function tikzsrc2imgsrc(m)
+        text = m.captures[1]
+        inpath, io = mktemp()
+        write(io, "\\documentclass[tikz,border=2mm]{standalone}\n")
+        write(io, text)
+        write(io, "\n")
+        close(io)
+        outpath, io = mktemp()
+        close(io)
+        run(pipeline(inpath, `latex-pipe2`, `convert -density 300 pdf:- png:-`, `base64`, outpath))
 
         "![](data:image/png;base64,$(read(outpath, String)))"
     end
@@ -165,6 +179,10 @@ function process_file(file_contents)
     # remove `dot` code block
     rx = r"```dot\n([^`]*)\n```"
     file_contents = replace(file_contents, rx => s -> dotsrc2imgsrc(match(rx, s)))
+
+    # remove `tikz` code block
+    rx = r"```tikz\n([^`]*)\n```"
+    file_contents = replace(file_contents, rx => s -> tikzsrc2imgsrc(match(rx, s)))
 end
 
 function copy_images!(file_contents)
