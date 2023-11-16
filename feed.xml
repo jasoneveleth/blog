@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Professor Chan&#39;s Band Coloring  ]]>
+  </title>
+  <link> https://www.jasoneveleth.com/blog/2023/11/16/professor-chan%27s-band-coloring/index.html </link>
+  <guid> https://www.jasoneveleth.com/blog/2023/11/16/professor-chan%27s-band-coloring/index.html </guid>
+  <description>
+    <![CDATA[  My recollection of my advisor&#39;s graph theory application from freshman year.  ]]>
+  </description>  
+    
+  <pubDate>Thu, 16 Nov 2023 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Jason Eveleth</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Asymptotic Analysis of Dijkstras in Haskell  ]]>
   </title>
   <link> https://www.jasoneveleth.com/blog/2023/11/05/purely-functional-dijkstras/index.html </link>

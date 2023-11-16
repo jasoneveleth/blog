@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="/blog/libs/katex/katex.min.css">
+   
+   <link rel="stylesheet" href="/blog/libs/highlight/styles/github.min.css">
+   
+
+  <link href="/blog/css/franklin.css" rel="stylesheet">
+<link href="/blog/css/global.css" rel="stylesheet">
+<!-- <script src="/blog/libs/jquery/jquery.min.js"></script> -->
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+
+  <title>Professor Chan's Band Coloring</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/blog/search">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">Professor Chan's Band Coloring</h1>
+<!-- <hr> -->
+<!-- Content appended here -->
+<div class="franklin-content"><p> 
+<details>
+<summary>Table of Contents</summary>
+  
+</details>
+</p>
+<p>My first-year undergraduate advisor wrote a small program to save her musical camp director hours of work. Keep in mind that this was 4 years ago so the details are a little shaky. Her musical camp director had dozens of students, and each of them was in at least 1 band. The problem he was trying to solve was assigning student bands to time slots for practicing. The issue was that students could be in multiple bands but only in one timeslot at a time.</p>
+<p>Let&#39;s make this problem concrete. Let&#39;s say you have 9 students numbered \(1\) through \(9\). Let&#39;s say you have 3 time slots 8am-9am, 9am-10am, and 10am-11am. The bands are labeled with letters \(a=\{2,5,7,9\},b=\{6,7\},c=\{1,2,3\},d=\{3\},e=\{1,3,8,9\},f=\{4,7,8\}\). This example isn&#39;t too hard to do by hand, but it would be tricky if you had many more students and many more bands.</p>
+<p>To solve this, we can assign \(a,d\) to 8am, \(b,e\) to 9am, and \(c,f\) to 10am. You can check that none of the students overlap in the same time slot.</p>
+<p>Now, in comes the graph theory. We can turn this problem into a graph by letting each band be a vertex and each timeslot be a color. Let&#39;s say 8am is red, 9am is green, and 10am is blue. Here is the resulting graph:</p>
+<pre><code class="language-tikz">\usepackage&#123;tikz&#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;
+	node distance&#61;3.5cm,
+&#93;
+
+\def\testarray&#123;&#123;&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;red&quot;, &quot;green&quot;, &quot;blue&quot;&#125;&#125;
+
+\foreach \v 
+&#91;evaluate&#61;&#123;\x&#61;2*cos&#40;&#40;3-\v&#41;*360/6&#41;&#125;, evaluate&#61;&#123;\y&#61;2*sin&#40;&#40;3-\v&#41;*360/6&#41;&#125;, evaluate&#61;&#123;\letter&#61;int&#40;\v&#43;96&#41;&#125;, evaluate&#61;&#123;\mycolor&#61;\testarray&#91;\v-1&#93;&#125;&#93;
+in &#123;1,...,6&#125; 
+\node&#91;draw, circle, fill&#61;\mycolor, font&#61;\footnotesize&#93; &#40;node\v&#41; at &#40;\x, \y&#41; &#123;\char\letter&#125;;
+
+\draw &#40;node1&#41; -- &#40;node2&#41; node&#91;midway,above&#93; &#123;&#36;7&#36;&#125;;
+\draw &#40;node1&#41; -- &#40;node3&#41; node&#91;midway,right&#93; &#123;&#36;2&#36;&#125;;
+\draw &#40;node1&#41; -- &#40;node5&#41; node&#91;midway,right&#93; &#123;&#36;9&#36;&#125;;
+\draw &#40;node1&#41; -- &#40;node6&#41; node&#91;midway,right&#93; &#123;&#36;7&#36;&#125;;
+\draw &#40;node3&#41; -- &#40;node4&#41; node&#91;midway,right&#93; &#123;&#36;3&#36;&#125;;
+\draw &#40;node4&#41; -- &#40;node5&#41; node&#91;midway,below&#93; &#123;&#36;3&#36;&#125;;
+\draw &#40;node5&#41; -- &#40;node6&#41; node&#91;midway,below&#93; &#123;&#36;8&#36;&#125;;
+\draw &#40;node2&#41; -- &#40;node6&#41; node&#91;midway,right&#93; &#123;&#36;7&#36;&#125;;
+\draw &#40;node3&#41; -- &#40;node5&#41; node&#91;midway,right&#93; &#123;&#36;1,3&#36;&#125;;
+
+\end&#123;tikzpicture&#125;
+\end&#123;document&#125;</code></pre>
+<p>I&#39;ve drawn edges between bands that share students. The restriction of a valid coloring means that a student never has to be in the same time slot for two different bands.</p>
+<p>This was a very elegant solution to the problem and she said that her code still runs and schedules the bands practice times to this day.</p>
+    <script src="https://utteranc.es/client.js"
+        repo="jasoneveleth/blog"
+        issue-term="pathname"
+        label="Comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+
+<div class="page-foot">
+    © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: November 16, 2023
+</div>
+</div><!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+    if (window.self != window.top) {
+      console.log("we're in an iframe!!!");
+      document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+    }
+  </script>
+
+  <!-- <script src="/blog/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/blog/libs/vela/slideout.min.js"></script> -->
+  
+    <script src="/blog/libs/katex/katex.min.js"></script>
+<script src="/blog/libs/katex/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+  
+  
+    <script src="/blog/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+  
+  
+</body>
+</html>
