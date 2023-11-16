@@ -1,7 +1,7 @@
 @def title = "Archive"
 
 ## 2023
-~~~<span class='date'>11/16</span>~~~ [Professor Chan's Band Coloring](2023/11/16/professor-chan%27s-band-coloring)
+~~~<span class='date'>11/16</span>~~~ [Professor Chan's Band Coloring](2023/11/16/professor-chans-band-coloring)
 
 ~~~<span class='date'>11/05</span>~~~ [Asymptotic Analysis of Dijkstras in Haskell](2023/11/05/purely-functional-dijkstras)
 
