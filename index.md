@@ -1,6 +1,8 @@
 @def title = "Archive"
 
 ## 2023
+~~~<span class='date'>12/8</span>~~~ [A Linear Algebra Perspective on High School Chemistry](2023/12/8/stoichiometry)
+
 ~~~<span class='date'>11/16</span>~~~ [Professor Chan's Band Coloring](2023/11/16/professor-chans-band-coloring)
 
 ~~~<span class='date'>11/05</span>~~~ [Asymptotic Analysis of Dijkstras in Haskell](2023/11/05/purely-functional-dijkstras)
