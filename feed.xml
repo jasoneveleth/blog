@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  A Linear Algebra Perspective on High School Chemistry  ]]>
+  </title>
+  <link> https://www.jasoneveleth.com/blog/2023/12/8/stoichiometry/index.html </link>
+  <guid> https://www.jasoneveleth.com/blog/2023/12/8/stoichiometry/index.html </guid>
+  <description>
+    <![CDATA[  My attempt to understand what happened in high school with the tools of linear algebra.  ]]>
+  </description>  
+    
+  <pubDate>Fri, 08 Dec 2023 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Jason Eveleth</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Professor Chan&#39;s Band Coloring  ]]>
   </title>
   <link> https://www.jasoneveleth.com/blog/2023/11/16/professor-chans-band-coloring/index.html </link>
