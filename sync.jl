@@ -12,7 +12,7 @@ end
 
 const posts = [
     # NEWEST TO OLDESTS
-    Post("stoichiometry", "2023/12/8", "A Linear Algebra Perspective on High School Chemistry", [], "My attempt to understand what happened in high school with the tools of linear algebra."),
+    Post("stoichiometry", "2023/12/08", "A Linear Algebra Perspective on High School Chemistry", [], "My attempt to understand what happened in high school with the tools of linear algebra."),
     Post("professor chan's band coloring", "2023/11/16", "Professor Chan's Band Coloring", [], "My recollection of my advisor's graph theory application from freshman year."),
     Post("purely functional dijkstras", "2023/11/05", "Asymptotic Analysis of Dijkstras in Haskell", [], "My analysis of whether it is possible to have optimal* Dijkstras in Haskell"),
     Post("wave equation", "2023/08/01", "Wave equation simulation", ["website"], ""),
