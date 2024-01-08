@@ -1,7 +1,10 @@
 @def title = "Archive"
 
+## 2024
+~~~<span class='date'>01/05</span>~~~ [A Rigorous (and Not-So-Rigorous) Look at JAX's Autograd](2024/01/05/autograd)
+
 ## 2023
-~~~<span class='date'>12/8</span>~~~ [A Linear Algebra Perspective on High School Chemistry](2023/12/8/stoichiometry)
+~~~<span class='date'>12/08</span>~~~ [A Linear Algebra Perspective on High School Chemistry](2023/12/08/stoichiometry)
 
 ~~~<span class='date'>11/16</span>~~~ [Professor Chan's Band Coloring](2023/11/16/professor-chans-band-coloring)
 

@@ -12,6 +12,7 @@ end
 
 const posts = [
     # NEWEST TO OLDESTS
+    Post("autograd", "2024/01/05", "A Rigorous (and Not-So-Rigorous) Look at JAX's Autograd", [], "My attempt to understand how JAX does autograd."),
     Post("stoichiometry", "2023/12/08", "A Linear Algebra Perspective on High School Chemistry", [], "My attempt to understand what happened in high school with the tools of linear algebra."),
     Post("professor chan's band coloring", "2023/11/16", "Professor Chan's Band Coloring", [], "My recollection of my advisor's graph theory application from freshman year."),
     Post("purely functional dijkstras", "2023/11/05", "Asymptotic Analysis of Dijkstras in Haskell", [], "My analysis of whether it is possible to have optimal* Dijkstras in Haskell"),
@@ -102,17 +103,31 @@ function process_file(file_contents)
     # happens after the capture
 
     function f(m)
-        x, y = m.captures
-        if y === nothing
-            "[$(x)](/$(resolve_post_title(x)))"
-        else
-            "[$(y)](/$(resolve_post_title(x)))"
+        link_name, section, alias = m.captures
+        if alias !== nothing
+            alias = alias[2:end] # cut off '|'
         end
-    end
+        if section !== nothing
+            section = section[2:end] # cut off '#'
+        end
+        s = ""
 
-    function h(m)
-        x, y = m.captures
-        "[$(y)](/$(resolve_post_title(x))/#$(replace(lowercase(y), ' ' => '_')))"
+        # display
+        if alias !== nothing
+            s *= "[$(alias)]"
+        elseif section !== nothing
+            s *= "[$(section)]"
+        else
+            s *= "[$(link_name)]"
+        end
+
+        # href
+        if section !== nothing
+            s *= "(/$(resolve_post_title(link_name))/#$(replace(lowercase(section), ' ' => '_')))"
+        else
+            s *= "(/$(resolve_post_title(link_name)))"
+        end
+        s
     end
 
     function g(m)
@@ -149,22 +164,24 @@ function process_file(file_contents)
         close(io)
         outpath, io = mktemp()
         close(io)
-        run(pipeline(inpath, `latex-pipe2`, `convert -density 300 pdf:- png:-`, `base64`, outpath))
+        run(pipeline(inpath, `pwrap pdflatex -interaction batchmode -halt-on-error file.tex tex pdf`, `convert -density 300 pdf:- png:-`, `pwrap mogrify -strip file.png png png`, `base64`, outpath))
 
         "![](data:image/png;base64,$(read(outpath, String)))"
     end
+
+    # change `mathbfit` to `bm`
+    file_contents = replace(file_contents, r"\\mathbfit" => "\\bm")
+
 
     # note inclusion: ![[note]]
     rx = r"\!\[\[([a-zA-Z0-9 .'=!-]+)\]\]"
     file_contents = replace(file_contents, rx => s -> g(match(rx, s)))
 
-    # section links: [[link name#section title]] => [section](/2021/07/11/link-name/#section)
-    rx = r"\[\[([a-zA-Z0-9 .'=!-]+)#([a-zA-Z0-9 ]+)\]\]"
-    file_contents = replace(file_contents, rx => s -> h(match(rx, s)))
-
-    # wikilinks: [[link name|alias]] => [alias](/2021/07/11/link-name/)
+    # wikilinks: [[link name#section|alias]] => [alias](/2021/07/11/link-name/#section)
+    #            [[link name|alias]] => [alias](/2021/07/11/link-name)
+    #            [[link name#section]] => [section](/2021/07/11/link-name/#section)
     #            [[link name]] => [link name](/2021/07/11/link-name/)
-    rx = r"\[\[([a-zA-Z0-9 .'=!-]+)\|?([a-zA-Z0-9 ]+)?\]\]"
+    rx = r"\[\[([a-zA-Z0-9 .'=!-]+)(#[a-zA-Z0-9 ]+)?(\|[a-zA-Z0-9 ]+)?\]\]"
     file_contents = replace(file_contents, rx => s -> f(match(rx, s)))
 
     # convert images
