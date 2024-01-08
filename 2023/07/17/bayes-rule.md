@@ -48,7 +48,10 @@ Where the hell does this come from? Don't worry, I will explain.
 # You ask: Why is the formula you presented remotely true???
 
 Intuitively, think about the [waterfall analogy](https://arbital.com/p/bayes_rule/?l=693)
+
+@@im-full
 ![wide vs narrow waterfall](https://i.imgur.com/6FOndjc.png?0)
+@@
 
 If the only thing we care about is the odds at the end (i.e. the ratio of red to blue at the bottom), then we only need to care about the odds that it goes in, $90:30$ or $45:15.$ Since they are the same odds, we end up with $3:4$ red to blue in both cases.
 
@@ -112,6 +115,10 @@ $$
 &= P(A\cap B):P(\lnot (A\cup B))
 \end{align*}
 $$
-This might be better understood by a very poorly drawn PowerPoint slide: ![](/assets/union-and-intersection.png)
+This might be better understood by a very poorly drawn PowerPoint slide: 
+
+@@im-most
+![](/assets/union-and-intersection.png)
+@@
 
 {{ addcomments }}

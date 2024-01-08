@@ -176,6 +176,30 @@ img {
   border: 0;
 }
 
+.im-full,
+.im-most,
+.im-half,
+.im-800 {
+    display: flex;
+    justify-content: center;
+}
+
+.im-full img {
+    width: 100%;
+}
+
+.im-most img {
+    width: 70%;
+}
+
+.im-half img {
+    width: 50%;
+}
+
+.im-800 img {
+    width: 800px;
+}
+
 svg:not(:root) {
   overflow: hidden;
 }

@@ -20,7 +20,9 @@ $$\frac{B}{2} + I - 1.$$ Where $B$ is the number of vertices on the boundary
 (blue in the figure) and $I$ is the number of vertices in the interior of the
 shape (red in the figure).
 
+@@im-full
 ![](/assets/picks_theorem1.jpeg)
+@@
 
 # Proof
 
@@ -34,7 +36,9 @@ It is easy to see that a isoceles right triangle with side length $1$, has area
 $\frac{1}{2}$. This is clear from the formula for the area of the triangle
 ($\frac{1}{2}bh$).
 
+@@im-half
 ![|300](/assets/picks_theorem2.jpeg)
+@@
 
 A shear takes the form: 
 

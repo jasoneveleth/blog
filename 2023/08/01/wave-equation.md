@@ -35,7 +35,9 @@ $$D_{tt}u = c^2 ( D_{xx}u + D_{yy}u)$$
 First, we figure out what the finite difference wave equation looks like.
 Since we have a second time derivative, we need to keep 2 past states to calculate the difference in the first derivative. Look at this picture ($u_{0,i,j}$ is the newest state)
 
+@@im-most
 ![Mode of action of the discretized version of the differential operator for the solution of the wave equation](https://beltoforion.de/en/recreational_mathematics/images/diskretisierung_wellengleichung.webp)
+@@
 
 Let's do the time derivative first.
 $$D_tu_{1,i,j} = \frac{\Delta_t u_{1,i,j}}{dt} = \frac{u_{1,i,j} - u_{2, i, j}}{dt}$$

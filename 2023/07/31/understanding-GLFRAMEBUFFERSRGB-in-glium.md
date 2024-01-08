@@ -27,7 +27,9 @@ I have been working on a small project to learn [OpenGL](/404). I decided to use
 
 Many of the issues people have encountered would be solved by this flow chart, so I've included it before the rest of my learnings.
 
+@@im-most
 ![](/assets/help-colors.jpg)
+@@
 
 # Summary of literature
 
@@ -56,7 +58,10 @@ Blending is a linear operation, so we need to convert to linear, then back to sR
 [source](https://www.khronos.org/opengl/wiki/Framebuffer)
 
 This entire section is summarized by this graphic: 
+
+@@im-full
 ![](/assets/gpu-colorspace.jpg)
+@@
 
 # `clear_color()` vs `clear_color_srgb()`
 

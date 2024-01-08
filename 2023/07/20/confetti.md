@@ -23,7 +23,9 @@ I wanted physics and camera matrices to be the focus of the project, so the UI i
 
 To describe what is happening, we will assume that in the world, $x,y,z$ are arranged as if we're looking at an $x$-$y$ graph, and $z$ is coming toward us:
 
+@@im-full
 ![](/assets/axes.png)
+@@
 
 We need to convert a point in that, to a point on the screen, which has coordinates $(0,0)$ in the top left, and increasing $x$ and $y$ going down and right. We can do that using `Rt`, which is the extrinsic matrix: $$[R\mid t]=\begin{bmatrix}1&0&0&t_x\\ 0&1&0&t_y\\ 0&0&1&t_z\end{bmatrix}.$$
 This matrix describes how the camera is positioned in relation to the origin. Our rotation is the identity, and our translation is $10$ in the $z$ direction (since our camera is oriented normally at $(0,0,-10)$). Thus, $t_x=t_y=0,t_z=10$. Left multiplying this matrix with a vector will move it 10 units in the $z$ direction (bringing the camera to the origin).
