@@ -61,7 +61,7 @@
 </ul>
 <h1 id="help_my_colors_are_broken_flowchart_for_the_current_glium_way"><a href="#help_my_colors_are_broken_flowchart_for_the_current_glium_way" class="header-anchor">&quot;help my colors are broken&quot; flowchart &#40;for the current glium way&#41;</a></h1>
 <p>Many of the issues people have encountered would be solved by this flow chart, so I&#39;ve included it before the rest of my learnings.</p>
-<p><img src="/blog/assets/help-colors.jpg" alt="" /></p>
+<div class="im-most"><img src="/blog/assets/help-colors.jpg" alt="" /></div>
 <h1 id="summary_of_literature"><a href="#summary_of_literature" class="header-anchor">Summary of literature</a></h1>
 <p>Normally, color values in images are assumed to be in linear color space. If an image is in sRGB color format &#40;ie. <code>SrgbTexture2d</code> vs <code>Texture2d</code>&#41;, values are assumed to be stored in sRGB.</p>
 <p>&quot;When fetching from sRGB images in shaders, values are converted from sRGB into linear colorspace.&quot; Thus, the shader only sees linear values.</p>
@@ -86,7 +86,8 @@
 </table>
  Blending is a linear operation, so we need to convert to linear, then back to sRGB. If <code>GFS</code> is enabled, if a destination image is sRGB, the color will be converted to linear, blended w/ linear source and convert back. If <code>GFS</code> is disabled, &quot;we assume the user knows what they are doing&quot;; thus, &quot;blending against an sRGB image will not perform any correction. This is usually not a good idea even if you are writing sRGB color values from the Fragment Shader.&quot;</p>
 <p><a href="https://www.khronos.org/opengl/wiki/Framebuffer">source</a></p>
-<p>This entire section is summarized by this graphic:  <img src="/blog/assets/gpu-colorspace.jpg" alt="" /></p>
+<p>This entire section is summarized by this graphic: </p>
+<div class="im-full"><img src="/blog/assets/gpu-colorspace.jpg" alt="" /></div>
 <h1 id="clear_color_vs_clear_color_srgb"><a href="#clear_color_vs_clear_color_srgb" class="header-anchor"><code>clear_color&#40;&#41;</code> vs <code>clear_color_srgb&#40;&#41;</code></a></h1>
 <p>If you call <code>clear_color_srgb&#40;&#41;</code>, we enable <code>GFS</code> and record that in the global context if it wasn&#39;t already enabled. If you call <code>clear_color&#40;&#41;</code>, we disable <code>GFS</code>  &#40;and record that in the global context&#41; if it wasn&#39;t already.</p>
 <p>source: &#40;<code>commit:filename:line-number&#41;</code> <code>5d50e70:src/ops/clear.rs:38</code></p>
@@ -174,7 +175,7 @@
     </script>
 
 <div class="page-foot">
-    © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: December 10, 2023
+    © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: January 08, 2024
 </div>
 </div><!-- CONTENT ENDS HERE -->
   </main> <!-- end of id=main -->
