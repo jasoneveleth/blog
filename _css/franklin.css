@@ -321,7 +321,10 @@ body { counter-reset: eqnum; }
 
 code {
   background-color: var(--block-background);
-  padding: 0.1em 0.2em;
+  padding-top: 0.2rem;
+  padding-left: 0.1rem;
+  padding-right: 0.1rem;
+  padding-bottom: 0;
   border-radius: 2px;
   font-size: 1rem;
 }

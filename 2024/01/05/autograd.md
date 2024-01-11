@@ -15,7 +15,7 @@ tags = String[]
 
 # What this post is about
 
-I've started writing this post from scratch several times as I've tried to get the presentation just right. I settled on this two goals: (1) if you have heard the terms "[vector space](/404)" and "gradient" thrown about before, you should be able to understand and write JAX primitives, and (2) if you're comfortable with vector spaces, dual spaces, and multivariable calculus, I will assuage your fears about rigor.
+I've started writing this post from scratch several times as I've tried to get the presentation just right. I settled on this two goals: (1) if you have heard the terms "[vector space](/404)" and "gradient" thrown about before, you should be able to understand and write JAX primitives, and (2) if you're comfortable with vector spaces, dual spaces, and multivariable calculus, I will assuage any fears about rigor.
 
 [JAX](https://jax.readthedocs.io/en/latest/) is a high-performance numerical computing framework for Python that can wrap a normal python function to calculate the derivative. We'll cover JAX flavored reverse-mode autograd, and focus on the 'grad' part: you should see [Related work](/2024/01/05/autograd/#related_work) for the 'auto' part (or my [110 line implementation](https://github.com/jasoneveleth/autograd)), basically you wrap every `ndarray` in a custom class that keeps track of how it was made.
 
@@ -24,15 +24,23 @@ Warning: this is my understanding, I've only just starting learning differential
 
 There is a lot of prior art in this area. These are the things I found helpful. One of the main contributors behind JAX made [a video](https://videolectures.net/deeplearning2017_johnson_automatic_differentiation/) about their framework, and [here](/404) are my notes on it. I also found another [autodiff blog post](https://thenumb.at/Autodiff/), and my [notes](/404). The most directly relevant stuff is probably the [autodiff cookbook](https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff) for JAX, specifically the section I linked to, and [what you need to do](https://jax.readthedocs.io/en/latest/notebooks/How_JAX_primitives_work.html) to implement a primitive. Finally, I also found [a paper from 2008](https://engineering.purdue.edu/~qobi/papers/toplas2008.pdf) and a core JAX contributor's [phd thesis](https://dougalmaclaurin.com/phd-thesis.pdf)  (pages 48-52 and 13-19 are relevant).
 
-# How does it work (examples plz)
+# How does it work (using an example)
 
-First, let's look at a simple neural net as a function of it's input. I've colored each part of the function to correspond to its description. $$
-\begin{align*}
-&f(\bm{x}) := {\color{red}  \lvert\lvert} {\color{green}\arctan(}{\color{blue} W\bm{x} + \bm{b} }{\color{green})} - {\color{purple}\bm{y} } {\color{red} \rvert\rvert ^{2} }\\
-&\text{ {\color{blue}single-layer} neural net: {\color{green}arctan activation} and {\color{red}MSE} loss w.r.t. {\color{purple}labels} }
-\end{align*}
-$$ 
-If all the computation for autodifferentiation of $f$  (evaluation and gradient accumulation) happened sequentially, it would look like the following. We will execute each operation of the neural net individually, so we can use these intermediate computations in our backwards pass. Note: in `numpy`, the `.T` property takes the transpose of a 2D array. Don't worry about the `Jt_f(x, gt)` functions, they will be explained.
+First, let's look at a simple neural net as a function of its input. I've colored each part of the function to correspond to its description. $$
+f(\bm{x}) := {\color{red}  \lvert\lvert} {\color{green}\arctan(}{\color{blue} W\bm{x} + \bm{b} }{\color{green})} - {\color{purple}\bm{y} } {\color{red} \rvert\rvert ^{2} }
+$$
+This is a 
+~~~
+<span style="color: blue";">single-layer</span>
+<span style="">neural net:</span>
+<span style="color:green">arctan activation</span>
+<span style="color:">and</span>
+<span style="color:red">MSE</span>
+<span style="">loss w.r.t.</span>
+<span style="color:purple">labels</span>
+~~~
+
+If all the computation for automatic differentiation of $f$  (evaluation and gradient accumulation) happened sequentially, it would look like the following. We will execute each operation of the neural net individually, so we can use these intermediate computations in our backwards pass. Note: in `numpy`, the `.T` property takes the transpose of a 2D array. Don't worry about the `Jt_f(x, gt)` functions, they will be explained.
 
 ```python
 a = W @ x
@@ -75,7 +83,7 @@ Much better. Now, why does composing `Jt_func` work? We'll hold off on that for 
 
 The way we figure out what these `Jt` functions should be is just evaluate $\bm{g}^{\intercal}Df(\bm{x})$ (which you should think about as taking direction $\bm{g}^{\intercal}$ from output to input) for a given $f$. Let's start with the functions I introduced in the simple neural net at the beginning of this article. 
 
-## `Jt_subtract_const`
+## Implementing `Jt_subtract_const`
 
 We will start with `subtract_const`. $f(\bm{x}) := \bm{x} - \bm{b}$ with $\bm{b}$ a constant. We can calculate the derivative by plucking it out of the taylor series: $$
 f(\bm{x}+ \Delta \bm{x}) = f(\bm{x}) + Df(\bm{x})\Delta \bm{x} + O(\Delta \bm{x}^2).
@@ -96,7 +104,7 @@ def Jt_subtract_const(x, gt):
 
 Let's do a harder one.
 
-## `Jt_square`
+## Implementing `Jt_square`
 
 Now $f(\bm{x}) := \bm{x}^{2}$ element-wise. Remember, to find the derivative, we take $$
 \begin{align*}
@@ -122,7 +130,7 @@ def Jt_square(x, gt):
 	return gt * (2 * x.reshape(1, -1))
 ```
 
-## `Jt_arctan`
+## Implementing `Jt_arctan`
 
 Now $f(\bm{x}) := \arctan(\bm{x})$ element-wise. Now we're going to exploit the fact that the Jacobian is a matrix of partials. Since it's element-wise, we're dealing with a diagonal matrix. This gives us $$
 Df(\bm{x}) = \begin{bmatrix}
@@ -208,5 +216,6 @@ It is important to note that the components of the Jacobian depend on the basis 
 # Wrapping up
 
 I hope this post helped you understand JAX backward-mode autodifferentiation. I have an [implementation](https://github.com/jasoneveleth/autograd) that automatically tracks the computations, so you don't have to write out the `Jt_f()` functions explicitly. This is one of my most technical posts. Let me know if any part of it needs better or more in depth explanation.
+
 
 {{ addcomments }}
