@@ -56,6 +56,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://www.jasoneveleth.com/blog/2024/01/05/autograd/index.html</loc>
+    <lastmod>2024-01-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://www.jasoneveleth.com/blog/2023/07/20/voronoi-blog-post/index.html</loc>
     <lastmod>2024-01-11</lastmod>
     <changefreq>monthly</changefreq>
