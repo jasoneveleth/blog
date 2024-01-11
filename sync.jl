@@ -288,6 +288,7 @@ function new_search!()
         contents = replace(contents, r"\+\+\+[^+]*\+\+\+" => "")
         contents = replace(contents, "```" => "")
         contents = replace(contents, "\n" => " ")
+        contents = replace(contents, r"!\[\]\(data:image/png;base64,[-A-Za-z0-9+/]*=* \)" => "")
         # this is the beginning of every document: "  <details> <summary>Table of Contents</summary>  \\toc  </details>   "
         contents = contents[70:end]
         search *= "{title: \"$(p.title)\", content: \"$(contents)\"},\n"

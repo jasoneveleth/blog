@@ -32,13 +32,14 @@ $$
 This is a 
 ~~~
 <span style="color: blue";">single-layer</span>
-<span style="">neural net:</span>
+<span style="">neural net with</span>
 <span style="color:green">arctan activation</span>
 <span style="color:">and</span>
 <span style="color:red">MSE</span>
 <span style="">loss w.r.t.</span>
 <span style="color:purple">labels</span>
 ~~~
+. This is pretty standard (aside from the maybe uncommon choice of $\arctan$). Notice that usually, you'd want to take the derivative with respect to the weights (so $W$ or $b$), but I'm keeping this example simpler. This way, we don't need to deal with dimension problems, just vectors.
 
 If all the computation for automatic differentiation of $f$  (evaluation and gradient accumulation) happened sequentially, it would look like the following. We will execute each operation of the neural net individually, so we can use these intermediate computations in our backwards pass. Note: in `numpy`, the `.T` property takes the transpose of a 2D array. Don't worry about the `Jt_f(x, gt)` functions, they will be explained.
 
@@ -97,9 +98,9 @@ $$
 Thus, $Df(\bm{x}) = I$ the identity matrix. So, If we want to calculate `Jt_subtract_const` we need to figure out what $\bm{g}^{\intercal}I$ is, which is simply $\bm{g}^{\intercal}$. Thus,
 ```python
 def Jt_subtract_const(x, gt):
-	"""x: ndarray shape(n,)
-	   gt: ndarray shape(1,n)"""
-	return gt
+    """x: ndarray shape(n,)
+       gt: ndarray shape(1,n)"""
+    return gt
 ```
 
 Let's do a harder one.
@@ -125,9 +126,9 @@ Multiplying this with $\bm{g}^{\intercal}$ gives $[2x_{1}g_{1} \dots 2x_{n}g_{n}
 So,
 ```python
 def Jt_square(x, gt):
-	"""x: ndarray shape(n,)
-	   gt: ndarray shape(1,n)"""
-	return gt * (2 * x.reshape(1, -1))
+    """x: ndarray shape(n,)
+       gt: ndarray shape(1,n)"""
+    return gt * (2 * x.reshape(1, -1))
 ```
 
 ## Implementing `Jt_arctan`
@@ -142,9 +143,9 @@ Df(\bm{x}) = \begin{bmatrix}
 $$  So it makes sense that 
 ```python
 def Jt_arctan(x, gt):
-	"""x: ndarray shape(n,)
-	   gt: ndarray shape(1,n)"""
-	return gt * (1/(1 + x**2)).reshape(1, -1)
+    """x: ndarray shape(n,)
+       gt: ndarray shape(1,n)"""
+    return gt * (1/(1 + x**2)).reshape(1, -1)
 ```
 # What is going on (bringing back rigor)
 
