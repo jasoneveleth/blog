@@ -17,14 +17,16 @@ tags = String[]
 
 I've started writing this post from scratch several times as I've tried to get the presentation just right. I settled on this two goals: (1) if you have heard the terms "[vector space](/404)" and "gradient" thrown about before, you should be able to understand and write JAX primitives, and (2) if you're comfortable with vector spaces, dual spaces, and multivariable calculus, I will assuage any fears about rigor.
 
-[JAX](https://jax.readthedocs.io/en/latest/) is a high-performance numerical computing framework for Python that can wrap a normal python function to calculate the derivative. We'll cover JAX flavored reverse-mode autograd, and focus on the 'grad' part: you should see [Related work](/2024/01/05/autograd/#related_work) for the 'auto' part (or my [110 line implementation](https://github.com/jasoneveleth/autograd)), basically you wrap every `ndarray` in a custom class that keeps track of how it was made.
+[JAX](https://jax.readthedocs.io/en/latest/) is a high-performance numerical computing framework for Python that can wrap a normal python function to calculate the derivative. We'll cover JAX-flavored reverse-mode automatic differentiation (autodiff), and focus on the 'differentiation' part. The 'automatic' part basically works by wrapping every `ndarray` in a custom class that keeps track of computation. That is out of the scope of this post, but you should check out the [Resources](/2024/01/05/autograd/#resources) section for more information (or my [110-line python implementation](https://github.com/jasoneveleth/autograd)).
 
-Warning: this is my understanding, I've only just starting learning differential geometry, so if I've made a mistake, please leave a comment.
-# Related work
+\warn{This post is my understanding; I've only just started learning differential geometry, so if I've made a mistake, please leave a comment. We're learning together ;)}
+# Resources
 
-There is a lot of prior art in this area. These are the things I found helpful. One of the main contributors behind JAX made [a video](https://videolectures.net/deeplearning2017_johnson_automatic_differentiation/) about their framework, and [here](/404) are my notes on it. I also found another [autodiff blog post](https://thenumb.at/Autodiff/), and my [notes](/404). The most directly relevant stuff is probably the [autodiff cookbook](https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff) for JAX, specifically the section I linked to, and [what you need to do](https://jax.readthedocs.io/en/latest/notebooks/How_JAX_primitives_work.html) to implement a primitive. Finally, I also found [a paper from 2008](https://engineering.purdue.edu/~qobi/papers/toplas2008.pdf) and a core JAX contributor's [phd thesis](https://dougalmaclaurin.com/phd-thesis.pdf)  (pages 48-52 and 13-19 are relevant).
+I found plenty high-quality resources on autodiff. The first post I read was [this one](https://thenumb.at/Autodiff/), and I wrote down my takeaways [here](/404). [This post](https://jingnanshi.com/blog/autodiff.html) is also excellent. However, they cover mostly how to directly apply the chain rule. In contrast, the JAX-flavored way of doing things involved "Jacobian-vector products", and other foreign terms. I really liked the JAX approach of only providing a `grad` function that can wrap any function you like, and it seemed to have a structured approach to applying the chain rule.
 
-# How does it work (using an example)
+In my efforts, I stumbled upon many resources specifically related to JAX. One of the main contributors behind JAX made [a video](https://videolectures.net/deeplearning2017_johnson_automatic_differentiation/) about their framework (my notes on it are [here](/404)).  However, the most directly relevant information is the [autodiff cookbook](https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff) for JAX (specifically the section I linked to) and [documentation](https://jax.readthedocs.io/en/latest/notebooks/How_JAX_primitives_work.html) on what you need to do to implement a primitive. Their approach is grounded in the literature, specifically [this paper from 2008](https://engineering.purdue.edu/~qobi/papers/toplas2008.pdf). And finally, I found a core JAX contributor's [phd thesis](https://dougalmaclaurin.com/phd-thesis.pdf) on the implementation of a precursor library (pages 13-19 and 48-52 are relevant).
+
+# How does autodiff work? (using an example)
 
 First, let's look at a simple neural net as a function of its input. I've colored each part of the function to correspond to its description. $$
 f(\bm{x}) := {\color{red}  \lvert\lvert} {\color{green}\arctan(}{\color{blue} W\bm{x} + \bm{b} }{\color{green})} - {\color{purple}\bm{y} } {\color{red} \rvert\rvert ^{2} }
@@ -39,9 +41,9 @@ This is a
 <span style="">loss w.r.t.</span>
 <span style="color:purple">labels</span>
 ~~~
-. This is pretty standard (aside from the maybe uncommon choice of $\arctan$). Notice that usually, you'd want to take the derivative with respect to the weights (so $W$ or $b$), but I'm keeping this example simpler. This way, we don't need to deal with dimension problems, just vectors.
+. This is pretty standard (aside from the maybe uncommon choice of $\arctan$). Notice that usually, you'd want to take the derivative with respect to the weights (so $W$ or $b$), but I'm keeping this example simpler. This way, we don't need to deal with multiple dimensions.
 
-If all the computation for automatic differentiation of $f$  (evaluation and gradient accumulation) happened sequentially, it would look like the following. We will execute each operation of the neural net individually, so we can use these intermediate computations in our backwards pass. Note: in `numpy`, the `.T` property takes the transpose of a 2D array. Don't worry about the `Jt_f(x, gt)` functions, they will be explained.
+If all the computations for the autodiff of $f$  (evaluation and gradient accumulation) happened sequentially, it would look like the following. We will execute each operation of the neural net individually so that we can use these intermediate computations in our backward pass. Note: in `numpy`, the `.T` property takes the transpose of a 2D array. Don't worry about the `Jt_f(x, gt)` functions, they will be explained.
 
 ```python
 a = W @ x
@@ -80,9 +82,9 @@ You can see the direction $\bm{g}^{\intercal}$ in the output being transformed i
 $$ Where $\left.\frac{d}{d\bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}$ is the Jacobian matrix of $f$ at $\bm{x}$. [Leibniz's notation](https://en.wikipedia.org/wiki/Leibniz%27s_notation) is insane, so we're going to adopt the notation from [Spivak](http://www.strangebeautiful.com/other-texts/spivak-calc-manifolds.pdf), and [other](http://ceres-solver.org/spivak_notation.html) [people](http://www.vendian.org/mncharity/dir3/dxdoc/) [agree](https://mitpress.mit.edu/9780262019347/functional-differential-geometry/). Thus, let $Df(\bm{x}) = \left.\frac{d}{d\bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}$ be the Jacobian matrix. Let's rewrite the equation: $$
 \texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal}) = \bm{g}^{\intercal}Df(\bm{x}).
 $$
-Much better. Now, why does composing `Jt_func` work? We'll hold off on that for a bit, but jump to [[autograd#What is going on (bringing back rigor)|the section that covers it]]. If you're confused right now, that's entirely fair. We'll go through many examples, and then I'll explain the underlying theory. I've just said this stuff so it will click later on.
+Much better. Now, why does composing `Jt_func` work? We'll hold off on that for a bit (unless you can't wait, in which case it's [[autograd#What is going on (bringing back rigor)|here]]). If you're confused right now, that's entirely fair. We'll go through many examples, and then I'll explain the underlying theory. I've just said this stuff so it will click later on.
 
-The way we figure out what these `Jt` functions should be is just evaluate $\bm{g}^{\intercal}Df(\bm{x})$ (which you should think about as taking direction $\bm{g}^{\intercal}$ from output to input) for a given $f$. Let's start with the functions I introduced in the simple neural net at the beginning of this article. 
+The way we figure out how to implement these `Jt` functions is we evaluate $\bm{g}^{\intercal}Df(\bm{x})$ (which you should think about as taking direction $\bm{g}^{\intercal}$ from output to input) for a given $f$. Let's start with the functions I introduced in the simple neural net at the beginning of this article. 
 
 ## Implementing `Jt_subtract_const`
 
@@ -133,14 +135,32 @@ def Jt_square(x, gt):
 
 ## Implementing `Jt_arctan`
 
-Now $f(\bm{x}) := \arctan(\bm{x})$ element-wise. Now we're going to exploit the fact that the Jacobian is a matrix of partials. Since it's element-wise, we're dealing with a diagonal matrix. This gives us $$
+Now $f(\bm{x}) := \arctan(\bm{x})$ element-wise. This one is much trickier. There's probably a way to do this using the Taylor series, but there is an easier way in this scenario. To understand it, let's name the components of the output: $$f(\bm{x})=\begin{pmatrix}
+f_{1}(\bm{x})\\ \\
+\dots\\
+f_{n}(\bm{x})
+\end{pmatrix}=\begin{pmatrix}
+\arctan(x_{1})\\ \\
+\dots\\
+\arctan(x_{n})
+\end{pmatrix}.$$
+When we first learn multivariable calculus, you're probably taught that the definition of the Jacobian is the matrix of partial derivatives, i.e. $$
+Df(\bm{x}) = \begin{bmatrix}
+\partial_{1}f_{1}(\bm{x})& \partial_{2}f_{1}(\bm{x}) & \dots& \partial_{n}f_{1}(\bm{x}) \\
+\partial_{1}f_{2}(\bm{x})& \ddots & & \\
+\dots& & \ddots & \partial_{n}f_{n-1}(\bm{x})\\
+& & \partial_{n-1}f_{n}(\bm{x})& \partial_{n}f_{n}(\bm{x})\\
+\end{bmatrix}.
+$$
+
+We're going to exploit the fact that the Jacobian happens to equal this matrix of partial derivatives since we know how to evaluate the scalar $\arctan$. Because our function $f$ is element-wise, only the diagonal will have values on it. That's because $x_{m}$ has no effect on $f_{k}(\bm{x}) = \arctan(x_{k})$ unless $k=m$ (which would put it on the diagonal). This is true in general: element-wise operations yield a diagonal Jacobian. In our scenario, since $D(\arctan)(x)=1/(1 + x^{2})$, this gives us $$
 Df(\bm{x}) = \begin{bmatrix}
 1 /(1 + x_{1}^{2})& 0 & \dots& 0 \\
 0& \ddots & & \\
 & & \ddots & 0\\
 & & 0& 1 / (1 + x_{n}^{2})\\
 \end{bmatrix}
-$$  So it makes sense that 
+$$  Putting it into code we get:
 ```python
 def Jt_arctan(x, gt):
     """x: ndarray shape(n,)
@@ -216,7 +236,7 @@ It is important to note that the components of the Jacobian depend on the basis 
 
 # Wrapping up
 
-I hope this post helped you understand JAX backward-mode autodifferentiation. I have an [implementation](https://github.com/jasoneveleth/autograd) that automatically tracks the computations, so you don't have to write out the `Jt_f()` functions explicitly. This is one of my most technical posts. Let me know if any part of it needs better or more in depth explanation.
+I hope this post helped you understand JAX backward-mode automatic differentiation. I wrote an [implementation](https://github.com/jasoneveleth/autograd) that automatically tracks the computations, so you don't have to write out the `Jt_f()` functions explicitly. This is one of my most technical posts. Let me know if any part of it needs better or more in depth explanation.
 
 
 {{ addcomments }}
