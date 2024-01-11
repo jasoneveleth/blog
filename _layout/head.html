@@ -3,10 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Otter emoji icon!!! -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+  <!-- Open Graph https://ogp.me/ -->
+  <meta property="og:title" content="{{fill title}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="/assets/otter.png" />
+  <meta property="og:image:width" content="160" />
+  <meta property="og:image:height" content="160" />
+  <meta property="og:article:author" content="Jason Eveleth">
+
   {{if hasmath}} {{insert head_katex.html }}   {{end}}
   {{if hascode}} {{insert head_highlight.html }}   {{end}}
 
-  {{insert style.html}}
+  <link href="/css/franklin.css" rel="stylesheet">
+  <link href="/css/global.css" rel="stylesheet">
 
   <title>{{ fill title }}</title>
 </head>
