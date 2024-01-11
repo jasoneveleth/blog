@@ -19,7 +19,7 @@ I've started writing this post from scratch several times as I've tried to get t
 
 [JAX](https://jax.readthedocs.io/en/latest/) is a high-performance numerical computing framework for Python that can wrap a normal python function to calculate the derivative. We'll cover JAX-flavored reverse-mode automatic differentiation (autodiff), and focus on the 'differentiation' part. The 'automatic' part basically works by wrapping every `ndarray` in a custom class that keeps track of computation. That is out of the scope of this post, but you should check out the [Resources](/2024/01/05/autograd/#resources) section for more information (or my [110-line python implementation](https://github.com/jasoneveleth/autograd)).
 
-\warn{This post is my understanding; I've only just started learning differential geometry, so if I've made a mistake, please leave a comment. We're learning together ;)}
+\warn{This post is my understanding; I've only just started learning differential geometry, so if I've made a mistake, *please leave a comment*.}
 # Resources
 
 I found plenty high-quality resources on autodiff. The first post I read was [this one](https://thenumb.at/Autodiff/), and I wrote down my takeaways [here](/404). [This post](https://jingnanshi.com/blog/autodiff.html) is also excellent. However, they cover mostly how to directly apply the chain rule. In contrast, the JAX-flavored way of doing things involved "Jacobian-vector products", and other foreign terms. I really liked the JAX approach of only providing a `grad` function that can wrap any function you like, and it seemed to have a structured approach to applying the chain rule.
