@@ -176,6 +176,7 @@ img {
   border: 0;
 }
 
+.im-quarter,
 .im-full,
 .im-most,
 .im-half,
@@ -196,8 +197,20 @@ img {
     width: 50%;
 }
 
+@media (max-width: 800px) {
+.im-800 img {
+    width: 100vw; /* 100% view width */
+}
+}
+
+@media not (max-width: 800px) {
 .im-800 img {
     width: 800px;
+}
+}
+
+.im-quarter img {
+    width: 25%;
 }
 
 svg:not(:root) {
@@ -218,11 +231,16 @@ textarea {
   overflow: auto;
 }
 
+.katex-display {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
 code,
 kbd,
 pre,
 samp {
-  font-family: monospace, monospace;
+  font-family: 'KaTeX_Typewriter', monospace;
   font-size: 1em;
 }
 
