@@ -170,6 +170,13 @@ main {
   list-style-type: lower-alpha;
 }
 
+.franklin-content .toc {
+  background: #EEE;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;>
+}
+
 .franklin-content th,
 td {
   font-size: var(--small);

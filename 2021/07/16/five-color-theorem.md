@@ -5,7 +5,7 @@ rss = "The Five Color Theorem asserts that no planar graphs are 5-colorable."
 tags = ["math"]
 +++
 ~~~
-<details>
+<details class="toc">
 <summary>Table of Contents</summary>
 ~~~
 \toc

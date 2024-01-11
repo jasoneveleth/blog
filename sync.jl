@@ -39,7 +39,7 @@ function frontmatter(post)
     tags = $(post.tags)
     +++
     ~~~
-    <details>
+    <details class="toc">
     <summary>Table of Contents</summary>
     ~~~
     \\toc

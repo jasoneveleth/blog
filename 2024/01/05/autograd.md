@@ -5,7 +5,7 @@ rss = "My attempt to understand how JAX does autograd."
 tags = String[]
 +++
 ~~~
-<details>
+<details class="toc">
 <summary>Table of Contents</summary>
 ~~~
 \toc

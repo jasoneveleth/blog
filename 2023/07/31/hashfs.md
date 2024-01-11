@@ -5,7 +5,7 @@ rss = ""
 tags = ["website"]
 +++
 ~~~
-<details>
+<details class="toc">
 <summary>Table of Contents</summary>
 ~~~
 \toc

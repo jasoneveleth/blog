@@ -5,7 +5,7 @@ rss = "My analysis of whether it is possible to have optimal* Dijkstras in Haske
 tags = String[]
 +++
 ~~~
-<details>
+<details class="toc">
 <summary>Table of Contents</summary>
 ~~~
 \toc

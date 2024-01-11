@@ -5,7 +5,7 @@ rss = "My attempt to understand what happened in high school with the tools of l
 tags = String[]
 +++
 ~~~
-<details>
+<details class="toc">
 <summary>Table of Contents</summary>
 ~~~
 \toc

@@ -5,7 +5,7 @@ rss = "My recollection of my advisor's graph theory application from freshman ye
 tags = String[]
 +++
 ~~~
-<details>
+<details class="toc">
 <summary>Table of Contents</summary>
 ~~~
 \toc

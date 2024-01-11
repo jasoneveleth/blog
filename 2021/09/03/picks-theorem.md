@@ -5,7 +5,7 @@ rss = "Pick's Theorem is a formula for the area of a closed polygon with integer
 tags = ["math"]
 +++
 ~~~
-<details>
+<details class="toc">
 <summary>Table of Contents</summary>
 ~~~
 \toc
