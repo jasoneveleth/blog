@@ -48,6 +48,6 @@ x_4\\
 0\\0\\0\\
 \end{bmatrix}.
 $$
-This is so exciting, because now you can use your favorite linear solver on this equation to determine the balance for the original equation.
+This is so exciting, because now you can use your favorite linear solver on this equation to determine the balance for the original chemical reaction.
 
 {{ addcomments }}

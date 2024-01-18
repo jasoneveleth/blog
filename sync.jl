@@ -181,7 +181,7 @@ function process_file(file_contents)
     #            [[link name|alias]] => [alias](/2021/07/11/link-name)
     #            [[link name#section]] => [section](/2021/07/11/link-name/#section)
     #            [[link name]] => [link name](/2021/07/11/link-name/)
-    rx = r"\[\[([a-zA-Z0-9 .'=!-]+)(#[a-zA-Z0-9 ]+)?(\|[a-zA-Z0-9 ]+)?\]\]"
+    rx = r"\[\[([a-zA-Z0-9 .'=!-]+)(#[a-zA-Z0-9 ()]+)?(\|[a-zA-Z0-9 ]+)?\]\]"
     file_contents = replace(file_contents, rx => s -> f(match(rx, s)))
 
     # convert images
