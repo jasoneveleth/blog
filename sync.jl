@@ -37,6 +37,7 @@ function frontmatter(post)
     date = Date("$(post.date)", "yyyy/mm/dd")
     rss = "$(post.rss)"
     tags = $(post.tags)
+    descr = true
     +++
     ~~~
     <details class="toc">

@@ -173,6 +173,13 @@ sub {
   bottom: -0.25em;
 }
 
+.post-descr {
+    font-size: 0.8rem;
+    color: grey;
+    display: inline;
+    margin-right: 20px;
+}
+
 img {
   border: 0;
 }
