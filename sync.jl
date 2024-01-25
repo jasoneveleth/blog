@@ -38,6 +38,7 @@ function frontmatter(post)
     rss = "$(post.rss)"
     tags = $(post.tags)
     descr = true
+    githubsource = "https://github.com/jasoneveleth/blog/blob/dev/$(post2filename(post)).md"
     +++
     ~~~
     <details class="toc">
