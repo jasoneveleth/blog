@@ -177,6 +177,15 @@ img {
   border: 0;
 }
 
+.figure {
+    color: grey;
+    margin-bottom: 1em;
+}
+
+.figure p {
+    font-size: 1rem;
+}
+
 .im-quarter,
 .im-full,
 .im-most,

@@ -150,7 +150,7 @@ function process_file(file_contents)
         close(io)
         outpath, io = mktemp()
         close(io)
-        run(pipeline(inpath, `dot -Tpng`, `base64`, outpath))
+        run(pipeline(inpath, `dot -Tpng -Gdpi=300`, `base64`, outpath))
 
         "![](data:image/png;base64,$(read(outpath, String)))"
     end
