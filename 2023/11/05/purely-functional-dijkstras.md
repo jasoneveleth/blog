@@ -4,6 +4,7 @@ date = Date("2023/11/05", "yyyy/mm/dd")
 rss = "My analysis of whether it is possible to have optimal* Dijkstras in Haskell"
 tags = String[]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/11/05/purely-functional-dijkstras.md"
 +++
 ~~~
 <details class="toc">

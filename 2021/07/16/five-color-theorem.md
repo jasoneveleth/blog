@@ -4,6 +4,7 @@ date = Date("2021/07/16", "yyyy/mm/dd")
 rss = "The Five Color Theorem asserts that no planar graphs are 5-colorable."
 tags = ["math"]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2021/07/16/five-color-theorem.md"
 +++
 ~~~
 <details class="toc">

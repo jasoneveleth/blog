@@ -4,6 +4,7 @@ date = Date("2023/12/08", "yyyy/mm/dd")
 rss = "My attempt to understand what happened in high school with the tools of linear algebra."
 tags = String[]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/12/08/stoichiometry.md"
 +++
 ~~~
 <details class="toc">

@@ -4,6 +4,7 @@ date = Date("2023/07/17", "yyyy/mm/dd")
 rss = ""
 tags = ["math"]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/17/bayes-rule.md"
 +++
 ~~~
 <details class="toc">

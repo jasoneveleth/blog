@@ -4,6 +4,7 @@ date = Date("2023/07/20", "yyyy/mm/dd")
 rss = ""
 tags = ["website"]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/20/confetti.md"
 +++
 ~~~
 <details class="toc">

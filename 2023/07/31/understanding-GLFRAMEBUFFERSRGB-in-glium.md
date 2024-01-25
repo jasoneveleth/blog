@@ -4,6 +4,7 @@ date = Date("2023/07/31", "yyyy/mm/dd")
 rss = ""
 tags = String[]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/31/understanding-GLFRAMEBUFFERSRGB-in-glium.md"
 +++
 ~~~
 <details class="toc">

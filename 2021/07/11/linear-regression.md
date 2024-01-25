@@ -4,6 +4,7 @@ date = Date("2021/07/11", "yyyy/mm/dd")
 rss = ""
 tags = ["math"]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2021/07/11/linear-regression.md"
 +++
 ~~~
 <details class="toc">

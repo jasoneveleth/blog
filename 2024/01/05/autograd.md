@@ -4,6 +4,7 @@ date = Date("2024/01/05", "yyyy/mm/dd")
 rss = "My attempt to understand how JAX does autograd."
 tags = String[]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2024/01/05/autograd.md"
 +++
 ~~~
 <details class="toc">

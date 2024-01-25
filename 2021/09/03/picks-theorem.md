@@ -4,6 +4,7 @@ date = Date("2021/09/03", "yyyy/mm/dd")
 rss = "Pick's Theorem is a formula for the area of a closed polygon with integer vertices."
 tags = ["math"]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2021/09/03/picks-theorem.md"
 +++
 ~~~
 <details class="toc">

@@ -4,6 +4,7 @@ date = Date("2023/11/16", "yyyy/mm/dd")
 rss = "My recollection of my advisor's graph theory application from freshman year."
 tags = String[]
 descr = true
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/11/16/professor-chans-band-coloring.md"
 +++
 ~~~
 <details class="toc">
