@@ -6,7 +6,8 @@
 
 a {
   text-decoration: none;
-  color: #3366CC;
+  color: var(--blue);
+  font-weight: 700;
 }
 
 a:hover {
@@ -175,7 +176,7 @@ sub {
 
 .post-descr {
     font-size: 0.8rem;
-    color: grey;
+    color: var(--text-grey);
     display: inline;
     margin-right: 20px;
 }

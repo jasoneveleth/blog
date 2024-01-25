@@ -5,8 +5,10 @@
 :root {
   --block-background: hsl(0, 0%, 98%);
   --output-background: hsl(0, 0%, 98%);
-  --normal: 6.25%;
   --text-color: hsv(0, 0%, 20%);
+  --blue: #0569FF;
+  --red: #FA1855;
+  --text-grey: #9ca3af;
 }
 
 /* ==================================================================
@@ -102,6 +104,13 @@ main {
   p {
     font-size: 1rem !important;
   }
+  .franklin-content h1 {
+    font-size: 1.5rem !important;
+  }
+  .post-title {
+    line-height: 2.5rem !important;
+    font-size: 2rem !important;
+  }
 }
 
 /* ==================================================================
@@ -110,13 +119,15 @@ main {
 
 .post-title {
     font-weight: 800;
-    font-size: 1.3125rem; 
+    font-size: 3rem; 
+    line-height: 3.75rem;
     margin-bottom: .2em;
+    font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
 }
 
 .title, .franklin-content h1 { 
-    font-weight: 800;
-    font-size: 1.3125rem; 
+    font-weight: 700;
+    font-size: 2.25rem; 
     margin-bottom: .2em;
 }
 .franklin-content h2 { 
@@ -147,6 +158,7 @@ main {
 .franklin-content h6 a {
     color: inherit;
     text-decoration: none;
+    font-weight: 800;
 }
 
 .franklin-content h1 a:hover,
@@ -206,7 +218,7 @@ td {
 }
 
 .franklin-content p {
-    font-size: 1.3125rem;
+    font-size: 1.25rem;
     line-height: 1.4em;
     margin-top: 0;
     margin-bottom: 1em;
@@ -375,7 +387,8 @@ code {
 }
 
 .warning .title {
-    background: #DC143C;
+    font-size: 1.25rem;
+    background: var(--red);
     padding: 5px;
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
