@@ -3,6 +3,7 @@ title = "Bayes' Rule (in real life)"
 date = Date("2023/07/17", "yyyy/mm/dd")
 rss = ""
 tags = ["math"]
+descr = true
 +++
 ~~~
 <details class="toc">

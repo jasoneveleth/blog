@@ -3,6 +3,7 @@ title = "A Linear Algebra Perspective on High School Chemistry"
 date = Date("2023/12/08", "yyyy/mm/dd")
 rss = "My attempt to understand what happened in high school with the tools of linear algebra."
 tags = String[]
+descr = true
 +++
 ~~~
 <details class="toc">

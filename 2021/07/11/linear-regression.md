@@ -3,6 +3,7 @@ title = "Linear Regression"
 date = Date("2021/07/11", "yyyy/mm/dd")
 rss = ""
 tags = ["math"]
+descr = true
 +++
 ~~~
 <details class="toc">

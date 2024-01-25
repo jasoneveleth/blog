@@ -3,6 +3,7 @@ title = "Asymptotic Analysis of Dijkstras in Haskell"
 date = Date("2023/11/05", "yyyy/mm/dd")
 rss = "My analysis of whether it is possible to have optimal* Dijkstras in Haskell"
 tags = String[]
+descr = true
 +++
 ~~~
 <details class="toc">

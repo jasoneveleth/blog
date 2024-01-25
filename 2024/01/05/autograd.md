@@ -3,6 +3,7 @@ title = "A Rigorous (and Not-So-Rigorous) Look at JAX's Autograd"
 date = Date("2024/01/05", "yyyy/mm/dd")
 rss = "My attempt to understand how JAX does autograd."
 tags = String[]
+descr = true
 +++
 ~~~
 <details class="toc">

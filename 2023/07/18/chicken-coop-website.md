@@ -3,6 +3,7 @@ title = "Hilarious Random Number Generator"
 date = Date("2023/07/18", "yyyy/mm/dd")
 rss = ""
 tags = String[]
+descr = true
 +++
 ~~~
 <details class="toc">

@@ -3,6 +3,7 @@ title = "Confetti"
 date = Date("2023/07/20", "yyyy/mm/dd")
 rss = ""
 tags = ["website"]
+descr = true
 +++
 ~~~
 <details class="toc">

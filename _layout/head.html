@@ -29,6 +29,14 @@
 </head>
 <body>
 {{insert nav.html}}
-<h1 class="post-title">{{isdef title}}{{fill title}}{{end}}</h1>
+<h1 class="post-title">{{fill title}}</h1>
+
+{{ifdef descr}}
+<div class="post-descr">
+Date: {{fill date}} ｜
+Author: Jason Eveleth
+</div>
+{{end}}
+
 <!-- <hr> -->
 <!-- Content appended here -->

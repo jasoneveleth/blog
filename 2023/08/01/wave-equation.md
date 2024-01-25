@@ -3,6 +3,7 @@ title = "Wave equation simulation"
 date = Date("2023/08/01", "yyyy/mm/dd")
 rss = ""
 tags = ["website"]
+descr = true
 +++
 ~~~
 <details class="toc">
