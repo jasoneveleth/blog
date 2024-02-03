@@ -28,9 +28,9 @@ I found plenty high-quality resources on autodiff. The first post I read was [th
 
 In my efforts, I stumbled upon many resources specifically related to JAX. One of the main contributors behind JAX made [a video](https://videolectures.net/deeplearning2017_johnson_automatic_differentiation/) about their framework (my notes on it are [here](/404)).  However, the most directly relevant information is the [autodiff cookbook](https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff) for JAX (specifically the section I linked to) and [documentation](https://jax.readthedocs.io/en/latest/notebooks/How_JAX_primitives_work.html) on what you need to do to implement a primitive. Their approach is grounded in the literature, specifically [this paper from 2008](https://engineering.purdue.edu/~qobi/papers/toplas2008.pdf). And finally, I found a core JAX contributor's [phd thesis](https://dougalmaclaurin.com/phd-thesis.pdf) on the implementation of a precursor library (pages 13-19 and 48-52 are relevant).
 
-# How does autodiff work? (using an example)
+# How does autodiff work?
 
-First, let's look at a simple neural net as a function of its input. I've colored each part of the function to correspond to its description. $$
+First, we'll look at an example. Here is a simple neural net as a function of its input. I've colored each part of the function to correspond to its description. $$
 f(\bm{x}) := {\color{red}  \lvert\lvert} {\color{green}\arctan(}{\color{blue} W\bm{x} + \bm{b} }{\color{green})} - {\color{purple}\bm{y} } {\color{red} \rvert\rvert ^{2} }
 $$
 This is a 

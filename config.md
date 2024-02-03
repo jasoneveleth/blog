@@ -29,4 +29,20 @@ Add here global latex commands to use throughout your pages.
 \newcommand{\R}{\mathbb R}
 \newcommand{\scal}[1]{\langle #1 \rangle}
 \newcommand{\note}[1]{@@note @@title ⚠ Note@@ @@content #1 @@ @@}
-\newcommand{\warn}[1]{@@warning @@title ⚠ Warning!@@ @@content #1 @@ @@}
+\newcommand{\styletext}[2]{~~~<span style="#1">#2</span>~~~}
+\newcommand{\icon}[1]{
+~~~
+<img src=#1 class="icon-in-text"></img>
+~~~
+}
+\newcommand{\warn}[1]{
+@@warning 
+@@title 
+\icon{"/assets/icons/exclamationmark.triangle.svg"}
+Warning!
+@@ 
+@@content
+  #1
+@@ 
+@@
+}
