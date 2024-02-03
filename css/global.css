@@ -18,6 +18,11 @@ a:hover {
     /* min-width: */ 
 }
 
+.icon-in-text {
+    vertical-align: text-bottom;
+    height: 1.375rem;
+}
+
 nav {
     display: flex;
     justify-content: flex-between;
