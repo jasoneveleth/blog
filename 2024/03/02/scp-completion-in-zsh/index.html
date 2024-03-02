@@ -67,7 +67,7 @@ Author: Jason Eveleth
 <p>Have you ever tried to complete a file on a remote server when you were <code>scp</code>-ing? </p>
 <pre><code class="bash hljs">$ scp user@server.com:/home/user/do|
 downloads/    documents/</code></pre>
-<p>I have known for awhile that if you&#39;ve set up ssh-keys or had a running ssh command open, that it would work. It&#39;d been in the back of my mind to research, but I&#39;ve never gotten around to it. That changed today.</p>
+<p>I have known for awhile that if you&#39;ve set up ssh-keys, it would work. It&#39;d been in the back of my mind to research, but I&#39;ve never gotten around to it. That changed today.</p>
 <p>My initial findings led me to <a href="https://unix.stackexchange.com/questions/203931/whats-the-magic-that-allows-me-to-tab-complete-remote-files-as-i-type-an-scp-co">stack exchange</a>. I&#39;m 9 years late, but I figured I&#39;d share some research I&#39;ve done into this topic. You can ask zsh to give you the completion function for any command. So, to see for <code>scp</code>, you can use:</p>
 <pre><code class="bash hljs">$ <span class="hljs-built_in">print</span> <span class="hljs-variable">$_comps</span>[scp]
 _ssh</code></pre>
@@ -93,7 +93,8 @@ _ssh</code></pre>
 <blockquote>
 <p>Needs key-based authentication with no passwords or a running ssh-agent to work.</p>
 </blockquote>
-<p>So, we do need to have an ssh session open. The file is just 104 lines long and pretty readable &#40;if you&#39;re looked at zsh completion code before&#41;. The relevant line I didn&#39;t quite understand:</p>
+<p>So, we do need to have an ssh keys or some other passwordless way to ssh. </p>
+<p>The file is just 104 lines long and pretty readable &#40;if you&#39;re looked at zsh completion code before&#41;. The relevant line I didn&#39;t quite understand:</p>
 <pre><code class="julia hljs">remfiles=(${(M)${(f)<span class="hljs-string">&quot;<span class="hljs-subst">$(
   _call_program files $cmd $cmd_args $host \
     command ls -d1FL -- <span class="hljs-string">&quot;<span class="hljs-variable">$rempat</span>&quot;</span> <span class="hljs-number">2</span>&gt;/dev/null
