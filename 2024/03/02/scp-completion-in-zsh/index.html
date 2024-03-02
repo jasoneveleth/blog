@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Otter emoji icon!!! -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+  <!-- Open Graph https://ogp.me/ -->
+  <meta property="og:title" content="How does `scp` completion work in zsh?" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://www.jasoneveleth.com/blog/assets/otter64px.png" />
+  <meta property="og:image:width" content="64" />
+  <meta property="og:image:height" content="64" />
+  <meta property="og:article:author" content="Jason Eveleth">
+  <meta property="og:article:published_time" content="2024-03-02">
+
+  
+   <link rel="stylesheet" href="/blog/libs/highlight/styles/github.min.css">
+   
+
+  <!-- not used -->
+  
+
+  <link href="/blog/css/franklin.css" rel="stylesheet">
+  <link href="/blog/css/global.css" rel="stylesheet">
+
+  <title>How does `scp` completion work in zsh?</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/blog/search">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">How does `scp` completion work in zsh?</h1>
+
+
+<div class="post-descr">
+Date: 2024-03-02 ｜
+Author: Jason Eveleth
+</div>
+
+
+<!-- <hr> -->
+<!-- Content appended here -->
+<div class="franklin-content"><p> 
+<details class="toc">
+<summary>Table of Contents</summary>
+ <div class="franklin-toc"><ol><li><a href="#breaking_down_the_command">Breaking down the command</a></li><li><a href="#getting_around_sip">Getting around SIP</a></li></ol></div> 
+</details>
+</p>
+<p>Have you ever tried to complete a file on a remote server when you were <code>scp</code>-ing? </p>
+<pre><code class="bash hljs">$ scp user@server.com:/home/user/do|
+downloads/    documents/</code></pre>
+<p>I have known for awhile that if you&#39;ve set up ssh-keys or had a running ssh command open, that it would work. It&#39;d been in the back of my mind to research, but I&#39;ve never gotten around to it. That changed today.</p>
+<p>My initial findings led me to <a href="https://unix.stackexchange.com/questions/203931/whats-the-magic-that-allows-me-to-tab-complete-remote-files-as-i-type-an-scp-co">stack exchange</a>. I&#39;m 9 years late, but I figured I&#39;d share some research I&#39;ve done into this topic. You can ask zsh to give you the completion function for any command. So, to see for <code>scp</code>, you can use:</p>
+<pre><code class="bash hljs">$ <span class="hljs-built_in">print</span> <span class="hljs-variable">$_comps</span>[scp]
+_ssh</code></pre>
+<p>From this, we learn that we&#39;re looking for <code>_ssh</code>. I did some looking into zsh source and I found this file: <a href="https://github.com/zsh-users/zsh/blob/master/Completion/Unix/Command/_ssh"><code>Completion/Unix/Command/_ssh</code></a>. After poking around in here, it seems like the relevant parts are here &#40;when it&#39;s completing the file part of the command&#41;:</p>
+<pre><code class="bash hljs">file)
+      <span class="hljs-keyword">if</span> compset -P 1 <span class="hljs-string">&#x27;[^./][^/]#:&#x27;</span>; <span class="hljs-keyword">then</span>
+        _remote_files -- ssh <span class="hljs-variable">${(kv)~opt_args[(I)-[FP1246]]/-P/-p}</span> &amp;&amp; ret=0
+      <span class="hljs-keyword">elif</span> compset -P 1 <span class="hljs-string">&#x27;*@&#x27;</span>; <span class="hljs-keyword">then</span>
+        suf=( -S <span class="hljs-string">&#x27;&#x27;</span> )
+        compset -S <span class="hljs-string">&#x27;:*&#x27;</span> || suf=( -r: -S: )
+        _wanted hosts expl <span class="hljs-string">&#x27;remote host name&#x27;</span> _ssh_hosts <span class="hljs-variable">$suf</span> &amp;&amp; ret=0
+      <span class="hljs-keyword">else</span>
+        _alternative \
+            <span class="hljs-string">&#x27;files:: _files&#x27;</span> \
+            <span class="hljs-string">&#x27;hosts:remote host name:_ssh_hosts -r: -S:&#x27;</span> \
+            <span class="hljs-string">&#x27;users:user:_ssh_users -qS@&#x27;</span> &amp;&amp; ret=0
+      <span class="hljs-keyword">fi</span>
+      ;;</code></pre>
+<p>Looking at the first if condition, we see that if the argument doesn&#39;t start with <code>./</code> or <code>/</code>, then we use <code>_remote_files</code> command. Doing some more digging, we can find that there is a corresponding file &#40;<code>Completion/Unix/Type/_remote_files</code>&#41;. You can find it on your computer with: </p>
+<pre><code class="bash hljs">$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$functions_source</span>[_remote_files]
+/usr/share/zsh/5.9/functions/_remote_files</code></pre>
+<p>Here&#39;s an excerpt of header comment:</p>
+<blockquote>
+<p>Needs key-based authentication with no passwords or a running ssh-agent to work.</p>
+</blockquote>
+<p>So, we do need to have an ssh session open. The file is just 104 lines long and pretty readable &#40;if you&#39;re looked at zsh completion code before&#41;. The relevant line I didn&#39;t quite understand:</p>
+<pre><code class="julia hljs">remfiles=(${(M)${(f)<span class="hljs-string">&quot;<span class="hljs-subst">$(
+  _call_program files $cmd $cmd_args $host \
+    command ls -d1FL -- <span class="hljs-string">&quot;<span class="hljs-variable">$rempat</span>&quot;</span> <span class="hljs-number">2</span>&gt;/dev/null
+)</span>&quot;</span>}%%[^/]<span class="hljs-comment">#(|/)})</span></code></pre>
+<p>But after asking ChatGPT, the meat of the command is here: <code>&#36;cmd &#36;cmd_args &#36;host command ls -d1FL -- &quot;&#36;rempat&quot; 2&gt;/dev/null</code> Here, <code>&#36;cmd</code> is <code>ssh</code>, so it&#39;s running <code>ls -d1FL -- &#36;rempat</code> on the remote machine.</p>
+<p>I patched the file to print out the actual command that it runs &#40;unfortunately Apple doesn&#39;t like this, so I had to get around SIP, see the last section&#41;. Here is the command in all it&#39;s glory:</p>
+<pre><code class="bash hljs">ssh -o BatchMode=<span class="hljs-built_in">yes</span> -a -x jason@machine.example.com <span class="hljs-built_in">command</span> <span class="hljs-built_in">ls</span> -d1FL -- /home/jason/\*</code></pre>
+<p>This is the command that zsh is using to find files on remote machines.</p>
+<h1 id="breaking_down_the_command"><a href="#breaking_down_the_command" class="header-anchor">Breaking down the command</a></h1>
+<p>There&#39;s two parts to the command in the previous section. The part that gets executed on the remote machine: <code>command ls -d1FL -- /home/jason/\*</code> and the part that gives options to ssh: <code>ssh -o BatchMode&#61;yes -a -x jason@machine.example.com</code></p>
+<p>Breaking down the remote command, we use <code>ls</code> with </p>
+<ul>
+<li><p><code>-d</code> to list directories as plain files &#40;not their contents&#41;</p>
+</li>
+<li><p><code>-1</code> for one file per line</p>
+</li>
+<li><p><code>-F</code> annotate directories with trailing <code>/</code>, and executables with <code>*</code>, etc</p>
+</li>
+<li><p><code>-L</code> for follow symbolic links to their final destination</p>
+</li>
+<li><p>the <code>\*</code> is to stop the glob from being expanded on the local machine</p>
+</li>
+<li><p>the <code>command</code> prefix is to ensure that we don&#39;t accidentally use an alias of <code>ls</code> on the remote machine</p>
+</li>
+</ul>
+<p>Breaking down the ssh options</p>
+<ul>
+<li><p><code>-o BatchMode&#61;yes</code> user interaction such as password prompts and host key confirmation requests will be disabled</p>
+</li>
+<li><p><code>-a</code> Disables forwarding of the authentication agent connection. &#40;let&#39;s say 3 servers, <code>local -&gt; A -&gt; B</code>, this option means that you can&#39;t use your keys on <code>local</code> to connect to <code>B</code>. If you don&#39;t use <code>-a</code>, then when you are running commands on <code>A</code>, you could use your <code>local</code> keys to <code>ssh</code> from <code>A</code> to <code>B</code>&#41;</p>
+</li>
+<li><p><code>-x</code> Disables X11 forwarding</p>
+</li>
+</ul>
+<h1 id="getting_around_sip"><a href="#getting_around_sip" class="header-anchor">Getting around SIP</a></h1>
+<p>I first tried to edit <code>/usr/share/zsh/5.9/functions/_remote_files</code> directly. This didn&#39;t work obviously because my user isn&#39;t root. I tried <code>sudo vim</code>, but that didn&#39;t work either. So &#40;and I know this is bad&#41; I tried <code>sudo sh</code> and then <code>vim</code>. This also didn&#39;t work. I realized that SIP was what was preventing me.</p>
+<p>So, I unloaded the function and loaded my patch:</p>
+<pre><code class="bash hljs"><span class="hljs-built_in">unfunction</span> _remote_files
+<span class="hljs-built_in">autoload</span> -U /tmp/_remote_files</code></pre>
+    <script src="https://utteranc.es/client.js"
+        repo="jasoneveleth/blog"
+        issue-term="pathname"
+        label="Comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+
+<div class="page-foot">
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: March 02, 2024 <a href="https://github.com/jasoneveleth/blog/blob/dev/2024/03/02/scp-completion-in-zsh.md">Page Source</a>
+</div>
+</div><!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+    if (window.self != window.top) {
+      console.log("we're in an iframe!!!");
+      document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+    }
+  </script>
+
+  <!-- <script src="/blog/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/blog/libs/vela/slideout.min.js"></script> -->
+  
+  
+    <script src="/blog/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+  
+  
+</body>
+</html>

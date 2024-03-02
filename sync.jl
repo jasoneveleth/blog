@@ -12,6 +12,7 @@ end
 
 const posts = [
     # NEWEST TO OLDESTS
+	Post("scp completion in zsh", "2024/03/02", "How does `scp` completion work in zsh?", [], "My attempt to understand the zsh completion system"),
     Post("autograd", "2024/01/05", "A Rigorous (and Not-So-Rigorous) Look at JAX's Autograd", [], "My attempt to understand how JAX does autograd."),
     Post("stoichiometry", "2023/12/08", "A Linear Algebra Perspective on High School Chemistry", [], "My attempt to understand what happened in high school with the tools of linear algebra."),
     Post("professor chan's band coloring", "2023/11/16", "Professor Chan's Band Coloring", [], "My recollection of my advisor's graph theory application from freshman year."),
@@ -195,6 +196,10 @@ function process_file(file_contents)
     # ![stuff](videos/something) => ~~~\n<videos>stuff](/assets/something)</video>\n~~~
     rx = r"!\[([a-zA-Z0-9 .'-=!|]*)\]\(videos/([a-zA-Z0-9 .'_=!-]+)\)"
     file_contents = replace(file_contents, rx => s"~~~\n<video controls src=\"/assets/\2\" alt=\"\1\"></video>\n~~~")
+
+    # turn `zsh` into `bash`
+    rx = r"```zsh\n"
+    file_contents = replace(file_contents, rx => "```bash\n")
 
     # remove `dot` code block
     rx = r"```dot\n([^`]*)\n```"
