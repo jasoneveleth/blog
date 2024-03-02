@@ -22,7 +22,7 @@ $ scp user@server.com:/home/user/do|
 downloads/    documents/
 ```
 
-I have known for awhile that if you've set up ssh-keys or had a running ssh command open, that it would work. It'd been in the back of my mind to research, but I've never gotten around to it. That changed today.
+I have known for awhile that if you've set up ssh-keys, it would work. It'd been in the back of my mind to research, but I've never gotten around to it. That changed today.
 
 My initial findings led me to [stack exchange](https://unix.stackexchange.com/questions/203931/whats-the-magic-that-allows-me-to-tab-complete-remote-files-as-i-type-an-scp-co). I'm 9 years late, but I figured I'd share some research I've done into this topic. You can ask zsh to give you the completion function for any command. So, to see for `scp`, you can use:
 
@@ -61,7 +61,9 @@ Here's an excerpt of header comment:
 
 > Needs key-based authentication with no passwords or a running ssh-agent to work.
 
-So, we do need to have an ssh session open. The file is just 104 lines long and pretty readable (if you're looked at zsh completion code before). The relevant line I didn't quite understand:
+So, we do need to have an ssh keys or some other passwordless way to ssh. 
+
+The file is just 104 lines long and pretty readable (if you're looked at zsh completion code before). The relevant line I didn't quite understand:
 
 ```
 remfiles=(${(M)${(f)"$(
