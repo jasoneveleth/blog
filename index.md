@@ -1,6 +1,8 @@
 @def title = "Archive"
 
 ## 2024
+~~~<span class='date'>04/07</span>~~~ [More gradient descent](2024/04/07/more-gradient-descent)
+
 ~~~<span class='date'>03/02</span>~~~ [How does `scp` completion work in zsh?](2024/03/02/scp-completion-in-zsh)
 
 ~~~<span class='date'>01/05</span>~~~ [A Rigorous (and Not-So-Rigorous) Look at JAX's Autograd](2024/01/05/autograd)
