@@ -34,9 +34,14 @@ Figure 1: On the left, we see the input space $V$ and the tangent space at $\bm{
 For gradient ascent (descent is in the opposite direction since we're on a plane), our goal is to maximize $f$ by finding the locally best direction. That is we want $\delta$-length vector $\bm{h}$ (in the tangent space of the input) such that it maximizes $f$:  $$
 \underset{\|h\|= \delta}{\operatorname{argmax}} f(\bm{x} + \bm{h})
 $$
-Where $\delta$ is a small constant. We know that the derivative of $f$ at $x$ is going to be a linear form because our loss function is a scalar. Notice that the left side of this equation is a scalar 
-$$f(\bm{x} + \bm{f}) - f(\bm{x}) = Df(\bm{x})\bm{h}.$$
-Since $Df(\bm{x})$ is turning a vector into a scalar, it must be a linear form. So, $Df(\bm{x})$ is a member of the dual space. Now, since the derivative is in the dual space, we can rewrite that expression as an inner product with a vector (the transpose of the derivative). To make that rigorous, given a basis $B = \{\bm{e^1}, \dots ,\bm{e^n}\}$ of $V$, for all $\bm{v} \in V$, there are unique $\alpha_{i}$ where $\bm{v} = \alpha_1\bm{e^1} + \dots  + \alpha_n \bm{e^n}$ (by definition of a basis). Then we can define basis elements of $V^*$ using  $$\begin{align*}
+Where $\delta$ is a small constant. The rest of this post is about why the argmax happens to be $\bm{h} = Df(\bm{x})^{\intercal}.$
+
+# Transpose maps
+
+Let $f$ be the function that we care about $V\to \mathbb{R}$, from a vector space to the real numbers (we could actually choose any field we want, but most loss functions are of this form). Notice that the left side of this equation is a scalar 
+$$f(\bm{x} + \bm{f}) - f(\bm{x}) = Df(\bm{x})\bm{h}.$$ 
+
+Since $Df(\bm{x})$ is turning a vector into a scalar, it must be a linear form. So, $Df(\bm{x})$ is a member of the dual space of $V$ . Now, since the derivative is in the dual space, we can rewrite that expression as an inner product with a vector (the transpose of the derivative). To make that rigorous, given a basis $B = \{\bm{e^1}, \dots ,\bm{e^n}\}$ of $V$, for all $\bm{v} \in V$, there are unique $\alpha_{i}$ where $\bm{v} = \alpha_1\bm{e^1} + \dots  + \alpha_n \bm{e^n}$ (by definition of a basis). Then we can define basis elements of $V^*$ using  $$\begin{align*}
 e_{i}: V \to  \mathbb{R}\\ \bm{v} \mapsto \alpha_i
 \end{align*}$$
 $B^* = \{e_1, \dots , e_{n}\}$ is a basis of $V^*$ which is the space of linear forms/covectors/dual space. Then given any element of the dual space, we can write it in coordinate form:
@@ -49,17 +54,17 @@ Let $$
 $$ be the transpose map. All $\phi$ does is preserve the coefficients of the basis. It should be clear now, that $$
 Df(\bm{x})\bm{h} = \left\langle  \phi(Df(\bm{x})), \bm{h} \right\rangle = \left\langle  Df(\bm{x})^{\intercal}, \bm{h} \right\rangle
 .$$ 
-# Why is the transpose the “steepest ascent”?
+# Why is the “steepest ascent” = the transpose?
 
-Now by unrolling the definition of the derivative, we have $$
+By unrolling the definition of the derivative, we have $$
 \begin{align*}
 \underset{\|h\|= \delta}{\operatorname{argmax}} f(\bm{x} + \bm{h})
 &\approx \underset{\|h\|= \delta}{\operatorname{argmax}} f(\bm{x}) + Df(\bm{x})\bm{h}\\
 &= \underset{\|h\|= \delta}{\operatorname{argmax}} Df(\bm{x})\bm{h}\\
 \end{align*}
 $$
-Let $\bm{c}=Df(\bm{x})^\intercal$ for clarity. Then, using the dual space equation from earlier, we are trying to optimize:
-$$\underset{\|h\|= \delta}{\operatorname{argmax}} \langle \bm{c}, \bm{h}\rangle$$
+Let $\bm{c}=Df(\bm{x})^\intercal$ for clarity. Then, using the dual space equation from earlier, we find:
+$$\underset{\|h\|= \delta}{\operatorname{argmax}} Df(\bm{x})\bm{h}=\underset{\|h\|= \delta}{\operatorname{argmax}} \langle Df(\bm{x})^\intercal, \bm{h}\rangle=\underset{\|h\|= \delta}{\operatorname{argmax}} \langle \bm{c}, \bm{h}\rangle$$
 
 Now remember that $\langle \bm{a},\bm{b} \rangle \leq \|\bm{a}\|\|\bm{b}\|$. And since $\|\bm{h}\|=\delta$, we have that $$
 \langle \bm{c}, \bm{h}\rangle \leq \|\bm{c}\|\delta
@@ -116,6 +121,33 @@ J^{\intercal}\sigma\left( a_{2}, g^{\intercal} \right) = g^{\intercal}D\sigma(a_
 $$
 # Interactive plot
 
-Coming soon.
+The left side is the input space, and the right side is the output space. The arrow on the left is a small increment to the input. The arrow on the right is the approximate change in the output use the first order approximation and the red $\times$ is the true function value.   
+
+Right now, it's a linear function: $f(\bm{x}) = A\bm{x} + \bm{b}.$ Both the input and output are vectors. You can adjust the $h$ value and see how accurate the first order approximation (the arrow on the right graph). For the linear function it should be perfect, since it is it's own first order approximation.
+
+Try the quadratic function (vector to scalar) and sin function (vector to vector). Note: I don't really have the time to animate multi dimensional graphs so we represent a scalar value $r$ as $(r, 0)$. You can find the code [here](https://github.com/jasoneveleth/d3-gradient-visualizer).
+
+~~~
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <select id="selectButton"></select>
+  <button id="resetButton">reset</button>
+  <br></br>
+  <div class="im-800">
+	  <svg id="graphssvg" width="800" height="375" style="flex: 1 0 auto;"></svg>
+  </div>
+  <div id="vals"></div>
+
+<script>
+const width=800;const height=375;const axis_width=375;const scale=600/14;const screen_origin1={x:axis_width/2,y:height/2};const v_init={x:2,y:2};const h_init={x:1,y:2};const gap=25;const screen_origin2={x:3*axis_width/2+gap,y:height/2};function add(a,b){return{x:a.x+b.x,y:a.y+b.y}}function p(x,y){return{x:x,y:y}}function mul(a,b){return{x:a.x*b,y:a.y*b}}function matmul(A,b){return{x:A[0].x*b.x+A[1].x*b.y,y:A[0].y*b.x+A[1].y*b.y}}function matmul2(b,A){if(Array.isArray(A)){return{x:A[0].x*b.x+A[0].y*b.y,y:A[1].x*b.x+A[1].y*b.y}}else{return b.x*A.x+b.y*A.y}}function transpose(A){return[{x:A[0].x,y:A[1].x},{x:A[0].y,y:A[1].y}]}function coord2screen(vec,origin=screen_origin1){const flip={x:vec.x,y:-vec.y};const a=add(origin,mul(flip,scale));return a}function screen2coord(vec){const a=mul(add(vec,mul(screen_origin1,-1)),1/scale);const c={x:a.x,y:-a.y};return c}const svg=d3.select("#graphssvg");svg.append("defs").append("marker").attr("id","arrowhead").attr("viewBox","0 -5 10 10").attr("refX",8).attr("refY",0).attr("markerWidth",6).attr("markerHeight",6).attr("orient","auto").append("path").attr("d","M0,-5L10,0L0,5").attr("fill","black");const xScale=d3.scaleLinear().domain([-(axis_width/scale)/2,axis_width/scale/2]).range([0,axis_width]);const yScale=d3.scaleLinear().domain([-(height/scale)/2,height/scale/2]).range([height,0]);const xAxis=d3.axisBottom(xScale);const yAxis=d3.axisLeft(yScale);const xaxis_group=svg.append("g").attr("transform","translate(0,"+screen_origin1.y+")").call(xAxis);xaxis_group.selectAll("line,path").style("stroke","#ccc");xaxis_group.selectAll("text").style("fill","#ccc");const yaxis_group=svg.append("g").attr("transform","translate("+screen_origin1.x+",0)").call(yAxis);yaxis_group.selectAll("line,path").style("stroke","#ccc");yaxis_group.selectAll("text").style("fill","#ccc");svg.append("rect").attr("x",0).attr("y",0).attr("width",axis_width).attr("height",height).style("fill","none").style("stroke","black").style("stroke-width",1);const xAxis2=d3.axisBottom(xScale);const yAxis2=d3.axisLeft(yScale);const xaxis_group2=svg.append("g").attr("transform","translate("+(screen_origin2.x-axis_width/2+gap)+","+screen_origin2.y+")").call(xAxis);xaxis_group2.selectAll("line,path").style("stroke","#c0c");xaxis_group2.selectAll("text").style("fill","#c0c");const yaxis_group2=svg.append("g").attr("transform","translate("+(screen_origin2.x+gap)+",0)").call(yAxis);yaxis_group2.selectAll("line,path").style("stroke","#c0c");yaxis_group2.selectAll("text").style("fill","#c0c");svg.append("rect").attr("x",screen_origin2.x-axis_width/2+gap).attr("y",0).attr("width",axis_width).attr("height",height).style("fill","none").style("stroke","black").style("stroke-width",1);const initialData=[v_init,add(v_init,h_init)].map(x=>coord2screen(x));const line=d3.line().x(d=>d.x).y(d=>d.y);let cache_v_h=add(v_init,h_init);linepath=svg.append("path").datum(initialData).attr("fill","none").attr("stroke","black").attr("stroke-width",2).attr("d",line).attr("marker-end","url(#arrowhead)");const endPoint=svg.append("circle").attr("cx",initialData[1].x).attr("cy",initialData[1].y).attr("r",3).attr("fill","white").attr("stroke","black").attr("stroke-width",1).call(d3.drag().on("drag",function(event){const vec=screen2coord(p(event.x,event.y));cache_v_h=vec;redraw()}));function updateAxis1(pt){const newData=[v_init,pt].map(x=>coord2screen(x));linepath.datum(newData).attr("d",line);endPoint.attr("cx",coord2screen(pt).x).attr("cy",coord2screen(pt).y)}const A=[{x:1,y:0},{x:0,y:.5}];const b={x:0,y:-3};const linear_f=v=>{return add(matmul(A,v),b)};const linear_Df=v=>{return h=>{return matmul(A,h)}};const quadratic_f=v=>{return{x:matmul2(v,matmul(A,v))- -b.y,y:0}};const quadratic_Df=v=>{return h=>{const should_be_row_vec=add(matmul2(v,A),matmul2(v,transpose(A)));return{x:matmul2(h,should_be_row_vec),y:0}}};const sine_f=v=>{return{x:Math.sin(v.x),y:Math.sin(v.y)}};const sine_Df=v=>{return h=>{return matmul([{x:Math.cos(v.x),y:0},{x:0,y:Math.cos(v.y)}],h)}};let f=linear_f;let Df=linear_Df;function line2_func(v,h){return[f(v),add(f(v),Df(v)(h))]}const initialData2=line2_func(v_init,h_init).map(x=>coord2screen(x,screen_origin2));const f_image_data=coord2screen(f(add(v_init,h_init)),screen_origin2);const line2=d3.line().x(d=>d.x).y(d=>d.y);linepath2=svg.append("path").datum(initialData2).attr("fill","none").attr("stroke","black").attr("stroke-width",2).attr("d",line).attr("marker-end","url(#arrowhead)");const endPoint2=svg.append("circle").attr("cx",initialData2[1].x).attr("cy",initialData2[1].y).attr("r",3).attr("fill","orange");const f_image=svg.append("g").attr("transform","translate("+f_image_data.x+","+f_image_data.y+")");f_image.append("path").attr("d","M-5,-5L5,5M5,-5L-5,5").attr("stroke","red").attr("stroke-width",2);function updateAxis2(pt){const h=add(pt,mul(v_init,-1));const newData=line2_func(v_init,h).map(x=>coord2screen(x,screen_origin2));const screen_actual=coord2screen(f(add(v_init,h)),screen_origin2);linepath2.datum(newData).attr("d",line);endPoint2.attr("cx",newData[1].x).attr("cy",newData[1].y);f_image.attr("transform","translate("+screen_actual.x+","+screen_actual.y+")")}funcs_options=["linear: Av + b","quadratic: v^TAv - b","sine: sin(v)"];d3.select("#selectButton").selectAll("myOptions").data(funcs_options).enter().append("option").text(function(d){return d}).attr("value",function(d){return d[0]});d3.select("#selectButton").on("change",function(d){var selectedOption=d3.select(this).property("value");if(selectedOption=="l"){f=linear_f;Df=linear_Df}else if(selectedOption=="q"){f=quadratic_f;Df=quadratic_Df}else if(selectedOption=="s"){f=sine_f;Df=sine_Df}});d3.select("#resetButton").on("click",function(d){cache_v_h=add(v_init,h_init);redraw()});function redraw(){const h=add(cache_v_h,mul(v_init,-1));const v=v_init;const lin_approx=add(f(v),Df(v)(h));r=x=>x.toFixed(2);updateAxis1(add(v,h));updateAxis2(add(v,h));let df_str;if(f==quadratic_f){df_str=`Df(v) = (${r(Df(v)({x:1,y:0}).x)}, ${r(Df(v)({x:0,y:1}).x)})`}else{console.log(Df(v)({x:1,y:0}));df_str=`Df(v) = ((${r(Df(v)({x:1,y:0}).x)}, ${r(Df(v)({x:0,y:1}).x)})
+         (${r(Df(v)({x:1,y:0}).y)}, ${r(Df(v)({x:0,y:1}).y)}))`}document.getElementById("vals").innerHTML=`<pre>
+v = (${v.x}, ${v.y})
+h = (${r(h.x)}, ${r(h.y)})
+f(v) = (${r(f(v).x)}, ${r(f(v).y)})
+${df_str}
+f(v + h) = (${r(f(add(v,h)).x)}, ${r(f(add(v,h)).y)})
+f(v) + Df(v)h = (${r(lin_approx.x)}, ${r(lin_approx.y)})
+</pre>`}redraw();
+</script>
+~~~
 
 {{ addcomments }}
