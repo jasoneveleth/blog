@@ -1,5 +1,8 @@
 @def title = "Archive"
 
+## 2025
+~~~<span class='date'>12/25</span>~~~ [Animating a list shuffle with FLIP technique](2025/12/25/animating-list-shuffle-with-FLIP-technique)
+
 ## 2024
 ~~~<span class='date'>04/07</span>~~~ [More gradient descent](2024/04/07/more-gradient-descent)
 
