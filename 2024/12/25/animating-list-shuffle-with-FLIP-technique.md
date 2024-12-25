@@ -1,10 +1,10 @@
 +++
 title = "Animating a list shuffle with FLIP technique"
-date = Date("2025/12/25", "yyyy/mm/dd")
+date = Date("2024/12/25", "yyyy/mm/dd")
 rss = "Explaining how to use the FLIP technique to animate a list shuffle"
 tags = String[]
 descr = true
-githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2025/12/25/animating-list-shuffle-with-FLIP-technique.md"
+githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2024/12/25/animating-list-shuffle-with-FLIP-technique.md"
 +++
 ~~~
 <details class="toc">
