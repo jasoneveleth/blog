@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Otter emoji icon!!! -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+  <!-- Open Graph https://ogp.me/ -->
+  <meta property="og:title" content="Animating a list shuffle with the FLIP technique" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://www.jasoneveleth.com/blog/assets/otter64px.png" />
+  <meta property="og:image:width" content="64" />
+  <meta property="og:image:height" content="64" />
+  <meta property="og:article:author" content="Jason Eveleth">
+  <meta property="og:article:published_time" content="2024-12-25">
+
+  
+   <link rel="stylesheet" href="/blog/libs/highlight/styles/github.min.css">
+   
+
+  <!-- not used -->
+  
+
+  <link href="/blog/css/franklin.css" rel="stylesheet">
+  <link href="/blog/css/global.css" rel="stylesheet">
+
+  <title>Animating a list shuffle with the FLIP technique</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/blog/search">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">Animating a list shuffle with the FLIP technique</h1>
+
+
+<div class="post-descr">
+Date: 2024-12-25 ｜
+Author: Jason Eveleth
+</div>
+
+
+<!-- <hr> -->
+<!-- Content appended here -->
+<div class="franklin-content"><p> 
+<details class="toc">
+<summary>Table of Contents</summary>
+ <div class="franklin-toc"><ol><li><a href="#what_is_the_flip_technique">What is the FLIP technique?</a></li><li><a href="#why_i_chose_vanilla_htmljs">Why I chose vanilla html/js</a></li></ol></div> 
+</details>
+</p>
+<h3 id="what_is_the_flip_technique"><a href="#what_is_the_flip_technique" class="header-anchor">What is the FLIP technique?</a></h3>
+<p>FLIP stands for First Last Invert Play. It&#39;s a technique for easily animating objects that are moving around. You record the <strong>first</strong> position of the object, and the <strong>last</strong> position of your object &#40;after the animation&#41;, then <strong>invert</strong> the object&#39;s position to the first position using a transformation. Finally, <strong>&quot;play&quot;</strong> an animation which transitions the object&#39;s position from the inverted transform to the identity transform.</p>
+<p><a href="https://css-tricks.com/animating-layouts-with-the-flip-technique/">This article</a> by css tricks has the best explanation I&#39;ve found. The css tricks article links to the original article <a href="https://aerotwist.com/blog/flip-your-animations/">here</a>. I found <a href="https://medium.com/developers-writing/animating-the-unanimatable-1346a5aab3cd">two</a> <a href="https://www.taraojo.com/post/animating-element-reordering">articles</a> showing how to integrate it into React&#39;s framework but nothing about vanilla html/js.</p>
+<h3 id="why_i_chose_vanilla_htmljs"><a href="#why_i_chose_vanilla_htmljs" class="header-anchor">Why I chose vanilla html/js</a></h3>
+<p>I chose to use vanilla html/js instead of React since I was auto-generating the html content and I didn&#39;t want to have to deal with the dependency of React. I found that chatGPT couldn&#39;t write correct code snippets using vanilla js, which indicated to me that there aren&#39;t many examples on the web.</p>
+<p>It was a lot of trial and error to figure out how the browser schedules animation frames and when to change the style on each element. It turns out the best way to do it is rearrange all the elements on the DOM. Then, in a <code>requestAnimationFrame</code> thunk, do the inversion &#40;animate them to their old positions with 0ms transition&#41;. Next, force the browser to do the animation with <code>void container.offsetHeight;</code> &#40;which is browser magic&#41;. Then play them by setting their transform to nothing with a transition of <code>300ms</code>.</p>
+<p>The <code>get_val</code> function takes the item and converts it to a real number which we use for sorting. I chose to put the values I wanted to sort by as fields of the element &#40;and so <code>getAttribute&#40;data-&#36;&#123;indexType&#125;&#41;</code> correctly retrieves it&#41;. But, you could choose any implementation/storage for the sorting keys.</p>
+<p>If we&#39;re willing to treat the <code>void container.offsetHeight;</code> as a black box then everything should make sense. My guess is that if you ask for the offset height &#40;<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetHeight">which is</a> a measurement in pixels of the element&#39;s CSS height, including any borders, padding, and horizontal scrollbars&#41;, then it will force the browser to move all the elements to their animated locations.</p>
+<p>Below is the code. Replace the <code>...</code> placeholders with whatever data you want.</p>
+<pre><code class="html hljs"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;container&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">details</span> <span class="hljs-attr">data-xvalue</span>=<span class="hljs-string">&quot;186&quot;</span> <span class="hljs-attr">data-idnumber</span>=<span class="hljs-string">&quot;148&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">summary</span>&gt;</span>Item title<span class="hljs-tag">&lt;/<span class="hljs-name">summary</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">pre</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">pre</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">details</span>&gt;</span>
+...
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">sortDetails</span>(<span class="hljs-params">indexType</span>) {
+  <span class="hljs-comment">// get a list of items to sort</span>
+  <span class="hljs-keyword">const</span> container = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.container&#x27;</span>);
+  <span class="hljs-keyword">const</span> items = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>(container.<span class="hljs-property">children</span>);
+
+  <span class="hljs-comment">// 1. FIRST</span>
+  <span class="hljs-keyword">const</span> oldPositions = items.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">el</span> =&gt;</span> el.<span class="hljs-title function_">getBoundingClientRect</span>());
+
+  <span class="hljs-comment">// rearrange the items on the div</span>
+  <span class="hljs-keyword">const</span> get_val = (<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-built_in">parseFloat</span>(x.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">`data-<span class="hljs-subst">${indexType}</span>`</span>)));
+  <span class="hljs-keyword">const</span> argsort = <span class="hljs-title class_">Array</span>(items.<span class="hljs-property">length</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>).<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">_, i</span>) =&gt;</span> i).<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">i, j</span>) =&gt;</span>
+    <span class="hljs-title function_">get_val</span>(items[i]) - <span class="hljs-title function_">get_val</span>(items[j])
+  )
+  argsort.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> container.<span class="hljs-title function_">appendChild</span>(items[i]));
+
+  <span class="hljs-comment">// 2. LAST</span>
+  <span class="hljs-keyword">const</span> newPositions = items.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">el</span> =&gt;</span> el.<span class="hljs-title function_">getBoundingClientRect</span>());
+
+  <span class="hljs-title function_">requestAnimationFrame</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// 3. INVERT</span>
+    items.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">el, i</span>) =&gt;</span> {
+  	  <span class="hljs-keyword">const</span> dx = oldPositions[i].<span class="hljs-property">left</span> - newPositions[i].<span class="hljs-property">left</span>
+  	  <span class="hljs-keyword">const</span> dy = oldPositions[i].<span class="hljs-property">top</span> - newPositions[i].<span class="hljs-property">top</span>
+  	  el.<span class="hljs-property">style</span>.<span class="hljs-property">transform</span> = <span class="hljs-string">`translate(<span class="hljs-subst">${dx}</span>px, <span class="hljs-subst">${dy}</span>px)`</span>
+  	  el.<span class="hljs-property">style</span>.<span class="hljs-property">transition</span> = <span class="hljs-string">&#x27;none&#x27;</span>
+    })
+    <span class="hljs-comment">// force reflow</span>
+    <span class="hljs-keyword">void</span> container.<span class="hljs-property">offsetHeight</span>;
+
+    <span class="hljs-comment">// 4. PLAY (play animation to new position)</span>
+    items.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">el</span> =&gt;</span> {
+  	  el.<span class="hljs-property">style</span>.<span class="hljs-property">transform</span> = <span class="hljs-string">&#x27;&#x27;</span>
+  	  el.<span class="hljs-property">style</span>.<span class="hljs-property">transition</span> = <span class="hljs-string">&#x27;transform 300ms&#x27;</span>
+    })
+  })
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+    <script src="https://utteranc.es/client.js"
+        repo="jasoneveleth/blog"
+        issue-term="pathname"
+        label="Comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+
+<div class="page-foot">
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: December 25, 2024 <a href="https://github.com/jasoneveleth/blog/blob/dev/2024/12/25/animating-list-shuffle-with-FLIP-technique.md">Page Source</a>
+</div>
+</div><!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+    if (window.self != window.top) {
+      console.log("we're in an iframe!!!");
+      document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+    }
+  </script>
+
+  <!-- <script src="/blog/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/blog/libs/vela/slideout.min.js"></script> -->
+  
+  
+    <script src="/blog/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+  
+  
+</body>
+</html>

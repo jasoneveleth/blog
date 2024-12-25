@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Animating a list shuffle with the FLIP technique  ]]>
+  </title>
+  <link> https://www.jasoneveleth.com/blog/2024/12/25/animating-list-shuffle-with-FLIP-technique/index.html </link>
+  <guid> https://www.jasoneveleth.com/blog/2024/12/25/animating-list-shuffle-with-FLIP-technique/index.html </guid>
+  <description>
+    <![CDATA[  Explaining how to use the FLIP technique to animate a list shuffle  ]]>
+  </description>  
+    
+  <pubDate>Wed, 25 Dec 2024 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Jason Eveleth</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  More gradient descent  ]]>
   </title>
   <link> https://www.jasoneveleth.com/blog/2024/04/07/more-gradient-descent/index.html </link>
