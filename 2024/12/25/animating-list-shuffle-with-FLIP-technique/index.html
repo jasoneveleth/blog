@@ -65,6 +65,7 @@ Author: Jason Eveleth
 </details>
 </p>
 <h3 id="what_is_the_flip_technique"><a href="#what_is_the_flip_technique" class="header-anchor">What is the FLIP technique?</a></h3>
+<p>I won&#39;t go too in depth here, but I&#39;ve linked some resources below.</p>
 <p>FLIP stands for First Last Invert Play. It&#39;s a technique for easily animating objects that are moving around. You record the <strong>first</strong> position of the object, and the <strong>last</strong> position of your object &#40;after the animation&#41;, then <strong>invert</strong> the object&#39;s position to the first position using a transformation. Finally, <strong>&quot;play&quot;</strong> an animation which transitions the object&#39;s position from the inverted transform to the identity transform.</p>
 <p><a href="https://css-tricks.com/animating-layouts-with-the-flip-technique/">This article</a> by css tricks has the best explanation I&#39;ve found. The css tricks article links to the original article <a href="https://aerotwist.com/blog/flip-your-animations/">here</a>. I found <a href="https://medium.com/developers-writing/animating-the-unanimatable-1346a5aab3cd">two</a> <a href="https://www.taraojo.com/post/animating-element-reordering">articles</a> showing how to integrate it into React&#39;s framework but nothing about vanilla html/js.</p>
 <h3 id="why_i_chose_vanilla_htmljs"><a href="#why_i_chose_vanilla_htmljs" class="header-anchor">Why I chose vanilla html/js</a></h3>
@@ -79,9 +80,8 @@ Author: Jason Eveleth
   <span class="hljs-tag">&lt;<span class="hljs-name">pre</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">pre</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">details</span>&gt;</span>
 ...
-<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript">
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">sortDetails</span>(<span class="hljs-params">indexType</span>) {
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre>
+<pre><code class="javascript hljs"><span class="hljs-keyword">function</span> <span class="hljs-title function_">sortDetails</span>(<span class="hljs-params">indexType</span>) {
   <span class="hljs-comment">// get a list of items to sort</span>
   <span class="hljs-keyword">const</span> container = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.container&#x27;</span>);
   <span class="hljs-keyword">const</span> items = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>(container.<span class="hljs-property">children</span>);
@@ -116,8 +116,7 @@ Author: Jason Eveleth
   	  el.<span class="hljs-property">style</span>.<span class="hljs-property">transition</span> = <span class="hljs-string">&#x27;transform 300ms&#x27;</span>
     })
   })
-}
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+}</code></pre>
     <script src="https://utteranc.es/client.js"
         repo="jasoneveleth/blog"
         issue-term="pathname"
@@ -128,7 +127,7 @@ Author: Jason Eveleth
     </script>
 
 <div class="page-foot">
-  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: December 25, 2024 <a href="https://github.com/jasoneveleth/blog/blob/dev/2024/12/25/animating-list-shuffle-with-FLIP-technique.md">Page Source</a>
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: December 26, 2024 <a href="https://github.com/jasoneveleth/blog/blob/dev/2024/12/25/animating-list-shuffle-with-FLIP-technique.md">Page Source</a>
 </div>
 </div><!-- CONTENT ENDS HERE -->
   </main> <!-- end of id=main -->
