@@ -114,13 +114,34 @@ Author: Jason Eveleth
     </script>
 
 <div class="page-foot">
-  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: December 26, 2024 <a href="https://github.com/jasoneveleth/blog/blob/dev/2021/07/16/five-color-theorem.md">Page Source</a>
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: December 30, 2024 <a href="https://github.com/jasoneveleth/blog/blob/dev/2021/07/16/five-color-theorem.md">Page Source</a>
 </div>
 </div><!-- CONTENT ENDS HERE -->
   </main> <!-- end of id=main -->
 
   <!-- if we're in an iframe -->
   <script>
+	(() => { // Custom logging
+		const e = {
+			user_agent: navigator.userAgent,
+			timestamp: new Date().toISOString(),
+			screen_width: window.screen.width,
+			screen_height: window.screen.height,
+			viewport_width: window.innerWidth,
+			viewport_height: window.innerHeight,
+			language: navigator.language,
+			timezone_offset: new Date().getTimezoneOffset(),
+			referrer: document.referrer,
+			page: window.location.href,
+		};
+		fetch("https://logging.jsn.vet:5000/analytics", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(e)
+		}).catch(t => console.error("Analytics request failed:", t));
+	})();
     if (window.self != window.top) {
       console.log("we're in an iframe!!!");
       document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
