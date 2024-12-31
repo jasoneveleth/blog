@@ -15,16 +15,16 @@ githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2024/01/05/autogra
 </details>
 ~~~
 
+\warn{(Check out my new follow up post: [more gradient descent](/2024/04/07/more-gradient-descent).) This post is correct but contains some misleading statements that I've labeled with an astricks*, and warnings at the beginning of each section. I wrote this post as I was learning differential geometry, thank you for joining me on this journey.}
+
 # What this post is about
 
 I've started writing this post from scratch several times as I've tried to get the presentation just right. I settled on this two goals: (1) if you have heard the terms "[vector space](/404)" and "gradient" thrown about before, you should be able to understand and write JAX primitives, and (2) if you're comfortable with vector spaces, dual spaces, and multivariable calculus, I will assuage any fears about rigor.
 
-[JAX](https://jax.readthedocs.io/en/latest/) is a high-performance numerical computing framework for Python that can wrap a normal python function to calculate the derivative. We'll cover JAX-flavored reverse-mode automatic differentiation (autodiff), and focus on the 'differentiation' part. The 'automatic' part basically works by wrapping every `ndarray` in a custom class that keeps track of computation. That is out of the scope of this post, but you should check out the [Resources](/2024/01/05/autograd/#resources) section for more information (or my [110-line python implementation](https://github.com/jasoneveleth/autograd)).
-
-\warn{New related post: [more gradient descent](/2024/04/07/more-gradient-descent). Old disclaimer: This post is my understanding; I've only just started learning differential geometry, so if I've made a mistake, *please leave a comment*.}
+[JAX](https://jax.readthedocs.io/en/latest/) is a high-performance numerical computing framework for Python that can wrap a normal python function to calculate the derivative. We'll cover JAX-flavored reverse-mode automatic differentiation (autodiff), and focus on the 'differentiation' part. The 'automatic' part basically works by wrapping input `ndarray`'s in a custom class that keeps track of computation. That is out of the scope of this post, but you should check out the [Resources](/2024/01/05/autograd/#resources) section for more information (or my [110-line python implementation](https://github.com/jasoneveleth/autograd)).
 # Resources
 
-I found plenty high-quality resources on autodiff. The first post I read was [this one](https://thenumb.at/Autodiff/), and I wrote down my takeaways [here](/404). [This post](https://jingnanshi.com/blog/autodiff.html) is also excellent. However, they cover mostly how to directly apply the chain rule. In contrast, the JAX-flavored way of doing things involved "Jacobian-vector products" and other foreign terms. I really liked the JAX approach of only providing a `grad` function that can wrap any function you like, and it seemed to have a structured approach to applying the chain rule.
+I found plenty high-quality resources on autodiff. The first post I read was [this one](https://thenumb.at/Autodiff/), and I wrote down my takeaways [here](/404). [This post](https://jingnanshi.com/blog/autodiff.html) is also excellent. However, they cover mostly how to directly apply the chain rule. In contrast, the JAX-flavored way of doing things involved "Jacobian-vector products" and other foreign terms. I really liked the JAX approach of providing a higher-order `grad` function that can wrap any function you like. That approach seemed to have a structured procedure to applying the chain rule.
 
 In my efforts, I stumbled upon many resources specifically related to JAX. One of the main contributors behind JAX made [a video](https://videolectures.net/deeplearning2017_johnson_automatic_differentiation/) about their framework (my notes on it are [here](/404)).  However, the most directly relevant information is the [autodiff cookbook](https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff) for JAX (specifically the section I linked to) and [documentation](https://jax.readthedocs.io/en/latest/notebooks/How_JAX_primitives_work.html) on what you need to do to implement a primitive. Their approach is grounded in the literature, specifically [this paper from 2008](https://engineering.purdue.edu/~qobi/papers/toplas2008.pdf). And finally, I found a core JAX contributor's [phd thesis](https://dougalmaclaurin.com/phd-thesis.pdf) on the implementation of a precursor library (pages 13-19 and 48-52 are relevant).
 
@@ -45,7 +45,7 @@ This is a
 ~~~
 . This is pretty standard (aside from the maybe uncommon choice of $\arctan$). Notice that usually, you'd want to take the derivative with respect to the weights (so $W$ or $b$), but I'm keeping this example simpler. We will only take the derivative with respect to the input $\bm{x}$ This way, we don't need to deal with multiple dimensions.
 
-If all the computations for the autodiff of $f$  (evaluation and gradient accumulation) happened sequentially, it would look like the following. We will execute each operation of the neural net individually so that we can use these intermediate computations in our backward pass. Note: in `numpy`, the `.T` property takes the transpose of a 2D array. Don't worry about the `Jt_f(x, gt)` functions, they will be explained.
+If all the computations for the autodiff of $f$  (evaluation and gradient accumulation) happened sequentially, it would look like the following. We will execute each operation of the neural net individually so that we can use these intermediate computations in our backward pass. Note: in `numpy`, the `.T` property takes the transpose of a 2D array. Don't worry about the `Jt_f(x, gt)` functions, they will be explained later.
 
 ```python
 a = W @ x
@@ -68,9 +68,11 @@ delta_x = delta_xt.T
 There are several things to take away from this code snippet. We see that in backward-mode we are using the values from the original computation (`a`, `b`, `c`, etc.). I've put comments to inline the definitions of the `Jt` functions. And, at the end of the computation, we get a `delta_x`: the gradient of $f$ with respect to the input `x`.  
 # What are those `Jt_f(x, gt)` functions?
 
+\warn{I make three comments (labeled with an astricks*) that make it seem like the `Jt_func` is an inverse map of the derivative (i.e. a map from the tangent space of the output to the tangent space of the input). The function is just a efficient method of evaluated the transpose of the derivative on $g^{\intercal}$, and since the derivative isn't guaranteed to be orthogonal, it is not an inverse map. It just so happens that $\texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal})^{\intercal}$ is the steepest ascent when $\bm{g}$ is the value in our backwards mode differentiation.}
+
 I'm borrowing the transpose vector Jacobian product (`Jt`) from [JAX documentation](https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff). I keep the notation the same so if you read the JAX documentation, their notation will be familiar. **The next few paragraphs are meant to click later in the post; please don't give up just because it doesn't quite make sense now.**
 
-When looking at a function call like `Jt_f(x, gt)`, the $\bm{x}$ tells us where in the input space of some $f:\mathbb{R}^{n}\to \mathbb{R}^{m}$ we are, and, morally[^1] , $\bm{g}^{\intercal}$  is a direction in the output space of that $f$. `Jt_func` turns that direction in the output space, to a direction of the gradient in the input space. Here's a picture:
+When looking at a function call like `Jt_f(x, gt)`, the $\bm{x}$ tells us where in the input space of some $f:\mathbb{R}^{n}\to \mathbb{R}^{m}$ we are, and, morally[^1] , $\bm{g}^{\intercal}$  is a direction in the output space of that $f$. `Jt_func` turns that direction in the output space, to a direction of the gradient in the input space.* Here's a picture:
 
 @@figure
 @@im-800
@@ -80,14 +82,14 @@ When looking at a function call like `Jt_f(x, gt)`, the $\bm{x}$ tells us where 
 Figure 1: On the right we have our output space. I named a vector in this space $\bm{g}^{\intercal}$ (later I will explain why I use the transpose notation). For now, we will use it as a row vector. On the left, we see the output of `Jt_f(x, gt)`, which is an increment to the input.
 @@
 
-You can see the direction $\bm{g}^{\intercal}$ in the output being transformed into the input space. This is how we propagate the gradient through `func`. If you have the gradient of $f$ at $\bm{x}$, you can compute $$
+You can see the direction $\bm{g}^{\intercal}$ in the output being transformed into the input space.* This is how we propagate the gradient through `func`. If you have the gradient of $f$ at $\bm{x}$, you can compute $$
 \texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal}) = \bm{g}^{\intercal} \left(\left.\frac{d}{d \bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}\right)
 $$ Where $\left.\frac{d}{d\bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}$ is the Jacobian matrix of $f$ at $\bm{x}$. [Leibniz's notation](https://en.wikipedia.org/wiki/Leibniz%27s_notation) is insane, so we're going to adopt the notation from [Spivak](http://www.strangebeautiful.com/other-texts/spivak-calc-manifolds.pdf), and [other](http://ceres-solver.org/spivak_notation.html) [people](http://www.vendian.org/mncharity/dir3/dxdoc/) [agree](https://mitpress.mit.edu/9780262019347/functional-differential-geometry/). Let me clarify the notation a little bit more. In math, we often confuse functions and expressions, so if $h(x) := 2x + 5$, we would talk about the function $h(x)$, when we should be talking about the function $h$. Normally the derivative operator applies to expressions, so we write $\frac{d}{dx}(2x + 5)$ or $\frac{d}{dx}h(x)$ which means "expand $h$ into an expression and then differentiate the expression". In the notation I’m using, the derivative operator applies to functions, we write $\frac{d}{dx}h$, which is a new function with same input type. We abbreviate $\frac{d}{dx}$ as $D$. Thus, let $$(Df)(\bm{x}) = Df(\bm{x}) = \left.\frac{d}{d\bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}$$ be the Jacobian matrix. Note that I'll leave off the parens and assume that $D$ always applies to it's function before we apply the function to $x$. Finally, let's rewrite the equation: $$
 \texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal}) := \bm{g}^{\intercal}Df(\bm{x}).
 $$
 Much better. Note that $Df(\bm{x})$ is a matrix, and $\bm{g}^{\intercal}$ is any column vector (we'll talk about what $\bm{g}$ really is [later](/2024/01/05/autograd/#what_is_going_on_bringing_back_rigor)). Now, why does composing `Jt_func` work? We'll hold off on that for a bit (unless you can't wait, in which case it's [here](/2024/01/05/autograd/#what_is_going_on_bringing_back_rigor)). If you're confused right now, that's entirely fair. We'll go through many examples, and then I'll explain the underlying theory. I've just said this stuff so it will click later on.
 
-The way we figure out how to implement these `Jt` functions is we evaluate $\bm{g}^{\intercal}Df(\bm{x})$ (which you should think about as taking the direction $\bm{g}^{\intercal}$ from output space to a direction in the input space) for a given $f$. Let's start with the functions I introduced in the simple neural net at the beginning of this article. 
+The way we figure out how to implement these `Jt` functions is we evaluate $\bm{g}^{\intercal}Df(\bm{x})$ (which you should think about as taking the direction $\bm{g}^{\intercal}$ from output space to a direction in the input space)* for a given $f$. Let's start with the functions I introduced in the simple neural net at the beginning of this article. 
 
 ## Implementing `Jt_subtract_const`
 
@@ -179,6 +181,8 @@ def Jt_arctan(x, gt):
 ```
 # What is going on (bringing back rigor)
 
+\warn{I claim "$\bm{g}$ isn't special" when it is. Otherwise the $Df(x)^{\intercal}\bm{g}$ is just a random value in a vector space with the same dimension as the tangent space in the input. Also, while it is correct, the side quest about the dual space just makes the article a little less clear.}
+
 You might be thinking: I'm familiar with multivariable calculus, I love a good dual space, but this all feels unjustified. To fix that, we'll look again at what a derivative really is. Given a function $f:V\to W$ between vector spaces, the derivative is *the* linear map that takes incremental inputs of $f$ and will output incremental changes in the value of $f$. It is often represented as a matrix, but to clarify the types, we'll pretend it's just a linear function. That is, $Df: V \to (V \to W)$, and $Df(\bm{x}): V\to W$. That is, we're currying the function when we evaluate it at $\bm{x}$.  It has a nice property that $$
 f(\bm{x}) + Df(\bm{x})(\bm{h})\approx f(\bm{x}+\bm{h}).
 $$We're using slightly different notation since we're treating $Df(\bm{x})$ as a function, but remember, the application of it as a function is just left multiplication with the matrix. With our new understanding that the derivative is a linear map (and it just happens to be a matrix). Let's look again at this figure
@@ -197,7 +201,7 @@ Df(\bm{x})^{\intercal}:W^*\to V^*\\
 Df(\bm{x})^{\intercal}(\bm{g})=\bm{g}\circ Df(\bm{x})
 \end{align*}
 $$
-Where $\bm{g}\in W^*$. It is important to realize $\bm{g}$ isn't special. It can be any element of $W^{*}$ . We're now dealing with the dual space. Elements are often referred to as covectors. They are a linear map from their "normal" space to the underlying field. Thus, $\bm{g}:W\to \mathbb{R}$. This means the types the expression make sense: $\bm{g}\circ Df(\bm{x}):V\to \mathbb{R}$, or $\bm{g}\circ Df(\bm{x}):V^*$ . Often people think of the dual space as linear functions that are "taking the inner product with a vector". So $$
+Where $\bm{g}\in W^*$. It is important to realize $\bm{g}$ isn't special.* It can be any element of $W^{*}$ . We're now dealing with the dual space. Elements are often referred to as covectors. They are a linear map from their "normal" space to the underlying field. Thus, $\bm{g}:W\to \mathbb{R}$. This means the types the expression make sense: $\bm{g}\circ Df(\bm{x}):V\to \mathbb{R}$, or $\bm{g}\circ Df(\bm{x}):V^*$ . Often people think of the dual space as linear functions that are "taking the inner product with a vector". So $$
 \bm{g}(\bm{x}) = \langle \bm{g},\bm{x} \rangle.
 $$  This is especially useful because we can then represent $\bm{g}$ as a row vector, which, when combined with a column vector from the nondual space, gives the inner product. This is the reason I've been so careful with keeping the `gt` of shape `(1,n)` because these $\bm{g}$s are members of the dual space and are actually row vectors. From now on, I'll use $\bm{g}^{\intercal}$ as a reminder that it's a row vector. 
 
