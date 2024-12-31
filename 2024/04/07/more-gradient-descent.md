@@ -132,7 +132,7 @@ Try the quadratic function (vector to scalar) and sin function (vector to vector
   <select id="selectButton"></select>
   <button id="resetButton">reset</button>
   <br></br>
-  <div class="im-800">
+  <div class="im-800 im-800-svg">
 	  <svg id="graphssvg" width="800" height="375" style="flex: 1 0 auto;"></svg>
   </div>
   <div id="vals"></div>
