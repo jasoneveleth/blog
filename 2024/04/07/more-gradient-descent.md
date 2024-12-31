@@ -32,7 +32,7 @@ Figure 1: On the left, we see the input space $V$ and the tangent space at $\bm{
 @@
 
 For gradient ascent (descent is in the opposite direction since we're on a plane), our goal is to maximize $f$ by finding the locally best direction. That is we want $\delta$-length vector $\bm{h}$ (in the tangent space of the input) such that it maximizes $f$:  $$
-\underset{\|h\|= \delta}{\operatorname{argmax}} f(\bm{x} + \bm{h})
+\underset{\|h\|= \delta}{\operatorname*{argmax}\,} f(\bm{x} + \bm{h})
 $$
 Where $\delta$ is a small constant. The rest of this post is about why the argmax happens to be $\bm{h} = Df(\bm{x})^{\intercal}.$
 
@@ -58,13 +58,13 @@ Df(\bm{x})\bm{h} = \left\langle  \phi(Df(\bm{x})), \bm{h} \right\rangle = \left\
 
 By unrolling the definition of the derivative, we have $$
 \begin{align*}
-\underset{\|h\|= \delta}{\operatorname{argmax}} f(\bm{x} + \bm{h})
-&\approx \underset{\|h\|= \delta}{\operatorname{argmax}} f(\bm{x}) + Df(\bm{x})\bm{h}\\
-&= \underset{\|h\|= \delta}{\operatorname{argmax}} Df(\bm{x})\bm{h}\\
+\underset{\|h\|= \delta}{\operatorname*{argmax}\,} f(\bm{x} + \bm{h})
+&\approx \underset{\|h\|= \delta}{\operatorname*{argmax}\,} f(\bm{x}) + Df(\bm{x})\bm{h}\\
+&= \underset{\|h\|= \delta}{\operatorname*{argmax}\,} Df(\bm{x})\bm{h}\\
 \end{align*}
 $$
 Let $\bm{c}=Df(\bm{x})^\intercal$ for clarity. Then, using the dual space equation from earlier, we find:
-$$\underset{\|h\|= \delta}{\operatorname{argmax}} Df(\bm{x})\bm{h}=\underset{\|h\|= \delta}{\operatorname{argmax}} \langle Df(\bm{x})^\intercal, \bm{h}\rangle=\underset{\|h\|= \delta}{\operatorname{argmax}} \langle \bm{c}, \bm{h}\rangle$$
+$$\underset{\|h\|= \delta}{\operatorname*{argmax}\,} Df(\bm{x})\bm{h}=\underset{\|h\|= \delta}{\operatorname*{argmax}\,} \langle Df(\bm{x})^\intercal, \bm{h}\rangle=\underset{\|h\|= \delta}{\operatorname*{argmax}\,} \langle \bm{c}, \bm{h}\rangle$$
 
 Now remember that $\langle \bm{a},\bm{b} \rangle \leq \|\bm{a}\|\|\bm{b}\|$. And since $\|\bm{h}\|=\delta$, we have that $$
 \langle \bm{c}, \bm{h}\rangle \leq \|\bm{c}\|\delta
