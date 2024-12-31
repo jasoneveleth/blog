@@ -83,4 +83,106 @@ function sortDetails(indexType) {
 }
 ```
 
+# Demo
+
+Here is a demo with expandable/collapsable items and a sorting animation between different orderings.
+
+~~~
+<button onclick="sortDetails('xvalue')">Sort by xvalue</button>
+<button onclick="sortDetails('idnumber')">Sort by id number</button>
+<h2>List</h2>
+<div class="container">
+<details data-xvalue="186" data-idnumber="148">
+  <summary>Oranges</summary>
+  <p>
+  Oranges are citrus fruits known for their vibrant color and tangy sweetness.
+  They are an excellent source of Vitamin C and are often eaten fresh, juiced,
+  or used as flavoring in various dishes and desserts.
+  </p>
+</details>
+
+<details data-xvalue="102" data-idnumber="173">
+  <summary>Apples</summary>
+  <p>Apples are one of the most popular and versatile fruits worldwide.</p>
+  <p>They come in various colors like red, green, and yellow, and are loved for their crisp texture and balanced sweetness.</p>
+  <p>Often eaten fresh, baked, or made into sauces and cider, apples are rich in dietary fiber and antioxidants.</p>
+</details>
+
+<details data-xvalue="225" data-idnumber="192">
+  <summary>Bananas</summary>
+  <p>Bananas are tropical fruits known for their soft, sweet flesh and easy-to-peel skin.</p>
+  <p>They are a convenient snack and a great source of potassium, Vitamin B6, and dietary fiber.</p>
+  <p>Popular in smoothies, baked goods, or eaten on their own, bananas are a versatile fruit.</p>
+</details>
+
+<details data-xvalue="134" data-idnumber="200">
+  <summary>Grapes</summary>
+  <p>Grapes are small, juicy fruits that grow in clusters and come in a variety of colors such as green, red, and purple.</p>
+  <p>They can be eaten fresh, dried to make raisins, or processed into wine, jam, and juice.</p>
+  <p>Rich in antioxidants, especially resveratrol, grapes are celebrated for their health benefits.</p>
+</details>
+
+<details data-xvalue="90" data-idnumber="155">
+  <summary>Watermelons</summary>
+  <p>
+  Watermelons are large, refreshing fruits with a green rind and sweet, juicy red flesh.
+  They are perfect for hot summer days and are high in water content, making them hydrating.
+  Watermelons also provide vitamins like A and C, as well as antioxidants like lycopene.
+  </p>
+</details>
+</div>
+<style>
+.container {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.container details {
+  background-color: rgb(249, 254, 255);
+  border: 1px solid rgb(0, 0, 0);
+  padding: 5px;
+  border-radius: 10px;
+}
+summary {
+  cursor: hand;
+}
+</style>
+<script>
+  function sortDetails(indexType) {
+    const container = document.querySelector('.container');
+	const items = Array.from(container.children);
+	const oldPositions = items.map(el => el.getBoundingClientRect());
+
+	const get_val = (x => parseFloat(x.getAttribute(`data-${indexType}`)));
+	const argsort = Array(items.length).fill(0).map((_, i) => i).sort((i, j) =>
+	  get_val(items[i]) - get_val(items[j])
+	)
+
+	// rearrange
+	argsort.forEach(i => container.appendChild(items[i]));
+	const newPositions = items.map(el => el.getBoundingClientRect());
+
+	requestAnimationFrame(() => {
+	  // animate to old position
+	  items.forEach((el, i) => {
+		const dx = oldPositions[i].left - newPositions[i].left
+		const dy = oldPositions[i].top - newPositions[i].top
+		el.style.transform = `translate(${dx}px, ${dy}px)`
+		el.style.transition = 'none'
+	  })
+	  // force reflow
+	  void container.offsetHeight;
+	  // play animation to new position
+	  items.forEach(el => {
+		el.style.transform = ''
+		el.style.transition = 'transform 300ms'
+	  })
+    })
+  }
+</script>
+~~~
+
+---
+
 {{ addcomments }}
