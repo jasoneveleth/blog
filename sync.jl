@@ -177,6 +177,8 @@ function process_file(file_contents)
     # change `mathbfit` to `bm`
     file_contents = replace(file_contents, r"\\mathbfit" => "\\bm")
 
+	file_contents = replace(file_contents, r"\\argmax" => "\\operatorname*{argmax}\\,")
+
 
     # note inclusion: ![[note]]
     rx = r"\!\[\[([a-zA-Z0-9 .'=!-]+)\]\]"
