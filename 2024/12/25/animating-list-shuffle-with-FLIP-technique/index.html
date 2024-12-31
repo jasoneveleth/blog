@@ -120,11 +120,10 @@ Author: Jason Eveleth
 <h1 id="demo"><a href="#demo" class="header-anchor">Demo</a></h1>
 <p>Here is a demo with expandable/collapsable items and a sorting animation between different orderings.</p>
 
-<button onclick="sortDetails('xvalue')">Sort by xvalue</button>
-<button onclick="sortDetails('idnumber')">Sort by id number</button>
+<button onclick="shuffleDetails()">shuffle elements</button>
 <h2>List</h2>
 <div class="container">
-<details data-xvalue="186" data-idnumber="148">
+<details>
   <summary>Oranges</summary>
   <p>
   Oranges are citrus fruits known for their vibrant color and tangy sweetness.
@@ -133,28 +132,28 @@ Author: Jason Eveleth
   </p>
 </details>
 
-<details data-xvalue="102" data-idnumber="173">
+<details>
   <summary>Apples</summary>
   <p>Apples are one of the most popular and versatile fruits worldwide.</p>
   <p>They come in various colors like red, green, and yellow, and are loved for their crisp texture and balanced sweetness.</p>
   <p>Often eaten fresh, baked, or made into sauces and cider, apples are rich in dietary fiber and antioxidants.</p>
 </details>
 
-<details data-xvalue="225" data-idnumber="192">
+<details>
   <summary>Bananas</summary>
   <p>Bananas are tropical fruits known for their soft, sweet flesh and easy-to-peel skin.</p>
   <p>They are a convenient snack and a great source of potassium, Vitamin B6, and dietary fiber.</p>
   <p>Popular in smoothies, baked goods, or eaten on their own, bananas are a versatile fruit.</p>
 </details>
 
-<details data-xvalue="134" data-idnumber="200">
+<details>
   <summary>Grapes</summary>
   <p>Grapes are small, juicy fruits that grow in clusters and come in a variety of colors such as green, red, and purple.</p>
   <p>They can be eaten fresh, dried to make raisins, or processed into wine, jam, and juice.</p>
   <p>Rich in antioxidants, especially resveratrol, grapes are celebrated for their health benefits.</p>
 </details>
 
-<details data-xvalue="90" data-idnumber="155">
+<details>
   <summary>Watermelons</summary>
   <p>
   Watermelons are large, refreshing fruits with a green rind and sweet, juicy red flesh.
@@ -181,15 +180,20 @@ summary {
 }
 </style>
 <script>
-  function sortDetails(indexType) {
+  function fisherYatesShuffle(array) {
+	for (let i = array.length - 1; i > 0; i--) {
+	  const j = Math.floor(Math.random() * (i + 1));
+	  [array[i], array[j]] = [array[j], array[i]];
+	}
+	return array;
+  }
+  function shuffleDetails() {
     const container = document.querySelector('.container');
 	const items = Array.from(container.children);
 	const oldPositions = items.map(el => el.getBoundingClientRect());
 
 	const get_val = (x => parseFloat(x.getAttribute(`data-${indexType}`)));
-	const argsort = Array(items.length).fill(0).map((_, i) => i).sort((i, j) =>
-	  get_val(items[i]) - get_val(items[j])
-	)
+	const argsort = fisherYatesShuffle(Array(items.length).fill(0).map((_, i) => i))
 
 	// rearrange
 	argsort.forEach(i => container.appendChild(items[i]));
