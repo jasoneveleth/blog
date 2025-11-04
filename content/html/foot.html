@@ -1,0 +1,20 @@
+<!-- CONTENT ENDS HERE -->
+{{ insert foot_comments.html }}
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  {{ insert foot_logging.html }}
+
+  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  {{ if hasmath }}
+    {{ insert foot_katex.html }}
+  {{ end }}
+  {{ if hascode }}
+    {{ insert foot_highlight.html }}
+  {{ end }}
+  {{ ispage search.md }}
+    {{insert foot_search.html}}
+  {{end}}
+</body>
+</html>
