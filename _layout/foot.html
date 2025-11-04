@@ -1,0 +1,45 @@
+<!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+	(() => { // Custom logging
+		const e = {
+			user_agent: navigator.userAgent,
+			timestamp: new Date().toISOString(),
+			screen_width: window.screen.width,
+			screen_height: window.screen.height,
+			viewport_width: window.innerWidth,
+			viewport_height: window.innerHeight,
+			language: navigator.language,
+			timezone_offset: new Date().getTimezoneOffset(),
+			referrer: document.referrer,
+			page: window.location.href,
+		};
+		fetch("https://logging.jsn.vet:5000/analytics", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(e)
+		}).catch(t => console.error("Analytics request failed:", t));
+	})();
+    if (window.self != window.top) {
+      console.log("we're in an iframe!!!");
+      document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+    }
+  </script>
+
+  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  {{ if hasmath }}
+    {{ insert foot_katex.html }}
+  {{ end }}
+  {{ if hascode }}
+    {{ insert foot_highlight.html }}
+  {{ end }}
+  {{ ispage search.md }}
+    {{insert foot_search.html}}
+  {{end}}
+</body>
+</html>
