@@ -1,5 +1,8 @@
 @def title = "Archive"
 
+## 2025
+~~~<span class='date'>11/03</span>~~~ [Solving the Game of 24](2025/11/03/game-of-24-journey)
+
 ## 2024
 ~~~<span class='date'>12/25</span>~~~ [Animating a list shuffle with the FLIP technique](2024/12/25/animating-list-shuffle-with-FLIP-technique)
 
