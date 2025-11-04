@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  Solving the Game of 24  ]]>
+  </title>
+  <link> https://www.jasoneveleth.com/blog/2025/11/03/game-of-24-journey/index.html </link>
+  <guid> https://www.jasoneveleth.com/blog/2025/11/03/game-of-24-journey/index.html </guid>
+  <description>
+    <![CDATA[  Going through my process of writing a solver for the Game of 24.  ]]>
+  </description>  
+    
+  <pubDate>Mon, 03 Nov 2025 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Jason Eveleth</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  Animating a list shuffle with the FLIP technique  ]]>
   </title>
   <link> https://www.jasoneveleth.com/blog/2024/12/25/animating-list-shuffle-with-FLIP-technique/index.html </link>

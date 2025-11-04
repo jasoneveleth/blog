@@ -12,12 +12,8 @@ end
 
 const posts = [
     # NEWEST TO OLDESTS
-<<<<<<< HEAD
-	Post("animating list shuffle with FLIP technique", "2024/12/25", "Animating a list shuffle with the FLIP technique", [], "Explaining how to use the FLIP technique to animate a list shuffle"),
-=======
 	Post("game of 24 journey", "2025/11/03", "Solving the Game of 24", [], "Going through my process of writing a solver for the Game of 24."),
     Post("animating list shuffle with FLIP technique", "2024/12/25", "Animating a list shuffle with the FLIP technique", [], "Explaining how to use the FLIP technique to animate a list shuffle"),
->>>>>>> dev
 	Post("more gradient descent", "2024/04/07", "More gradient descent", [], "My attempt to understand gradient descent a little better"),
 	Post("scp completion in zsh", "2024/03/02", "How does `scp` completion work in zsh?", [], "My attempt to understand the zsh completion system"),
     Post("autograd", "2024/01/05", "A Rigorous (and Not-So-Rigorous) Look at JAX's Autograd", [], "My attempt to understand how JAX does autograd."),
