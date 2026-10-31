@@ -1,19 +1,12 @@
 +++
 title = "How does `scp` completion work in zsh?"
-date = Date("2024/03/02", "yyyy/mm/dd")
+date = 2024-03-02
 rss = "My attempt to understand the zsh completion system"
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2024/03/02/scp-completion-in-zsh.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 Have you ever tried to complete a file on a remote server when you were `scp`-ing? 
 
@@ -111,4 +104,4 @@ unfunction _remote_files
 autoload -U /tmp/_remote_files
 ```
 
-{{ addcomments }}
+@@comments@@

@@ -1,21 +1,14 @@
 +++
 title = "Colorspace in glium"
-date = Date("2023/07/31", "yyyy/mm/dd")
+date = 2023-07-31
 rss = ""
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/31/understanding-GLFRAMEBUFFERSRGB-in-glium.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
-I have been working on a small project to learn [OpenGL](/404). I decided to use Rust since it is the best programming language ever conceived by man. The obvious choice for an OpenGL project in Rust is to use [`glium`](https://github.com/glium/glium/). However, I found their API a little confusing. I thought it would be useful to have a guide on how to deal with colorspaces in `glium` and OpenGL. This is that guide. **Note: This is my first foray into graphics, if anything is wrong, or hints at a misunderstanding on my part, please let me know.**
+I have been working on a small project to learn [OpenGL](/404). I decided to use Rust since it is the best programming language ever conceived by man. The obvious choice for an OpenGL project in Rust is to use [`glium`](https://github.com/glium/glium/). However, I found their API a little confusing. I thought it would be useful to have a guide on how to deal with colorspaces in `glium` and OpenGL. This is that guide. *Note: This is my first foray into graphics, if anything is wrong, or hints at a misunderstanding on my part, please let me know.*
 
 # Concepts involved
 
@@ -137,4 +130,4 @@ We also should remove `clear_color_srgb()` since users shouldn't worry about `GF
 - simplicity: there's only 1 mode to worry about
 - backward compatibility with old `glium` programs since this is doesn't change the fundamental model
 
-{{ addcomments }}
+@@comments@@

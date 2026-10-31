@@ -1,25 +1,18 @@
 +++
 title = "Animating a list shuffle with the FLIP technique"
-date = Date("2024/12/25", "yyyy/mm/dd")
+date = 2024-12-25
 rss = "Explaining how to use the FLIP technique to animate a list shuffle"
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2024/12/25/animating-list-shuffle-with-FLIP-technique.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 ### What is the FLIP technique?
 
 I won't go too in depth here, but I've linked some resources below.
 
-FLIP stands for First Last Invert Play. It's a technique for easily animating objects that are moving around. You record the **first** position of the object, and the **last** position of your object (after the animation), then **invert** the object's position to the first position using a transformation. Finally, **"play"** an animation which transitions the object's position from the inverted transform to the identity transform.
+FLIP stands for First Last Invert Play. It's a technique for easily animating objects that are moving around. You record the *first* position of the object, and the *last* position of your object (after the animation), then *invert* the object's position to the first position using a transformation. Finally, *"play"* an animation which transitions the object's position from the inverted transform to the identity transform.
 
 [This article](https://css-tricks.com/animating-layouts-with-the-flip-technique/) by css tricks has the best explanation I've found. The css tricks article links to the original article [here](https://aerotwist.com/blog/flip-your-animations/). I found [two](https://medium.com/developers-writing/animating-the-unanimatable-1346a5aab3cd) [articles](https://www.taraojo.com/post/animating-element-reordering) showing how to integrate it into React's framework but nothing about vanilla html/js.
 ### Why I chose vanilla html/js
@@ -189,4 +182,4 @@ summary {
 
 ---
 
-{{ addcomments }}
+@@comments@@

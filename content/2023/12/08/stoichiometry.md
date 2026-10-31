@@ -1,19 +1,12 @@
 +++
 title = "A Linear Algebra Perspective on High School Chemistry"
-date = Date("2023/12/08", "yyyy/mm/dd")
+date = 2023-12-08
 rss = "My attempt to understand what happened in high school with the tools of linear algebra."
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/12/08/stoichiometry.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 Recently, I was on a ski trip and the topic of chemistry came up, and I realized that high school stoichiometry seemed like a algorithm I should recognize.
 
@@ -52,4 +45,4 @@ x_4\\
 $$
 This is so exciting, because now you can use your favorite linear solver on this equation to determine the balance for the original chemical reaction.
 
-{{ addcomments }}
+@@comments@@

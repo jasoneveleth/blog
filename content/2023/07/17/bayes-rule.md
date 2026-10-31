@@ -1,19 +1,12 @@
 +++
 title = "Bayes' Rule (in real life)"
-date = Date("2023/07/17", "yyyy/mm/dd")
+date = 2023-07-17
 rss = ""
 tags = ["math"]
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/17/bayes-rule.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 # Motivating example
 
@@ -21,7 +14,7 @@ Let's say you're a doctor. A woman with no symptoms comes into your office after
 
 We often refer to $90\%$ as the "sensitivity" (since it's how *sensitive* the test is to the disease). We call the $91\%$, "specificity", since it's how specific the test is for the disease.
 
-The woman is stressed out that she tested positive. She asks you, "How likely is it that I have breast cancer?" **Is the answer 10% or 90%**? Many people make the mistake of saying $90\%$. The actual probability is $10\%$. This article will explain why, and how to avoid this mistake.
+The woman is stressed out that she tested positive. She asks you, "How likely is it that I have breast cancer?" *Is the answer 10% or 90%*? Many people make the mistake of saying $90\%$. The actual probability is $10\%$. This article will explain why, and how to avoid this mistake.
 
 # A perspective on why this is wrong
 
@@ -61,7 +54,7 @@ If the only thing we care about is the odds at the end (i.e. the ratio of red to
 
 We start with our prior odds, cancer:not cancer, which is written $O_{old}=P(C):P(\lnot C).$ 
 
-We want to know the probability of **cancer** *given* she **is positive**. In probability form, we write that $P(C\mid +).$ This kind of conditional probability is really important to understand, and I can't explain it too thoroughly here, but the idea is when you say "A given B", you are restricting your universe of possible events to only ones where B is true, and you're asking, out of those times, how often is A true. That is, $P(A\mid B) = \frac{P(A\cap B)}{P(B)}.$ We can rewrite this as $P(A\mid B)P(B) = P(A\cap B)$. This formula will be very important. You should also know that we can rename the A's to B's, so $P(B\mid A)P(A) = P(B\cap A)=P(A \cap B)$. We will use this later.
+We want to know the probability of *cancer* *given* she *is positive*. In probability form, we write that $P(C\mid +).$ This kind of conditional probability is really important to understand, and I can't explain it too thoroughly here, but the idea is when you say "A given B", you are restricting your universe of possible events to only ones where B is true, and you're asking, out of those times, how often is A true. That is, $P(A\mid B) = \frac{P(A\cap B)}{P(B)}.$ We can rewrite this as $P(A\mid B)P(B) = P(A\cap B)$. This formula will be very important. You should also know that we can rename the A's to B's, so $P(B\mid A)P(A) = P(B\cap A)=P(A \cap B)$. We will use this later.
 
 The odds we want to know about can be written $O_{new} = P(C\mid +):P(\lnot C\mid +)$. This will tell us our new estimate of the likelihood that the woman has cancer, given that she tested positive.
 
@@ -90,7 +83,7 @@ It should be clear now, that $$O_{new} = O_{old}O_{pos}= (1:99)(10:1) = 10:99 \a
 This formula is amazing because it is very easy to add more evidence to update your understanding.
 
 Let's say you reassure the woman. "It was a routine checkup, you have no symptoms, we just need to run another test, it was probably a mistake." She does it again and comes back positive again. Now, she should start to get worried: $$O_{newer}=O_{new}O_{pos}=(10:99)(10:1)=(100:99)\approx 50\%.$$
-Almost even odds. Okay, sure, but let's imagine that the second test came back negative. To understand the odds, we need to calculate the odds for a negative test. **Try this on your own and I'll see you in the next paragraph.**
+Almost even odds. Okay, sure, but let's imagine that the second test came back negative. To understand the odds, we need to calculate the odds for a negative test. *Try this on your own and I'll see you in the next paragraph.*
 
 Now, let's calculate this, $$O_{neg}=P(-\mid C):P(-\mid \lnot C)=10:91.$$
 This isn't as nice and round a  number, but it allows us to calculate:
@@ -123,4 +116,4 @@ This might be better understood by a very poorly drawn PowerPoint slide:
 ![](/assets/union-and-intersection.png)
 @@
 
-{{ addcomments }}
+@@comments@@

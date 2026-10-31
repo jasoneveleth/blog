@@ -1,86 +1,76 @@
 const std = @import("std");
-pub const GraphemeIterator = @import("blog").GraphemeIterator;
 
 fn makeID(comptime T: type, comptime U: type) type {
     _ = U;
     return enum(T) {
         _,
-
-        pub fn id(self: @This()) T {
-            return @intFromEnum(self);
-        }
-
-        pub fn from(int: usize) @This() {
-            return @enumFromInt(int);
-        }
-
-        pub fn into(self: @This()) usize {
-            return @intFromEnum(self);
-        }
+        pub fn id(self: @This()) T { return @intFromEnum(self); }
+        pub fn from(int: usize) @This() { return @enumFromInt(int); }
+        pub fn into(self: @This()) usize { return @intFromEnum(self); }
     };
 }
 
 pub const NodeID = makeID(u32, Node);
 pub const ChildrenID = makeID(u32, NodeID);
-pub const BufInd = makeID(u32, GraphemeIterator);
+pub const BufInd = makeID(u32, u8);
 
-// a slice into the array of NodeIDs
-pub const NodeSlice = struct {
-    start: ChildrenID,
-    end: ChildrenID,
-};
-
-pub const BufSlice = struct {
-    start: BufInd,
-    end: BufInd,
-};
+pub const NodeSlice = struct { start: ChildrenID, end: ChildrenID };
+pub const BufSlice = struct { start: BufInd, end: BufInd };
 
 pub const NodeKind = union(enum) {
+    // block nodes
+    doc: NodeSlice,
     para: NodeSlice,
-    text: void,
-    codeI: void,
+    heading: struct { level: u8, content: NodeSlice },
+    /// lang slice in BufSlice; body bytes at Node.start/len
+    code_block: BufSlice,
+    list: struct { ordered: bool, items: NodeSlice },
+    /// children: para node + optional trailing list node
+    list_item: NodeSlice,
+    blockquote: NodeSlice,
+    div: struct { name: BufSlice, children: NodeSlice },
+    toc,
+    comments,
+    /// opaque body at Node.start/len
+    raw_block,
+    footnote_def: struct { label: BufSlice, content: NodeSlice },
+    // inline nodes
+    /// bytes at Node.start/len
+    text,
     bold: NodeSlice,
     italic: NodeSlice,
-    math: void,
-    link: struct {
-        url: BufSlice,
-        content: NodeSlice,
-    },
-    // wikilink: struct {
-    //     target: []const u8,
-    //     section: ?[]const u8,
-    //     alias: ?[]const u8,
-    // },
-    // codeB: struct {
-    //     language: []const u8,
-    //     content: []struct {
-    //         content: []const u8,
-    //         decorator: []const u8,
-    //     },
-    // },
-    // image: struct {
-    //     url: []const u8,
-    //     alt: []const u8,
-    // },
-    // video: struct {
-    //     url: []const u8,
-    //     alt: []const u8,
-    // },
-    heading: struct {
-        level: u8,
-        content: NodeSlice,
-    },
-    // list: struct {
-    //     ordered: bool,
-    //     items: NodeSlice,
-    // },
+    /// opaque; bytes at Node.start/len (content only, no backtick)
+    code_inline,
+    /// opaque $…$; content bytes at Node.start/len
+    math_inline,
+    /// opaque $$…$$
+    math_display,
+    /// opaque ~~~…~~~
+    raw_inline,
+    link: struct { url: BufSlice, content: NodeSlice },
+    image: struct { url: BufSlice, alt: BufSlice },
+    footnote_ref: BufSlice,
+    /// literal char at Node.start, len=1
+    escape,
 };
-
 
 pub const Node = struct {
     kind: NodeKind,
     start: BufInd,
     len: u32,
+};
+
+pub const Date = struct { year: u16, month: u8, day: u8 };
+
+pub const Frontmatter = struct {
+    title: []const u8 = "",
+    date: Date = .{ .year = 0, .month = 1, .day = 1 },
+    updated: ?Date = null,
+    rss: []const u8 = "",
+    tags: []const []const u8 = &.{},
+    descr: bool = false,
+    draft: bool = false,
+    githubsource: ?[]const u8 = null,
 };
 
 pub const Scratch = struct {
@@ -89,17 +79,11 @@ pub const Scratch = struct {
     count: usize = 0,
 
     pub fn init(parser: *Parser) Scratch {
-        return Scratch{
-            .parser = parser,
-            .scratch = undefined,
-            .count = 0,
-        };
+        return .{ .parser = parser, .scratch = undefined, .count = 0 };
     }
 
     pub fn add(self: *@This(), node_id: NodeID) !void {
-        if (self.count >= self.scratch.len) {
-            return error.TooManyChildren; // Or dynamically grow
-        }
+        if (self.count >= self.scratch.len) return error.TooManyChildren;
         self.scratch[self.count] = node_id;
         self.count += 1;
     }
@@ -107,39 +91,30 @@ pub const Scratch = struct {
     pub fn finish(self: *@This()) std.mem.Allocator.Error!NodeSlice {
         const start = self.parser.indices.items.len;
         try self.parser.indices.appendSlice(self.parser.arena.allocator(), self.scratch[0..self.count]);
-        return NodeSlice{ .start = ChildrenID.from(start), .end = ChildrenID.from(self.parser.indices.items.len) };
+        return NodeSlice{
+            .start = ChildrenID.from(start),
+            .end = ChildrenID.from(self.parser.indices.items.len),
+        };
     }
 };
 
-// LOGGING [[[
-threadlocal var debug_depth: usize = 0;
-
-pub fn log(comptime fmt: []const u8, args: anytype) void {
-    _ = args;
-    _ = fmt;
-    // var i: usize = 0;
-    // while (i < debug_depth) : (i += 1) {
-    //     std.debug.print("  ", .{});
-    // }
-    // std.debug.print(fmt ++ "\n", args);
-}
-
-pub fn enter(comptime name: []const u8) void {
-    log("> {s}", .{name});
-    debug_depth += 1;
-}
-
-pub fn exit() void {
-    debug_depth -= 1;
-}
-// LOGGING ]]]
-
 pub const Parser = struct {
-    iter: GraphemeIterator,
-    text: []const u8,
-    nodes: std.ArrayList(Node),
-    indices: std.ArrayList(NodeID),
+    src: []const u8,
+    pos: usize,
+    nodes: std.ArrayListUnmanaged(Node),
+    indices: std.ArrayListUnmanaged(NodeID),
     arena: std.heap.ArenaAllocator,
+
+    pub fn init(allocator: std.mem.Allocator, src: []const u8) !Parser {
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        return .{
+            .src = src,
+            .pos = 0,
+            .nodes = try std.ArrayListUnmanaged(Node).initCapacity(arena.allocator(), 128),
+            .indices = try std.ArrayListUnmanaged(NodeID).initCapacity(arena.allocator(), 256),
+            .arena = arena,
+        };
+    }
 
     pub fn new_node(self: *@This(), node: Node) !NodeID {
         try self.nodes.append(self.arena.allocator(), node);
@@ -147,125 +122,67 @@ pub const Parser = struct {
     }
 
     pub fn finish(self: *@This(), root: NodeID) Parsed {
-        return Parsed{
+        return .{
             .root = root,
-            .text = self.text,
+            .text = self.src,
             .nodes = self.nodes,
             .indices = self.indices,
             .arena = self.arena,
+            .frontmatter = .{},
         };
     }
 
-    pub fn pprint(self: *@This(), start_line: usize, num_lines: usize, node_id: NodeID) void {
-        const node = self.nodes.items[node_id];
+    pub fn atEnd(self: *const @This()) bool { return self.pos >= self.src.len; }
 
-        // Find byte boundaries for the requested line range
-        var line_num: usize = 0;
-        var start_byte: usize = 0;
-        var end_byte: usize = std.math.maxInt(usize);
-        var in_range = false;
+    pub fn peek(self: *const @This()) ?u8 {
+        return if (self.pos < self.src.len) self.src[self.pos] else null;
+    }
 
-        for (self.text, 0..) |byte, pos| {
-            if (line_num == start_line and !in_range) {
-                in_range = true;
-                start_byte = pos;
-            }
-            if (byte == '\n') {
-                line_num += 1;
-                if (in_range and line_num == start_line + num_lines) {
-                    end_byte = pos;
-                    break;
-                }
-            }
+    pub fn peekAt(self: *const @This(), offset: usize) ?u8 {
+        const i = self.pos + offset;
+        return if (i < self.src.len) self.src[i] else null;
+    }
+
+    pub fn startsWith(self: *const @This(), s: []const u8) bool {
+        if (self.pos + s.len > self.src.len) return false;
+        return std.mem.eql(u8, self.src[self.pos .. self.pos + s.len], s);
+    }
+
+    pub fn advance(self: *@This()) void { if (self.pos < self.src.len) self.pos += 1; }
+
+    pub fn advanceBy(self: *@This(), n: usize) void {
+        self.pos = @min(self.pos + n, self.src.len);
+    }
+
+    pub fn skipToEOL(self: *@This()) void {
+        while (self.pos < self.src.len and self.src[self.pos] != '\n') self.pos += 1;
+    }
+
+    pub fn skipNewline(self: *@This()) void {
+        if (self.pos < self.src.len and self.src[self.pos] == '\n') self.pos += 1;
+    }
+
+    pub fn skipBlankLines(self: *@This()) void {
+        while (self.pos < self.src.len) {
+            const c = self.src[self.pos];
+            if (c == '\n') {
+                self.pos += 1;
+            } else if (c == ' ' or c == '\t') {
+                var i = self.pos;
+                while (i < self.src.len and (self.src[i] == ' ' or self.src[i] == '\t')) i += 1;
+                if (i >= self.src.len or self.src[i] == '\n') self.pos = i else break;
+            } else break;
         }
-        if (in_range and end_byte == std.math.maxInt(usize)) {
-            end_byte = self.text.len - 1;
-        }
-
-        const text_slice = self.text[start_byte..end_byte];
-        var children: []NodeID = undefined;
-        switch (node.kind) {
-            .para => {
-                const ns = node.kind.para;
-                children = self.indices.items[ns.start..ns.end];
-            },
-            .heading => {
-                const ns = node.kind.heading.content;
-                children = self.indices.items[ns.start..ns.end];
-            },
-            else => {
-                children = &[_]NodeID{};
-            },
-        }
-
-        std.debug.print("⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄⌄\n", .{});
-
-        var byte_offset: usize = start_byte;
-        var it = std.mem.splitScalar(u8, text_slice, '\n');
-        while (it.next()) |line| {
-            std.debug.print("> {s}\n", .{line});
-            if (line.len == 0) {
-                byte_offset += 1; // for newline
-                continue;
-            }
-            var indicators: [120]u8 = undefined;
-            @memset(&indicators, ' ');
-
-            // for each immediate child
-            for (children) |child_id| {
-                const child = self.nodes.items[child_id];
-                if (child.start >= byte_offset + line.len) break; // past this node
-
-                const span_end = @min(child.start + child.len, byte_offset + line.len);
-                if (child.start + child.len <= byte_offset) continue; // before this node
-                if (span_end >= byte_offset) {
-                    // overlaps
-                    var name: []const u8 = "unknown";
-                    switch (child.kind) {
-                        .text => {
-                            name = "text";
-                        },
-                        .para => {
-                            name = "para";
-                        },
-                        .bold => {
-                            name = "bold";
-                        },
-                        .italic => {
-                            name = "italic";
-                        },
-                        .codeI => {
-                            name = "code";
-                        },
-                        .heading => {
-                            name = "heading";
-                        },
-                        else => {},
-                    }
-                    const rel_start = @max(child.start, byte_offset) - byte_offset;
-                    const rel_end = @min((child.start + child.len - 1) - byte_offset, byte_offset + line.len - 1);
-                    // std.debug.print("Child ID: {}, Kind: {}, Span: [{}..{}], Rel Span: [{}..{}]\n", .{child_id, child.kind, child.start, child.start + child.len, rel_start, rel_end});
-                    @memcpy(indicators[rel_start + 1 .. rel_start + 1 + name.len], name);
-                    indicators[rel_start] = '[';
-                    indicators[rel_end] = ']';
-                }
-            }
-
-            if (!std.mem.allEqual(u8, &indicators, ' ')) {
-                std.debug.print("  {s}\n", .{indicators});
-            }
-            byte_offset += line.len + 1; // +1 for newline
-        }
-        std.debug.print("⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃⌃\n", .{});
     }
 };
 
 pub const Parsed = struct {
     root: NodeID,
     text: []const u8,
-    nodes: std.ArrayList(Node),
-    indices: std.ArrayList(NodeID),
+    nodes: std.ArrayListUnmanaged(Node),
+    indices: std.ArrayListUnmanaged(NodeID),
     arena: std.heap.ArenaAllocator,
+    frontmatter: Frontmatter,
 
     pub fn getSlice(self: *const @This(), slice: NodeSlice) []const NodeID {
         return self.indices.items[slice.start.into()..slice.end.into()];
@@ -273,5 +190,14 @@ pub const Parsed = struct {
 
     pub fn getNode(self: *const @This(), id: NodeID) Node {
         return self.nodes.items[id.into()];
+    }
+
+    pub fn getText(self: *const @This(), slice: BufSlice) []const u8 {
+        return self.text[slice.start.into()..slice.end.into()];
+    }
+
+    pub fn getNodeText(self: *const @This(), node: Node) []const u8 {
+        const s = node.start.into();
+        return self.text[s .. s + node.len];
     }
 };

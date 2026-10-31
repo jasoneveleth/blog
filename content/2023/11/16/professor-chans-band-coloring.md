@@ -1,19 +1,12 @@
 +++
 title = "Professor Chan's Band Coloring"
-date = Date("2023/11/16", "yyyy/mm/dd")
+date = 2023-11-16
 rss = "My recollection of my advisor's graph theory application from freshman year."
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/11/16/professor-chans-band-coloring.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 My first-year undergraduate advisor wrote a small program to save her musical camp director hours of work. Keep in mind that this was 4 years ago, so the details are a little shaky. Her musical camp director had dozens of students, and each of them was in at least 1 band. The problem he was trying to solve was assigning student bands to time slots for practicing. The issue was that students could be in multiple bands but only in one timeslot at a time.
 
@@ -30,4 +23,4 @@ I've drawn edges between bands that share students. The restriction of a valid c
 
 This was a very elegant solution to the problem and she said that her code still runs and schedules the bands practice times to this day.
 
-{{ addcomments }}
+@@comments@@

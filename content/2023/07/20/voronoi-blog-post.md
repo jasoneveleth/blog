@@ -1,19 +1,12 @@
 +++
 title = "Voronoi Diagrams"
-date = Date("2023/07/20", "yyyy/mm/dd")
+date = 2023-07-20
 rss = ""
 tags = ["website"]
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/20/voronoi-blog-post.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 Imagine a city map that colored each house differently based on the nearest post office. That map would partition the city into colored regions, which approximate a Voronoi diagram, a concept that often appears in science and engineering. These diagrams appear in the network of crystals in heated metal; the bubbles in soap foams; and disease outbreaks originating from different sources.
 
@@ -27,4 +20,4 @@ The objective function is highly nonlinear and nonconvex, so different methods a
 
 The source for this project can be found on [github](https://github.com/jasoneveleth/voronoi2).
 
-{{ addcomments }}
+@@comments@@

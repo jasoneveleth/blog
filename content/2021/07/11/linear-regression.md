@@ -1,19 +1,12 @@
 +++
 title = "Linear Regression"
-date = Date("2021/07/11", "yyyy/mm/dd")
+date = 2021-07-11
 rss = ""
 tags = ["math"]
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2021/07/11/linear-regression.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 # Theory
 
@@ -94,4 +87,4 @@ Which gives us our desired line of best fit: $y = 0.962823x + 0.122874$.
 
 
 
-{{ addcomments }}
+@@comments@@

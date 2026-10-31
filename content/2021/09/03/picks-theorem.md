@@ -1,19 +1,12 @@
 +++
 title = "Pick's Theorem"
-date = Date("2021/09/03", "yyyy/mm/dd")
+date = 2021-09-03
 rss = "Pick's Theorem is a formula for the area of a closed polygon with integer vertices."
 tags = ["math"]
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2021/09/03/picks-theorem.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 # Theorem
 
@@ -55,4 +48,4 @@ other have area $\frac{1}{2}$.
 
 
 
-{{ addcomments }}
+@@comments@@

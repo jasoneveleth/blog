@@ -1,19 +1,12 @@
 +++
 title = "Five Color Theorem"
-date = Date("2021/07/16", "yyyy/mm/dd")
+date = 2021-07-16
 rss = "The Five Color Theorem asserts that no planar graphs are 5-colorable."
 tags = ["math"]
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2021/07/16/five-color-theorem.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 # Theorem
 
@@ -100,4 +93,4 @@ one of the cases that was 5 colorable. Thus, every planar graph is 5 colorable. 
 
 ---
 
-{{ addcomments }}
+@@comments@@

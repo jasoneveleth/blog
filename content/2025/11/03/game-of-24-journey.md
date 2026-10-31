@@ -1,19 +1,12 @@
 +++
 title = "Solving the Game of 24"
-date = Date("2025/11/03", "yyyy/mm/dd")
+date = 2025-11-03
 rss = "Going through my process of writing a solver for the Game of 24."
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2025/11/03/game-of-24-journey.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 # Solving the Game of 24
 
@@ -86,4 +79,4 @@ I encourage you to try the [app](https://www.jasoneveleth.com/game-of-24-app/) I
 
 [^1]: The proof for this follows. Consider at the root node the number of leaves on each subtree. There are 3 options: $(1,3)$, $(2,2)$, $(3,1)$ since there have to be 4 numbers in the tree, and at least 1 on either side. Then think about the number of subtree shapes: for 1 node, there's only the trivial tree, for 2 nodes there's only one option for how to connect it, and for 3 nodes, we can divide that into $(1,2)$ and $(2,1)$, so 2. Thus, we get 2 options for the $(1,3)$s and 1 option for $(2,2)$ which gives us 5 total.
 
-{{ addcomments }}
+@@comments@@

@@ -1,19 +1,12 @@
 +++
 title = "Hilarious Random Number Generator"
-date = Date("2023/07/18", "yyyy/mm/dd")
+date = 2023-07-18
 rss = ""
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/18/chicken-coop-website.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 I was searching for a chicken coop (as one does). I stumbled across a Facebook marketplace ad:
 
@@ -40,4 +33,4 @@ That seemed suspicious, so I looked into it.
 They were just setting a random integer with jquery on a `setTimeout()`.
 
 
-{{ addcomments }}
+@@comments@@

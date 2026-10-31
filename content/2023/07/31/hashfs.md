@@ -1,19 +1,12 @@
 +++
 title = "hashfs"
-date = Date("2023/07/31", "yyyy/mm/dd")
+date = 2023-07-31
 rss = ""
 tags = ["website"]
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/31/hashfs.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 This weekend I was helping my aunt make sure that her files were syncing correctly between two laptops. I'd been thinking about git a lot, and I realized recursive hashing was the way to go.
 
@@ -61,4 +54,4 @@ One of my friends let me know that I have implemented a [Merkle tree](https://en
 
 They are often used in cryptocurrencies because you can prove the inclusion of a leaf in the tree by just providing the child nodes corresponding to the path from that leaf to the root. This works in log time because the tree is $log(N)$ tall.
 
-{{ addcomments }}
+@@comments@@

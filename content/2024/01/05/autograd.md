@@ -1,21 +1,16 @@
 +++
 title = "A Rigorous (and Not-So-Rigorous) Look at JAX's Autograd"
-date = Date("2024/01/05", "yyyy/mm/dd")
+date = 2024-01-05
 rss = "My attempt to understand how JAX does autograd."
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2024/01/05/autograd.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
-\warn{(Check out my new follow up post: [more gradient descent](/2024/04/07/more-gradient-descent).) This post is correct but contains some misleading statements that I've labeled with an astricks*, and warnings at the beginning of each section. I wrote this post as I was learning differential geometry, thank you for joining me on this journey.}
+@@warn
+(Check out my new follow up post: [more gradient descent](/2024/04/07/more-gradient-descent).) This post is correct but contains some misleading statements that I've labeled with an astricks*, and warnings at the beginning of each section. I wrote this post as I was learning differential geometry, thank you for joining me on this journey.
+@@
 
 # What this post is about
 
@@ -68,9 +63,11 @@ delta_x = delta_xt.T
 There are several things to take away from this code snippet. We see that in backward-mode we are using the values from the original computation (`a`, `b`, `c`, etc.). I've put comments to inline the definitions of the `Jt` functions. And, at the end of the computation, we get a `delta_x`: the gradient of $f$ with respect to the input `x`.  
 # What are those `Jt_f(x, gt)` functions?
 
-\warn{I make three comments (labeled with an astricks*) that make it seem like the `Jt_func` is an inverse map of the derivative (i.e. a map from the tangent space of the output to the tangent space of the input). The function is just a efficient method of evaluated the transpose of the derivative on $g^{\intercal}$, and since the derivative isn't guaranteed to be orthogonal, it is not an inverse map. It just so happens that $\texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal})^{\intercal}$ is the steepest ascent when $\bm{g}$ is the value in our backwards mode differentiation.}
+@@warn
+I make three comments (labeled with an astricks*) that make it seem like the `Jt_func` is an inverse map of the derivative (i.e. a map from the tangent space of the output to the tangent space of the input). The function is just a efficient method of evaluated the transpose of the derivative on $g^{\intercal}$, and since the derivative isn't guaranteed to be orthogonal, it is not an inverse map. It just so happens that $\texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal})^{\intercal}$ is the steepest ascent when $\bm{g}$ is the value in our backwards mode differentiation.
+@@
 
-I'm borrowing the transpose vector Jacobian product (`Jt`) from [JAX documentation](https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff). I keep the notation the same so if you read the JAX documentation, their notation will be familiar. **The next few paragraphs are meant to click later in the post; please don't give up just because it doesn't quite make sense now.**
+I'm borrowing the transpose vector Jacobian product (`Jt`) from [JAX documentation](https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff). I keep the notation the same so if you read the JAX documentation, their notation will be familiar. *The next few paragraphs are meant to click later in the post; please don't give up just because it doesn't quite make sense now.*
 
 When looking at a function call like `Jt_f(x, gt)`, the $\bm{x}$ tells us where in the input space of some $f:\mathbb{R}^{n}\to \mathbb{R}^{m}$ we are, and, morally[^1] , $\bm{g}^{\intercal}$  is a direction in the output space of that $f$. `Jt_func` turns that direction in the output space, to a direction of the gradient in the input space.* Here's a picture:
 
@@ -181,7 +178,9 @@ def Jt_arctan(x, gt):
 ```
 # What is going on (bringing back rigor)
 
-\warn{I claim "$\bm{g}$ isn't special" when it is. Otherwise the $Df(x)^{\intercal}\bm{g}$ is just a random value in a vector space with the same dimension as the tangent space in the input. Also, while it is correct, the side quest about the dual space just makes the article a little less clear.}
+@@warn
+I claim "$\bm{g}$ isn't special" when it is. Otherwise the $Df(x)^{\intercal}\bm{g}$ is just a random value in a vector space with the same dimension as the tangent space in the input. Also, while it is correct, the side quest about the dual space just makes the article a little less clear.
+@@
 
 You might be thinking: I'm familiar with multivariable calculus, I love a good dual space, but this all feels unjustified. To fix that, we'll look again at what a derivative really is. Given a function $f:V\to W$ between vector spaces, the derivative is *the* linear map that takes incremental inputs of $f$ and will output incremental changes in the value of $f$. It is often represented as a matrix, but to clarify the types, we'll pretend it's just a linear function. That is, $Df: V \to (V \to W)$, and $Df(\bm{x}): V\to W$. That is, we're currying the function when we evaluate it at $\bm{x}$.  It has a nice property that $$
 f(\bm{x}) + Df(\bm{x})(\bm{h})\approx f(\bm{x}+\bm{h}).
@@ -259,4 +258,4 @@ I wrote a follow-up post [here](/2024/04/07/more-gradient-descent), which should
 
 [^1]:  morally in [this](https://eugeniacheng.com/wp-content/uploads/2017/02/cheng-morality.pdf) sense
 
-{{ addcomments }}
+@@comments@@

@@ -1,19 +1,12 @@
 +++
 title = "Confetti"
-date = Date("2023/07/20", "yyyy/mm/dd")
+date = 2023-07-20
 rss = ""
 tags = ["website"]
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/20/confetti.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 # Overview
 
@@ -48,4 +41,4 @@ The main approach is to keep a big array of confetti, and on each rendering step
 
 Since we are calculating how each confetti would fall in real-time, large amounts of confetti (or badly optimized browsers), can really slow down a machine. Something to keep in mind if you use the website. Overall, I really enjoyed this project.
 
-{{ addcomments }}
+@@comments@@

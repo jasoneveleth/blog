@@ -1,19 +1,12 @@
 +++
 title = "Why a Blog?"
-date = Date("2023/07/20", "yyyy/mm/dd")
+date = 2023-07-20
 rss = ""
 tags = ["website"]
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/20/why-a-blog.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 # Why did I make a blog?
 
@@ -26,4 +19,4 @@ githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/07/20/why-a-b
 
 - Computer science, math, and whatever I'm currently interested in
 
-{{ addcomments }}
+@@comments@@

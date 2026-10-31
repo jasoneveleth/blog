@@ -1,19 +1,12 @@
 +++
 title = "More gradient descent"
-date = Date("2024/04/07", "yyyy/mm/dd")
+date = 2024-04-07
 rss = "My attempt to understand gradient descent a little better"
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2024/04/07/more-gradient-descent.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 # Issues with my last post
 
@@ -151,4 +144,4 @@ f(v) + Df(v)h = (${r(lin_approx.x)}, ${r(lin_approx.y)})
 </script>
 ~~~
 
-{{ addcomments }}
+@@comments@@

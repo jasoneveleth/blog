@@ -1,19 +1,12 @@
 +++
 title = "Wave equation simulation"
-date = Date("2023/08/01", "yyyy/mm/dd")
+date = 2023-08-01
 rss = ""
 tags = ["website"]
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/08/01/wave-equation.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 # Inspiration
 
@@ -72,4 +65,4 @@ Note: this is actually [Verlet integration](https://en.wikipedia.org/wiki/Verlet
 
 We can play a frequency by resetting the value of a $u_{0,i,j}$ after the step to the value of a sine wave at the time. We can make a water droplet by setting part of the $u_{0,i,j}$ layer to a negative gaussian at a certain time step. This is achieved with `put_drop!()` and `play_noise!()` functions.
 
-{{ addcomments }}
+@@comments@@

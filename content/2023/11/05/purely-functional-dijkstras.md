@@ -1,19 +1,12 @@
 +++
 title = "Asymptotic Analysis of Dijkstras in Haskell"
-date = Date("2023/11/05", "yyyy/mm/dd")
+date = 2023-11-05
 rss = "My analysis of whether it is possible to have optimal* Dijkstras in Haskell"
-tags = String[]
+tags = []
 descr = true
 githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2023/11/05/purely-functional-dijkstras.md"
 +++
-~~~
-<details class="toc">
-<summary>Table of Contents</summary>
-~~~
-\toc
-~~~
-</details>
-~~~
+@@toc@@
 
 Imagine you have a map of the US. You want to know the distances from Providence to all the other cities. We can turn that map into a network of cities and distances between them. In math and computer science, we call this a graph (and we refer to the cities as vertices or nodes). Our goal in this post is to using functional programming to find the shortest distances from Providence using Dijkstra's algorithm. It's going to get CS-heavy in the rest of the post so buckle up.
 
@@ -96,4 +89,4 @@ main = do
 
 
 
-{{ addcomments }}
+@@comments@@

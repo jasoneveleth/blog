@@ -3,4 +3,5 @@ __site/
 node_modules/
 package-lock.json
 .zig-cache/
+zig-pkg/
 dist/
