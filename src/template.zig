@@ -6,6 +6,7 @@ pub const Context = struct {
     author: []const u8 = "Jason Eveleth",
     last_modified: []const u8 = "", // for fd_mtime
     githubsource: ?[]const u8 = null,
+    description: []const u8 = "",
     hasmath: bool = false,
     hascode: bool = false,
     descr: bool = false,
@@ -16,6 +17,7 @@ pub const Context = struct {
         if (std.mem.eql(u8, key, "author")) return ctx.author;
         if (std.mem.eql(u8, key, "fd_mtime")) return ctx.last_modified;
         if (std.mem.eql(u8, key, "githubsource")) return ctx.githubsource orelse "";
+        if (std.mem.eql(u8, key, "description")) return ctx.description;
         return "";
     }
 
@@ -24,6 +26,7 @@ pub const Context = struct {
             const key = std.mem.trim(u8, directive[3..], " \t");
             if (std.mem.eql(u8, key, "hasmath")) return ctx.hasmath;
             if (std.mem.eql(u8, key, "hascode")) return ctx.hascode;
+            if (std.mem.eql(u8, key, "description")) return ctx.description.len > 0;
             return false;
         }
         if (std.mem.startsWith(u8, directive, "ifdef ")) {

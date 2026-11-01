@@ -81,6 +81,7 @@ fn renderPost(
         .date = date_str,
         .last_modified = last_modified,
         .githubsource = parsed.frontmatter.githubsource,
+        .description = parsed.frontmatter.rss,
         .hasmath = body_result.hasmath,
         .hascode = body_result.hascode,
         .descr = parsed.frontmatter.descr,
@@ -160,6 +161,8 @@ fn applyPrepath(html: []const u8, prepath: []const u8, gpa: std.mem.Allocator) !
     return out.toOwnedSlice(gpa);
 }
 
+const SitemapEntry = struct { url: []u8, date: []u8 };
+
 fn buildAll(
     init: std.process.Init,
     content_dir: []const u8,
@@ -176,6 +179,18 @@ fn buildAll(
         copyDirRecursive(init, src_path, dst_path) catch |e| {
             std.debug.print("warning: skipping {s}: {}\n", .{ src_path, e });
         };
+    }
+
+    const base_url = if (prepath.len > 0)
+        try std.fmt.allocPrint(init.gpa, "https://www.jasoneveleth.com/{s}", .{prepath})
+    else
+        try init.gpa.dupe(u8, "https://www.jasoneveleth.com");
+    defer init.gpa.free(base_url);
+
+    var sitemap_entries: std.ArrayListUnmanaged(SitemapEntry) = .empty;
+    defer {
+        for (sitemap_entries.items) |e| { init.gpa.free(e.url); init.gpa.free(e.date); }
+        sitemap_entries.deinit(init.gpa);
     }
 
     // Walk content dir and render markdown files.
@@ -204,8 +219,52 @@ fn buildAll(
 
         renderPost(init, md_path, out_path, tmpl_dir, prepath) catch |e| {
             std.debug.print("error rendering {s}: {}\n", .{ md_path, e });
+            continue;
         };
+
+        // Collect sitemap entry for posts (depth-3 slug paths only).
+        var slash_count: usize = 0;
+        for (rel) |c| if (c == '/') { slash_count += 1; };
+        if (slash_count == 3) {
+            const src = try std.Io.Dir.cwd().readFileAlloc(init.io, md_path, init.gpa, .limited(4 * 1024 * 1024));
+            defer init.gpa.free(src);
+            const parsed = try parse.parse(src, init.gpa);
+            const stem = rel[0 .. rel.len - 3];
+            const url = try std.fmt.allocPrint(init.gpa, "{s}/{s}/", .{ base_url, stem });
+            const fm = parsed.frontmatter;
+            const date = try std.fmt.allocPrint(init.gpa, "{d:0>4}-{d:0>2}-{d:0>2}", .{ fm.date.year, fm.date.month, fm.date.day });
+            try sitemap_entries.append(init.gpa, .{ .url = url, .date = date });
+        }
     }
+
+    try writeSitemap(init, dist_dir, sitemap_entries.items);
+}
+
+fn writeSitemap(init: std.process.Init, dist_dir: []const u8, entries: []const SitemapEntry) !void {
+    var buf: std.ArrayListUnmanaged(u8) = .empty;
+    defer buf.deinit(init.gpa);
+
+    try buf.appendSlice(init.gpa,
+        \\<?xml version="1.0" encoding="UTF-8"?>
+        \\<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        \\
+    );
+    for (entries) |e| {
+        try buf.appendSlice(init.gpa, "  <url>\n");
+        try buf.appendSlice(init.gpa, "    <loc>");
+        try buf.appendSlice(init.gpa, e.url);
+        try buf.appendSlice(init.gpa, "</loc>\n");
+        try buf.appendSlice(init.gpa, "    <lastmod>");
+        try buf.appendSlice(init.gpa, e.date);
+        try buf.appendSlice(init.gpa, "</lastmod>\n");
+        try buf.appendSlice(init.gpa, "  </url>\n");
+    }
+    try buf.appendSlice(init.gpa, "</urlset>\n");
+
+    const sitemap_path = try std.fmt.allocPrint(init.gpa, "{s}/sitemap.xml", .{dist_dir});
+    defer init.gpa.free(sitemap_path);
+    try std.Io.Dir.cwd().writeFile(init.io, .{ .sub_path = sitemap_path, .data = buf.items });
+    std.debug.print("wrote {s}\n", .{sitemap_path});
 }
 
 // Map a content-relative md path to a dist output path.
