@@ -156,13 +156,14 @@ autoload -U /tmp/_remote_files</code></pre>
         referrer: document.referrer,
         page: window.location.href,
     };
+    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") return;
     fetch("https://logging.jason.pub:5000/analytics", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(e)
-    }).catch(t => console.error("Analytics request failed:", t));
+    }).catch(t => console.warn("analytics unavailable", t));
 })();
 if (window.self != window.top) {
     console.log("we're in an iframe!!!");
@@ -170,11 +171,14 @@ if (window.self != window.top) {
 }
 </script>
 
+
   <!-- <script src="/blog/libs/vela/metisMenu.min.js"></script> -->
   <!-- <script src="/blog/libs/vela/slideout.min.js"></script> -->
   
   
     <script src="/blog/libs/highlight/highlight.min.js"></script>
+<script src="/blog/libs/highlight/javascript.min.js"></script>
+<script src="/blog/libs/highlight/haskell.min.js"></script>
 <script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
 
   

@@ -20,7 +20,7 @@ However, there's lots of games where I can't find a solution. For example, $10$,
 
 My initial approach was to consider all possible arithmetic expressions (the brute force approach). It's the simplest possible strategy. We just guess and check every option. It works because even an iPhone can process thousands of these expressions in a second.
 
-There are 3 pieces to this. An expression will look something like this: $x_1\circ (x_2\circ x_3) \circ x_4$, where $\circ$ can represent any of the arithmetic operations ($+,-,\times ,\div ,\textasciicircum$).
+There are 3 pieces to this. An expression will look something like this: $x_1\circ (x_2\circ x_3) \circ x_4$, where $\circ$ can represent any of the arithmetic operations ($+,-,\times ,\div ,\hat{\,}$).
 
 * The $x_i$'s can be any of the 4 numbers
 * We can put any of the 5 arithmetic operations in between the numbers
