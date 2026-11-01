@@ -16,16 +16,16 @@
   <meta property="og:article:author" content="Jason Eveleth">
   <meta property="og:article:published_time" content="2025-11-03">
 
-   <link rel="stylesheet" href="/libs/katex/katex.min.css">
+   <link rel="stylesheet" href="/blog/libs/katex/katex.min.css">
    
-   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   <link rel="stylesheet" href="/blog/libs/highlight/styles/github.min.css">
    
 
   <!-- not used -->
   
 
-  <link href="/css/franklin.css" rel="stylesheet">
-  <link href="/css/global.css" rel="stylesheet">
+  <link href="/blog/css/franklin.css" rel="stylesheet">
+  <link href="/blog/css/global.css" rel="stylesheet">
 
   <title>Solving the Game of 24</title>
 </head>
@@ -41,7 +41,7 @@
 
   <div class="type-b content-spacer"></div>
 
-  <div class="type-a nav-link"><a href="/search">Search</a></div>
+  <div class="type-a nav-link"><a href="/blog/search">Search</a></div>
   <div class="type-b link-spacer"></div>
   <div class="type-c"></div>
 </nav>
@@ -79,11 +79,11 @@ Author: Jason Eveleth
 <p>To get all possible choices of operators, it's even simpler: we have 5 options for the first operator spot, then 5 options again, and another 5 options again. So, $125$ possible options.</p>
 <p>The parentheses one is trickier. The way I approached this problem is you can draw out the order of operations in a tree:</p>
 <div class="im-most">
-<img src="/assets/subtraction_tree.png" alt="" />
+<img src="/blog/assets/subtraction_tree.png" alt="" />
 </div>
 <p>A tree diagram unambiguously tells you how to calculate an expression, in the same way that parenthesis does. If you saw $5-1-10-10$ there's a way to parenthesize this to get $24$: $5-(1-10-10)$, but if you did it in the PEMDAS left-to-right you'd get $-16$. We need that specificity to express all of the options.</p>
 <div class="im-full">
-<img src="/assets/tree_shapes.png" alt="" />
+<img src="/blog/assets/tree_shapes.png" alt="" />
 </div>
 <p>There are only 5 tree base shapes<sup id="fnref:1"><a href="#fndef:1" class="fnref">[1]</a></sup> (I've included a brief proof in the footnotes). It may also be intuitive that these are the only tree shapes you can make. Regardless, if we look at every option for all 3 of these aspects of arithmetic expression we get $15,000$ total trees, and a straightforward way to list them all out.</p>
 <p>In the code this ends up playing out like the snippet below. You loop through every permutation for 4 elements, every list of 3 operations, and every tree type and use that to construct a tree.</p>
@@ -98,7 +98,7 @@ Author: Jason Eveleth
 <h2 id="what_i_discovered"><a href="#what_i_discovered" class="header-anchor">What I Discovered</a></h2>
 <p>Once I coded up the solver – I could finally find the answer to if 5, 5, 5, 1 was solvable. Turns out: <a href="https://www.jasoneveleth.com/game-of-24-app/?n1=5&amp;n2=5&amp;n3=5&amp;n4=1">it is</a>! I don't think if I spend half an hour could I have thought to subtract a fifth from 5 and then multiply by 5.</p>
 <div class="im-most">
-<img src="/assets/tree_of_5-5-5-1.png" alt="" />
+<img src="/blog/assets/tree_of_5-5-5-1.png" alt="" />
 </div>
 <p>Turns out there are some pretty interesting expressions that I'd never have thought of. There are also a lot of numbers that don't work: like 10, 10, 10, 10. Many impossible games are all repeats, or have lots of 7s or 9s. I'd guess that's because 7 and 9 don't have many divisors and they're kinda large numbers, which ends up being annoying to work with.</p>
 <p>The expressions with the most values: 1, 1, 3, 8 and 1, 1, 4, 6.</p>
@@ -152,11 +152,11 @@ if (window.self != window.top) {
 }
 </script>
 
-  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
-  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  <!-- <script src="/blog/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/blog/libs/vela/slideout.min.js"></script> -->
   
-    <script src="/libs/katex/katex.min.js"></script>
-<script src="/libs/katex/contrib/auto-render.min.js"></script>
+    <script src="/blog/libs/katex/katex.min.js"></script>
+<script src="/blog/libs/katex/contrib/auto-render.min.js"></script>
 <script>renderMathInElement(document.body, {
   delimiters: [
     {left: "$$", right: "$$", display: true},
@@ -166,7 +166,7 @@ if (window.self != window.top) {
 
   
   
-    <script src="/libs/highlight/highlight.min.js"></script>
+    <script src="/blog/libs/highlight/highlight.min.js"></script>
 <script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
 
   

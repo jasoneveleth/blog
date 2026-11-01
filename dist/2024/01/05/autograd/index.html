@@ -16,16 +16,16 @@
   <meta property="og:article:author" content="Jason Eveleth">
   <meta property="og:article:published_time" content="2024-01-05">
 
-   <link rel="stylesheet" href="/libs/katex/katex.min.css">
+   <link rel="stylesheet" href="/blog/libs/katex/katex.min.css">
    
-   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   <link rel="stylesheet" href="/blog/libs/highlight/styles/github.min.css">
    
 
   <!-- not used -->
   
 
-  <link href="/css/franklin.css" rel="stylesheet">
-  <link href="/css/global.css" rel="stylesheet">
+  <link href="/blog/css/franklin.css" rel="stylesheet">
+  <link href="/blog/css/global.css" rel="stylesheet">
 
   <title>A Rigorous (and Not-So-Rigorous) Look at JAX's Autograd</title>
 </head>
@@ -41,7 +41,7 @@
 
   <div class="type-b content-spacer"></div>
 
-  <div class="type-a nav-link"><a href="/search">Search</a></div>
+  <div class="type-a nav-link"><a href="/blog/search">Search</a></div>
   <div class="type-b link-spacer"></div>
   <div class="type-c"></div>
 </nav>
@@ -64,14 +64,14 @@ Author: Jason Eveleth
 <div class="franklin-toc"><ol><li><a href="#what_this_post_is_about">What this post is about</a><li><a href="#resources">Resources</a><li><a href="#how_does_autodiff_work_">How does autodiff work?</a><li><a href="#what_are_those_jt_f_x__gt__functions_">What are those Jt_f(x, gt) functions?</a><ol><li><a href="#implementing_jt_subtract_const">Implementing Jt_subtract_const</a><li><a href="#implementing_jt_square">Implementing Jt_square</a><li><a href="#implementing_jt_arctan">Implementing Jt_arctan</a></ol><li><a href="#what_is_going_on__bringing_back_rigor_">What is going on (bringing back rigor)</a><li><a href="#wrapping_up">Wrapping up</a></ol></div>
 </details>
 <div class="warn">
-<p>(Check out my new follow up post: <a href="/2024/04/07/more-gradient-descent">more gradient descent</a>.) This post is correct but contains some misleading statements that I've labeled with a dagger†, and warnings at the beginning of each section. I wrote this post as I was learning differential geometry, thank you for joining me on this journey.</p>
+<p>(Check out my new follow up post: <a href="/blog/2024/04/07/more-gradient-descent">more gradient descent</a>.) This post is correct but contains some misleading statements that I've labeled with a dagger†, and warnings at the beginning of each section. I wrote this post as I was learning differential geometry, thank you for joining me on this journey.</p>
 </div>
 <h1 id="what_this_post_is_about"><a href="#what_this_post_is_about" class="header-anchor">What this post is about</a></h1>
-<p>I've started writing this post from scratch several times as I've tried to get the presentation just right. I settled on this two goals: (1) if you have heard the terms &quot;<a href="/404">vector space</a>&quot; and &quot;gradient&quot; thrown about before, you should be able to understand and write JAX primitives, and (2) if you're comfortable with vector spaces, dual spaces, and multivariable calculus, I will assuage any fears about rigor.</p>
-<p><a href="https://jax.readthedocs.io/en/latest/">JAX</a> is a high-performance numerical computing framework for Python that can wrap a normal python function to calculate the derivative. We'll cover JAX-flavored reverse-mode automatic differentiation (autodiff), and focus on the 'differentiation' part. The 'automatic' part basically works by wrapping input <code>ndarray</code>'s in a custom class that keeps track of computation. That is out of the scope of this post, but you should check out the <a href="/2024/01/05/autograd/#resources">Resources</a> section for more information (or my <a href="https://github.com/jasoneveleth/autograd">110-line python implementation</a>).</p>
+<p>I've started writing this post from scratch several times as I've tried to get the presentation just right. I settled on this two goals: (1) if you have heard the terms &quot;<a href="/blog/404">vector space</a>&quot; and &quot;gradient&quot; thrown about before, you should be able to understand and write JAX primitives, and (2) if you're comfortable with vector spaces, dual spaces, and multivariable calculus, I will assuage any fears about rigor.</p>
+<p><a href="https://jax.readthedocs.io/en/latest/">JAX</a> is a high-performance numerical computing framework for Python that can wrap a normal python function to calculate the derivative. We'll cover JAX-flavored reverse-mode automatic differentiation (autodiff), and focus on the 'differentiation' part. The 'automatic' part basically works by wrapping input <code>ndarray</code>'s in a custom class that keeps track of computation. That is out of the scope of this post, but you should check out the <a href="/blog/2024/01/05/autograd/#resources">Resources</a> section for more information (or my <a href="https://github.com/jasoneveleth/autograd">110-line python implementation</a>).</p>
 <h1 id="resources"><a href="#resources" class="header-anchor">Resources</a></h1>
-<p>I found plenty high-quality resources on autodiff. The first post I read was <a href="https://thenumb.at/Autodiff/">this one</a>, and I wrote down my takeaways <a href="/404">here</a>. <a href="https://jingnanshi.com/blog/autodiff.html">This post</a> is also excellent. However, they cover mostly how to directly apply the chain rule. In contrast, the JAX-flavored way of doing things involved &quot;Jacobian-vector products&quot; and other foreign terms. I really liked the JAX approach of providing a higher-order <code>grad</code> function that can wrap any function you like. That approach seemed to have a structured procedure to applying the chain rule.</p>
-<p>In my efforts, I stumbled upon many resources specifically related to JAX. One of the main contributors behind JAX made <a href="https://videolectures.net/deeplearning2017_johnson_automatic_differentiation/">a video</a> about their framework (my notes on it are <a href="/404">here</a>).  However, the most directly relevant information is the <a href="https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff">autodiff cookbook</a> for JAX (specifically the section I linked to) and <a href="https://jax.readthedocs.io/en/latest/notebooks/How_JAX_primitives_work.html">documentation</a> on what you need to do to implement a primitive. Their approach is grounded in the literature, specifically <a href="https://engineering.purdue.edu/~qobi/papers/toplas2008.pdf">this paper from 2008</a>. And finally, I found a core JAX contributor's <a href="https://dougalmaclaurin.com/phd-thesis.pdf">phd thesis</a> on the implementation of a precursor library (pages 13-19 and 48-52 are relevant).</p>
+<p>I found plenty high-quality resources on autodiff. The first post I read was <a href="https://thenumb.at/Autodiff/">this one</a>, and I wrote down my takeaways <a href="/blog/404">here</a>. <a href="https://jingnanshi.com/blog/autodiff.html">This post</a> is also excellent. However, they cover mostly how to directly apply the chain rule. In contrast, the JAX-flavored way of doing things involved &quot;Jacobian-vector products&quot; and other foreign terms. I really liked the JAX approach of providing a higher-order <code>grad</code> function that can wrap any function you like. That approach seemed to have a structured procedure to applying the chain rule.</p>
+<p>In my efforts, I stumbled upon many resources specifically related to JAX. One of the main contributors behind JAX made <a href="https://videolectures.net/deeplearning2017_johnson_automatic_differentiation/">a video</a> about their framework (my notes on it are <a href="/blog/404">here</a>).  However, the most directly relevant information is the <a href="https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff">autodiff cookbook</a> for JAX (specifically the section I linked to) and <a href="https://jax.readthedocs.io/en/latest/notebooks/How_JAX_primitives_work.html">documentation</a> on what you need to do to implement a primitive. Their approach is grounded in the literature, specifically <a href="https://engineering.purdue.edu/~qobi/papers/toplas2008.pdf">this paper from 2008</a>. And finally, I found a core JAX contributor's <a href="https://dougalmaclaurin.com/phd-thesis.pdf">phd thesis</a> on the implementation of a precursor library (pages 13-19 and 48-52 are relevant).</p>
 <h1 id="how_does_autodiff_work_"><a href="#how_does_autodiff_work_" class="header-anchor">How does autodiff work?</a></h1>
 <p>First, we'll look at an example. Here is a simple neural net as a function of its input. I've colored each part of the function to correspond to its description. $$
 f(\bm{x}) := {\color{red}  \lvert\lvert} {\color{green}\arctan(}{\color{blue} W\bm{x} + \bm{b} }{\color{green})} - {\color{purple}\bm{y} } {\color{red} \rvert\rvert ^{2} }
@@ -118,7 +118,7 @@ delta_x = delta_xt.T</code></pre>
 \texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal}) = \bm{g}^{\intercal} \left(\left.\frac{d}{d \bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}\right)
 $$ Where $\left.\frac{d}{d\bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}$ is the Jacobian matrix of $f$ at $\bm{x}$. <a href="https://en.wikipedia.org/wiki/Leibniz%27s_notation">Leibniz's notation</a> is insane, so we're going to adopt the notation from <a href="http://www.strangebeautiful.com/other-texts/spivak-calc-manifolds.pdf">Spivak</a>, and <a href="http://ceres-solver.org/spivak_notation.html">other</a> <a href="http://www.vendian.org/mncharity/dir3/dxdoc/">people</a> <a href="https://mitpress.mit.edu/9780262019347/functional-differential-geometry/">agree</a>. Let me clarify the notation a little bit more. In math, we often confuse functions and expressions, so if $h(x) := 2x + 5$, we would talk about the function $h(x)$, when we should be talking about the function $h$. Normally the derivative operator applies to expressions, so we write $\frac{d}{dx}(2x + 5)$ or $\frac{d}{dx}h(x)$ which means &quot;expand $h$ into an expression and then differentiate the expression&quot;. In the notation I’m using, the derivative operator applies to functions, we write $\frac{d}{dx}h$, which is a new function with same input type. We abbreviate $\frac{d}{dx}$ as $D$. Thus, let $$(Df)(\bm{x}) = Df(\bm{x}) = \left.\frac{d}{d\bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}$$ be the Jacobian matrix. Note that I'll leave off the parens and assume that $D$ always applies to it's function before we apply the function to $x$. Finally, let's rewrite the equation: $$
 \texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal}) := \bm{g}^{\intercal}Df(\bm{x}).
-$$Much better. Note that $Df(\bm{x})$ is a matrix, and $\bm{g}^{\intercal}$ is any column vector (we'll talk about what $\bm{g}$ really is <a href="/2024/01/05/autograd/#what_is_going_on_bringing_back_rigor">later</a>). Now, why does composing <code>Jt_func</code> work? We'll hold off on that for a bit (unless you can't wait, in which case it's <a href="/2024/01/05/autograd/#what_is_going_on_bringing_back_rigor">here</a>). If you're confused right now, that's entirely fair. We'll go through many examples, and then I'll explain the underlying theory. I've just said this stuff so it will click later on.</p>
+$$Much better. Note that $Df(\bm{x})$ is a matrix, and $\bm{g}^{\intercal}$ is any column vector (we'll talk about what $\bm{g}$ really is <a href="/blog/2024/01/05/autograd/#what_is_going_on_bringing_back_rigor">later</a>). Now, why does composing <code>Jt_func</code> work? We'll hold off on that for a bit (unless you can't wait, in which case it's <a href="/blog/2024/01/05/autograd/#what_is_going_on_bringing_back_rigor">here</a>). If you're confused right now, that's entirely fair. We'll go through many examples, and then I'll explain the underlying theory. I've just said this stuff so it will click later on.</p>
 <p>The way we figure out how to implement these <code>Jt</code> functions is we evaluate $\bm{g}^{\intercal}Df(\bm{x})$ (which you should think about as taking the direction $\bm{g}^{\intercal}$ from output space to a direction in the input space)* for a given $f$. Let's start with the functions I introduced in the simple neural net at the beginning of this article. </p>
 <h2 id="implementing_jt_subtract_const"><a href="#implementing_jt_subtract_const" class="header-anchor">Implementing <code>Jt_subtract_const</code></a></h2>
 <p>We will start with <code>subtract_const</code>. $f(\bm{x}) := \bm{x} - \bm{b}$ with $\bm{b}$ a constant. We can calculate the derivative by plucking it out of the taylor series: $$
@@ -247,7 +247,7 @@ $$(borrowing notation from <a href="https://mitpress.mit.edu/9780262019347/funct
 <p>It is important to note that the components of the Jacobian depend on the basis of the vector spaces of the domain and codomain.</p>
 <h1 id="wrapping_up"><a href="#wrapping_up" class="header-anchor">Wrapping up</a></h1>
 <p>I hope this post helped you understand JAX backward-mode automatic differentiation. I wrote an <a href="https://github.com/jasoneveleth/autograd">implementation</a> that automatically tracks the computations, so you don't have to write out the <code>Jt_f()</code> functions explicitly. This is one of my most technical posts. Let me know if any part of it needs better or more in depth explanation.</p>
-<p>I wrote a follow-up post <a href="/2024/04/07/more-gradient-descent">here</a>, which should clarify what gradient descent actually is and why these Jacobian vector products help.</p>
+<p>I wrote a follow-up post <a href="/blog/2024/04/07/more-gradient-descent">here</a>, which should clarify what gradient descent actually is and why these Jacobian vector products help.</p>
 <table class="fndef" id="fndef:1"><tr><td class="fndef-backref"><a href="#fnref:1">[1]</a><td class="fndef-content"> morally in <a href="https://eugeniacheng.com/wp-content/uploads/2017/02/cheng-morality.pdf">this</a> sense</td></tr></table>
 <script src="https://utteranc.es/client.js"
     repo="jasoneveleth/blog"
@@ -294,11 +294,11 @@ if (window.self != window.top) {
 }
 </script>
 
-  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
-  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  <!-- <script src="/blog/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/blog/libs/vela/slideout.min.js"></script> -->
   
-    <script src="/libs/katex/katex.min.js"></script>
-<script src="/libs/katex/contrib/auto-render.min.js"></script>
+    <script src="/blog/libs/katex/katex.min.js"></script>
+<script src="/blog/libs/katex/contrib/auto-render.min.js"></script>
 <script>renderMathInElement(document.body, {
   delimiters: [
     {left: "$$", right: "$$", display: true},
@@ -308,7 +308,7 @@ if (window.self != window.top) {
 
   
   
-    <script src="/libs/highlight/highlight.min.js"></script>
+    <script src="/blog/libs/highlight/highlight.min.js"></script>
 <script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
 
   
