@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Otter emoji icon!!! -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+  <!-- Open Graph https://ogp.me/ -->
+  <meta property="og:title" content="Animating a list shuffle with the FLIP technique" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://www.jasoneveleth.com/blog/assets/otter64px.png" />
+  <meta property="og:image:width" content="64" />
+  <meta property="og:image:height" content="64" />
+  <meta property="og:article:author" content="Jason Eveleth">
+  <meta property="og:article:published_time" content="2024-12-25">
+
+  
+   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   
+
+  <!-- not used -->
+  
+
+  <link href="/css/franklin.css" rel="stylesheet">
+  <link href="/css/global.css" rel="stylesheet">
+
+  <title>Animating a list shuffle with the FLIP technique</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/search">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">Animating a list shuffle with the FLIP technique</h1>
+
+
+<div class="post-descr">
+Date: 2024-12-25 ｜
+Author: Jason Eveleth
+</div>
+
+
+<!-- <hr> -->
+<!-- Content appended here -->
+
+<div class="franklin-content"><details class="toc"><summary>Table of Contents</summary>
+<div class="franklin-toc"><ol><li><a href="#what_is_the_flip_technique_">What is the FLIP technique?</a><li><a href="#why_i_chose_vanilla_html_js">Why I chose vanilla html/js</a></ol><li><a href="#demo">Demo</a></div>
+</details>
+<h3 id="what_is_the_flip_technique_"><a href="#what_is_the_flip_technique_" class="header-anchor">What is the FLIP technique?</a></h3>
+<p>I won't go too in depth here, but I've linked some resources below.</p>
+<p>FLIP stands for First Last Invert Play. It's a technique for easily animating objects that are moving around. You record the <strong>first</strong> position of the object, and the <strong>last</strong> position of your object (after the animation), then <strong>invert</strong> the object's position to the first position using a transformation. Finally, <strong>&quot;play&quot;</strong> an animation which transitions the object's position from the inverted transform to the identity transform.</p>
+<p><a href="https://css-tricks.com/animating-layouts-with-the-flip-technique/">This article</a> by css tricks has the best explanation I've found. The css tricks article links to the original article <a href="https://aerotwist.com/blog/flip-your-animations/">here</a>. I found <a href="https://medium.com/developers-writing/animating-the-unanimatable-1346a5aab3cd">two</a> <a href="https://www.taraojo.com/post/animating-element-reordering">articles</a> showing how to integrate it into React's framework but nothing about vanilla html/js.</p>
+<h3 id="why_i_chose_vanilla_html_js"><a href="#why_i_chose_vanilla_html_js" class="header-anchor">Why I chose vanilla html/js</a></h3>
+<p>I chose to use vanilla html/js instead of React since I was auto-generating the html content and I didn't want to have to deal with the dependency of React. I found that chatGPT couldn't write correct code snippets using vanilla js, which indicated to me that there aren't many examples on the web.</p>
+<p>It was a lot of trial and error to figure out how the browser schedules animation frames and when to change the style on each element. It turns out the best way to do it is rearrange all the elements on the DOM. Then, in a <code>requestAnimationFrame</code> thunk, do the inversion (animate them to their old positions with 0ms transition). Next, force the browser to do the animation with <code>void container.offsetHeight;</code> (which is browser magic). Then play them by setting their transform to nothing with a transition of <code>300ms</code>.</p>
+<p>The <code>get_val</code> function takes the item and converts it to a real number which we use for sorting. I chose to put the values I wanted to sort by as fields of the element (and so <code>getAttribute(data-${indexType})</code> correctly retrieves it). But, you could choose any implementation/storage for the sorting keys.</p>
+<p>If we're willing to treat the <code>void container.offsetHeight;</code> as a black box then everything should make sense. My guess is that if you ask for the offset height (<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetHeight">which is</a> a measurement in pixels of the element's CSS height, including any borders, padding, and horizontal scrollbars), then it will force the browser to move all the elements to their animated locations.</p>
+<p>Below is the code. Replace the <code>...</code> placeholders with whatever data you want.</p>
+<pre><code class="language-html">&lt;div class=&quot;container&quot;&gt;
+&lt;details data-xvalue=&quot;186&quot; data-idnumber=&quot;148&quot;&gt;
+  &lt;summary&gt;Item title&lt;/summary&gt;
+  &lt;pre&gt;...&lt;/pre&gt;
+&lt;/details&gt;
+...
+&lt;/div&gt;</code></pre>
+<pre><code class="language-javascript">function sortDetails(indexType) {
+  // get a list of items to sort
+  const container = document.querySelector('.container');
+  const items = Array.from(container.children);
+
+  // 1. FIRST
+  const oldPositions = items.map(el =&gt; el.getBoundingClientRect());
+
+  // rearrange the items on the div
+  const get_val = (x =&gt; parseFloat(x.getAttribute(`data-${indexType}`)));
+  const argsort = Array(items.length).fill(0).map((_, i) =&gt; i).sort((i, j) =&gt;
+    get_val(items[i]) - get_val(items[j])
+  )
+  argsort.forEach(i =&gt; container.appendChild(items[i]));
+
+  // 2. LAST
+  const newPositions = items.map(el =&gt; el.getBoundingClientRect());
+
+  requestAnimationFrame(() =&gt; {
+    // 3. INVERT
+    items.forEach((el, i) =&gt; {
+  	  const dx = oldPositions[i].left - newPositions[i].left
+  	  const dy = oldPositions[i].top - newPositions[i].top
+  	  el.style.transform = `translate(${dx}px, ${dy}px)`
+  	  el.style.transition = 'none'
+    })
+    // force reflow
+    void container.offsetHeight;
+
+    // 4. PLAY (play animation to new position)
+    items.forEach(el =&gt; {
+  	  el.style.transform = ''
+  	  el.style.transition = 'transform 300ms'
+    })
+  })
+}</code></pre>
+<h1 id="demo"><a href="#demo" class="header-anchor">Demo</a></h1>
+<p>Here is a demo with expandable/collapsable items and a sorting animation between different orderings.</p>
+<button onclick="shuffleDetails()">shuffle elements</button>
+<h2>List</h2>
+<div class="container">
+<details>
+  <summary>Oranges</summary>
+  <p>
+  Oranges are citrus fruits known for their vibrant color and tangy sweetness.
+  They are an excellent source of Vitamin C and are often eaten fresh, juiced,
+  or used as flavoring in various dishes and desserts.
+  </p>
+</details>
+
+<details>
+  <summary>Apples</summary>
+  <p>Apples are one of the most popular and versatile fruits worldwide.</p>
+  <p>They come in various colors like red, green, and yellow, and are loved for their crisp texture and balanced sweetness.</p>
+  <p>Often eaten fresh, baked, or made into sauces and cider, apples are rich in dietary fiber and antioxidants.</p>
+</details>
+
+<details>
+  <summary>Bananas</summary>
+  <p>Bananas are tropical fruits known for their soft, sweet flesh and easy-to-peel skin.</p>
+  <p>They are a convenient snack and a great source of potassium, Vitamin B6, and dietary fiber.</p>
+  <p>Popular in smoothies, baked goods, or eaten on their own, bananas are a versatile fruit.</p>
+</details>
+
+<details>
+  <summary>Grapes</summary>
+  <p>Grapes are small, juicy fruits that grow in clusters and come in a variety of colors such as green, red, and purple.</p>
+  <p>They can be eaten fresh, dried to make raisins, or processed into wine, jam, and juice.</p>
+  <p>Rich in antioxidants, especially resveratrol, grapes are celebrated for their health benefits.</p>
+</details>
+
+<details>
+  <summary>Watermelons</summary>
+  <p>
+  Watermelons are large, refreshing fruits with a green rind and sweet, juicy red flesh.
+  They are perfect for hot summer days and are high in water content, making them hydrating.
+  Watermelons also provide vitamins like A and C, as well as antioxidants like lycopene.
+  </p>
+</details>
+</div>
+<style>
+.container {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.container details {
+  background-color: rgb(249, 254, 255);
+  border: 1px solid rgb(0, 0, 0);
+  padding: 5px;
+  border-radius: 10px;
+}
+summary {
+  cursor: hand;
+}
+</style>
+<script>
+  function fisherYatesShuffle(array) {
+	for (let i = array.length - 1; i > 0; i--) {
+	  const j = Math.floor(Math.random() * (i + 1));
+	  [array[i], array[j]] = [array[j], array[i]];
+	}
+	return array;
+  }
+  function shuffleDetails() {
+    const container = document.querySelector('.container');
+	const items = Array.from(container.children);
+	const oldPositions = items.map(el => el.getBoundingClientRect());
+
+	const get_val = (x => parseFloat(x.getAttribute(`data-${indexType}`)));
+	const argsort = fisherYatesShuffle(Array(items.length).fill(0).map((_, i) => i))
+
+	// rearrange
+	argsort.forEach(i => container.appendChild(items[i]));
+	const newPositions = items.map(el => el.getBoundingClientRect());
+
+	requestAnimationFrame(() => {
+	  // animate to old position
+	  items.forEach((el, i) => {
+		const dx = oldPositions[i].left - newPositions[i].left
+		const dy = oldPositions[i].top - newPositions[i].top
+		el.style.transform = `translate(${dx}px, ${dy}px)`
+		el.style.transition = 'none'
+	  })
+	  // force reflow
+	  void container.offsetHeight;
+	  // play animation to new position
+	  items.forEach(el => {
+		el.style.transform = ''
+		el.style.transition = 'transform 300ms'
+	  })
+    })
+  }
+</script>
+
+<p>—</p>
+<script src="https://utteranc.es/client.js"
+    repo="jasoneveleth/blog"
+    issue-term="pathname"
+    label="Comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+<div class="page-foot">
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: 2024-12-25 <a href="https://github.com/jasoneveleth/blog/blob/dev/2024/12/25/animating-list-shuffle-with-FLIP-technique.md">Page Source</a>
+</div>
+
+</div>
+<!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+(() => { // Custom logging
+    const e = {
+        user_agent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        screen_width: window.screen.width,
+        screen_height: window.screen.height,
+        viewport_width: window.innerWidth,
+        viewport_height: window.innerHeight,
+        language: navigator.language,
+        timezone_offset: new Date().getTimezoneOffset(),
+        referrer: document.referrer,
+        page: window.location.href,
+    };
+    fetch("https://logging.jason.pub:5000/analytics", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(e)
+    }).catch(t => console.error("Analytics request failed:", t));
+})();
+if (window.self != window.top) {
+    console.log("we're in an iframe!!!");
+    document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+}
+</script>
+
+  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  
+  
+    <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+  
+  
+</body>
+</html>

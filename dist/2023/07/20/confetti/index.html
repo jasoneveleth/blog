@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Otter emoji icon!!! -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+  <!-- Open Graph https://ogp.me/ -->
+  <meta property="og:title" content="Confetti" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://www.jasoneveleth.com/blog/assets/otter64px.png" />
+  <meta property="og:image:width" content="64" />
+  <meta property="og:image:height" content="64" />
+  <meta property="og:article:author" content="Jason Eveleth">
+  <meta property="og:article:published_time" content="2023-07-20">
+
+   <link rel="stylesheet" href="/libs/katex/katex.min.css">
+   
+   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   
+
+  <!-- not used -->
+  
+
+  <link href="/css/franklin.css" rel="stylesheet">
+  <link href="/css/global.css" rel="stylesheet">
+
+  <title>Confetti</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/search">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">Confetti</h1>
+
+
+<div class="post-descr">
+Date: 2023-07-20 ｜
+Author: Jason Eveleth
+</div>
+
+
+<!-- <hr> -->
+<!-- Content appended here -->
+
+<div class="franklin-content"><details class="toc"><summary>Table of Contents</summary>
+<div class="franklin-toc"><ol><li><a href="#overview">Overview</a><li><a href="#design">Design</a></ol></div>
+</details>
+<h1 id="overview"><a href="#overview" class="header-anchor">Overview</a></h1>
+<p>I took computer vision many years ago, and I wanted to refresh my knowledge of camera matrices and rendering. So I created <a href="https://www.jasoneveleth.com/confetti">this website</a> that displays an infinite stream of confetti. It calculates the movement of confetti in real-time. The code can be found <a href="https://github.com/jasoneveleth/confetti">here</a>.</p>
+<h1 id="design"><a href="#design" class="header-anchor">Design</a></h1>
+<p>I wanted physics and camera matrices to be the focus of the project, so the UI is spartan.</p>
+<p>To describe what is happening, we will assume that in the world, $x,y,z$ are arranged as if we're looking at an $x$-$y$ graph, and $z$ is coming toward us:</p>
+<div class="im-full">
+<img src="/assets/axes.png" alt="" />
+</div>
+<p>We need to convert a point in that, to a point on the screen, which has coordinates $(0,0)$ in the top left, and increasing $x$ and $y$ going down and right. We can do that using <code>Rt</code>, which is the extrinsic matrix: $$[R\mid t]=\begin{bmatrix}1&0&0&t_x\\ 0&1&0&t_y\\ 0&0&1&t_z\end{bmatrix}.$$This matrix describes how the camera is positioned in relation to the origin. Our rotation is the identity, and our translation is $10$ in the $z$ direction (since our camera is oriented normally at $(0,0,-10)$). Thus, $t_x=t_y=0,t_z=10$. Left multiplying this matrix with a vector will move it 10 units in the $z$ direction (bringing the camera to the origin).</p>
+<p>The second matrix we need is the intrinsic matrix: $$K=\begin{bmatrix}f_x&s&u\\ 0&f_x&v\\ 0&0&s\end{bmatrix}.$$$f_x, f_y$ are the focal length in pixels of the camera. $u,v$ are the principle point offset (shift in the sensor inside the camera). $s$ is skew. For us, $f_x=f_y=\max(w, h)/2$, which is the maximum of the width and height of the screen. Our skew is 1, and our principle point offsets are 0.</p>
+<p>The <code>index.js</code> file holds most of the code, and <code>math.js</code> has some utility functions (like matrix multiplication). There is one function I want to highlight in <code>math.js</code>, and that is <code>world2image</code>. It converts world coordinates to image coordinates. It multiplies $K \cdot [R\mid t] \cdot c$, where $c$ is the world coordinates and rescales the $x,y$ values by $z$. The <code>KRt</code> matrix is a precomputed multiplication of the intrinsic and extrinsic matrices and will take a point in 3D world coordinates and convert it to an $x,y$ coordinate system which is what the camera sees. Finally, we convert the $x,y$ coordinates to screen coordinates.</p>
+<p>With the camera matrix calculation out of the way, let's dig into the implementation. I keep track of confetti using its center (in world coordinates), velocity, acceleration, and its two rotation parameters $\theta$ and $\phi$. I used a constant acceleration down at $-9.81$ (for obvious reasons). I initialize the position to be the center of the screen (the origin). I initialize the velocity randomly and uniformly from the top quadrant of a circle. I initialize the rotation parameters, and their deltas randomly.</p>
+<p>The main approach is to keep a big array of confetti, and on each rendering step:</p>
+<ul>
+<li><p>replace confetti that falls off-screen</p>
+<li><p>update the world coordinates of each confetti (using acceleration, velocity, deltas for rotations, etc.)</p>
+<li><p>extract the corners of each confetti given their orientation</p>
+<li><p>use <code>world2image</code> to get the image coordinates of those corners</p>
+<li><p>draw the quadrilaterals from those image coordinates.</p>
+</ul>
+<p>Since we are calculating how each confetti would fall in real-time, large amounts of confetti (or badly optimized browsers), can really slow down a machine. Something to keep in mind if you use the website. Overall, I really enjoyed this project.</p>
+<script src="https://utteranc.es/client.js"
+    repo="jasoneveleth/blog"
+    issue-term="pathname"
+    label="Comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+<div class="page-foot">
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: 2023-07-20 <a href="https://github.com/jasoneveleth/blog/blob/dev/2023/07/20/confetti.md">Page Source</a>
+</div>
+
+</div>
+<!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+(() => { // Custom logging
+    const e = {
+        user_agent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        screen_width: window.screen.width,
+        screen_height: window.screen.height,
+        viewport_width: window.innerWidth,
+        viewport_height: window.innerHeight,
+        language: navigator.language,
+        timezone_offset: new Date().getTimezoneOffset(),
+        referrer: document.referrer,
+        page: window.location.href,
+    };
+    fetch("https://logging.jason.pub:5000/analytics", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(e)
+    }).catch(t => console.error("Analytics request failed:", t));
+})();
+if (window.self != window.top) {
+    console.log("we're in an iframe!!!");
+    document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+}
+</script>
+
+  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  
+    <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body, {
+  delimiters: [
+    {left: "$$", right: "$$", display: true},
+    {left: "$", right: "$", display: false}
+  ]
+})</script>
+
+  
+  
+    <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+  
+  
+</body>
+</html>

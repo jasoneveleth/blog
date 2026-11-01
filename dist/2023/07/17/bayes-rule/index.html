@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Otter emoji icon!!! -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+  <!-- Open Graph https://ogp.me/ -->
+  <meta property="og:title" content="Bayes' Rule (in real life)" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://www.jasoneveleth.com/blog/assets/otter64px.png" />
+  <meta property="og:image:width" content="64" />
+  <meta property="og:image:height" content="64" />
+  <meta property="og:article:author" content="Jason Eveleth">
+  <meta property="og:article:published_time" content="2023-07-17">
+
+   <link rel="stylesheet" href="/libs/katex/katex.min.css">
+   
+  
+
+  <!-- not used -->
+  
+
+  <link href="/css/franklin.css" rel="stylesheet">
+  <link href="/css/global.css" rel="stylesheet">
+
+  <title>Bayes' Rule (in real life)</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/search">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">Bayes' Rule (in real life)</h1>
+
+
+<div class="post-descr">
+Date: 2023-07-17 ｜
+Author: Jason Eveleth
+</div>
+
+
+<!-- <hr> -->
+<!-- Content appended here -->
+
+<div class="franklin-content"><details class="toc"><summary>Table of Contents</summary>
+<div class="franklin-toc"><ol><li><a href="#motivating_example">Motivating example</a><li><a href="#a_perspective_on_why_this_is_wrong">A perspective on why this is wrong</a><li><a href="#an_aside_about_odds">An aside about odds</a><li><a href="#how_do_we_fix_our_intuition_">How do we fix our intuition?</a><li><a href="#you_ask__why_is_the_formula_you_presented_remotely_true___">You ask: Why is the formula you presented remotely true???</a><li><a href="#the_proof">The proof</a><li><a href="#unrelated__what_does_multiplying_odds_usually_do_">Unrelated: What does multiplying odds usually do?</a></ol></div>
+</details>
+<h1 id="motivating_example"><a href="#motivating_example" class="header-anchor">Motivating example</a></h1>
+<p>Let's say you're a doctor. A woman with no symptoms comes into your office after she's tested positive for breast cancer. Let's say the prevalence of breast cancer at her age is $1$ in $100$. Imagine we have a test that is $90\%$ accurate when the person has cancer and $91\%$ accurate when they don't have cancer.</p>
+<p>We often refer to $90\%$ as the &quot;sensitivity&quot; (since it's how <strong>sensitive</strong> the test is to the disease). We call the $91\%$, &quot;specificity&quot;, since it's how specific the test is for the disease.</p>
+<p>The woman is stressed out that she tested positive. She asks you, &quot;How likely is it that I have breast cancer?&quot; <strong>Is the answer 10% or 90%</strong>? Many people make the mistake of saying $90\%$. The actual probability is $10\%$. This article will explain why, and how to avoid this mistake.</p>
+<h1 id="a_perspective_on_why_this_is_wrong"><a href="#a_perspective_on_why_this_is_wrong" class="header-anchor">A perspective on why this is wrong</a></h1>
+<p>My dad came up with a great way to think about it. Imagine a population of 1000 people and do the calculations on that. You know the prior is $1\%$, so $10$ people have cancer, and $990$ people don't. Our test is $90\%$ accurate when they have cancer; so, $9$ people who have cancer test positive, and $1$ person who has cancer tests negative. Of the $990$, our test is $91\%$ accurate, so about $901$ people test negative, and about $89$ people test positive.</p>
+<p>We know the woman tested positive, so she is either one of $9$ who has it, or $89$ who doesn't have it. $\frac{9}{9+89}\approx \frac{1}{11}$ so she is about $10\%$ likely to have cancer. That was a lot of calculation, and directly applying Bayes' rule isn't much simpler. We will create a framework for making these kinds of decisions that is mathematically sound, and easy to use in real life, even if you don't like <a href="/404">math</a>.</p>
+<h1 id="an_aside_about_odds"><a href="#an_aside_about_odds" class="header-anchor">An aside about odds</a></h1>
+<p>You may have heard your friends bet on something with $1:1$ odds (or even odds). This means the event has a $50\%$ chance of happening. It is similar to the idea of &quot;parts&quot; in a cooking recipe, &quot;3 parts water&quot; and &quot;2 parts wine&quot; means the mixture will be $2:3=\frac{2}{5}=40\%$ wine. It's exactly the same happening here. $1:1$ is $50\%$, $1:2$ is about $33.3\%$, $1:3$ odds are $25\%$. The idea is to go from the odds of: &quot;it happens $n$ times&quot;: &quot;it happens $m$ times&quot;, we go $$n:m = \frac{\text{times it happens}}{\text{all the times}}=\frac{n}{n+m}.$$This is how you can convert odds to probability.</p>
+<p>You can convert probability to odds using the following formula. Let's say the probability of an event $A$ happening is $P(A)$. The odds of it happening are $P(A):P(\text{not } A).$</p>
+<p>One nice thing about odds is you can cancel out common factors, so $2:4=1:2.$</p>
+<h1 id="how_do_we_fix_our_intuition_"><a href="#how_do_we_fix_our_intuition_" class="header-anchor">How do we fix our intuition?</a></h1>
+<p>You should think about the test—not as <strong>determining</strong> if she has breast cancer—but as <strong>updating</strong> your guess that she has breast cancer. Since the prevalence of breast cancer at her age (with no symptoms) is $1\%,$ she has the odds of breast cancer of $1:99$.</p>
+<p>Now, apply this formula (with $O$ representing odds): $$O_{new} = O_{old}O_{evidence}.$$So, $$O_{new} = O_{old}O_{pos}= (1:99)(10:1) = 10:99 \approx \frac{1}{11}=0.09090909.$$ Thus, the chance that she has the disease is $10:99,$ about $\textbf{9\%}$. This is the key formula that you should use in your everyday life. It allows to you quickly incorporate more evidence into your calculation, or change your prior odds.</p>
+<p>Where the hell does this come from? Don't worry, I will explain.</p>
+<h1 id="you_ask__why_is_the_formula_you_presented_remotely_true___"><a href="#you_ask__why_is_the_formula_you_presented_remotely_true___" class="header-anchor">You ask: Why is the formula you presented remotely true???</a></h1>
+<p>Intuitively, think about the <a href="https://arbital.com/p/bayes_rule/?l=693">waterfall analogy</a></p>
+<div class="im-full">
+<img src="https://i.imgur.com/6FOndjc.png?0" alt="wide vs narrow waterfall" />
+</div>
+<p>If the only thing we care about is the odds at the end (i.e. the ratio of red to blue at the bottom), then we only need to care about the odds that it goes in, $90:30$ or $45:15.$ Since they are the same odds, we end up with $3:4$ red to blue in both cases.</p>
+<h1 id="the_proof"><a href="#the_proof" class="header-anchor">The proof</a></h1>
+<p>We start with our prior odds, cancer:not cancer, which is written $O_{old}=P(C):P(\lnot C).$ </p>
+<p>We want to know the probability of <strong>cancer</strong> <strong>given</strong> she <strong>is positive</strong>. In probability form, we write that $P(C\mid +).$ This kind of conditional probability is really important to understand, and I can't explain it too thoroughly here, but the idea is when you say &quot;A given B&quot;, you are restricting your universe of possible events to only ones where B is true, and you're asking, out of those times, how often is A true. That is, $P(A\mid B) = \frac{P(A\cap B)}{P(B)}.$ We can rewrite this as $P(A\mid B)P(B) = P(A\cap B)$. This formula will be very important. You should also know that we can rename the A's to B's, so $P(B\mid A)P(A) = P(B\cap A)=P(A \cap B)$. We will use this later.</p>
+<p>The odds we want to know about can be written $O_{new} = P(C\mid +):P(\lnot C\mid +)$. This will tell us our new estimate of the likelihood that the woman has cancer, given that she tested positive.</p>
+<p>I claim that the question mark is true. </p>
+<p>$$
+\begin{align*}
+&O_{old}O_{pos}\\&=(P(C):P(\lnot C))\cdot \left(P(+\mid C):P(+\mid \lnot C)\right)\\ &\stackrel{?}{=} P(C\mid+):P(\lnot C\mid+)\\&=O_{new}
+\end{align*}
+$$</p>
+<p>Here is the proof:$$
+\begin{align*}
+(&P(C):P(\lnot C))\cdot \left(P(+\mid C):P(+\mid \lnot C)\right)\\&=P(C)P(+\mid C):P(\lnot C)P(+\mid \lnot C)\\
+&= P(+\cap C):P(+\cap \lnot C) \\
+&= P(+)P(C\mid +):P(+)P(\lnot C|+)\\
+&= P(C\mid +):P(\lnot C|+)\\
+\end{align*}
+$$—</p>
+<p>The last wrinkle to that calculation I showed earlier is how to calculate $O_{pos}=P(+\mid C):P(+\mid \lnot C).$ The trick is that usually this is given to you or easy to calculate. $P(+\mid \lnot C)$ is the false positive rate, which if the test is $91\%$ accurate when they don't have cancer is $9\%$. And $P(+|C)$, which is the true positive rate, or sensitivity of the test, $90\%$. Thus, the $O_{pos}=90:9=10:1.$</p>
+<p>It should be clear now, that $$O_{new} = O_{old}O_{pos}= (1:99)(10:1) = 10:99 \approx 9.2\%.$$This formula is amazing because it is very easy to add more evidence to update your understanding.</p>
+<p>Let's say you reassure the woman. &quot;It was a routine checkup, you have no symptoms, we just need to run another test, it was probably a mistake.&quot; She does it again and comes back positive again. Now, she should start to get worried: $$O_{newer}=O_{new}O_{pos}=(10:99)(10:1)=(100:99)\approx 50\%.$$Almost even odds. Okay, sure, but let's imagine that the second test came back negative. To understand the odds, we need to calculate the odds for a negative test. <strong>Try this on your own and I'll see you in the next paragraph.</strong></p>
+<p>Now, let's calculate this, $$O_{neg}=P(-\mid C):P(-\mid \lnot C)=10:91.$$This isn't as nice and round a  number, but it allows us to calculate:$$O = O_{old}O_{pos}O_{neg}=(1:99)(10:1)(10:91)=100:9009 \approx 1\%$$Another great thing about this, is let's say we get more information that the prevalence in her age group is actually $1:10$. How do we incorporate that? Well, it replaces our prior estimate. So, $O_{old} = 1:10$ rather than $1:99$. Now,$$
+\begin{align*}
+O_{old}O_{pos} &=(1:10)(10:1)=10:10=50\%\\
+O_{old}O_{pos}O_{pos} &=(1:10)(10:1)(10:1)=100:1=99\%\\
+O_{old}O_{pos}O_{neg} &=(1:10)(10:1)(10:91)=100:910\approx10\%
+.\end{align*}
+$$</p>
+<h1 id="unrelated__what_does_multiplying_odds_usually_do_"><a href="#unrelated__what_does_multiplying_odds_usually_do_" class="header-anchor">Unrelated: What does multiplying odds usually do?</a></h1>
+<p>The rule $(n:m) \cdot (a:b) = an:mb,$ can be justified as follows:</p>
+<p>$$
+\begin{align*}
+&(P(A):P(\lnot A))(P(B):P(\lnot B))\\
+&= P(A)P(B):P(\lnot A)P(\lnot B)\\
+&= P(A\cap B):P(\lnot A \,\cap \,\lnot B)\\
+&= P(A\cap B):P(\lnot (A\cup B))
+\end{align*}
+$$This might be better understood by a very poorly drawn PowerPoint slide: </p>
+<div class="im-most">
+<img src="/assets/union-and-intersection.png" alt="" />
+</div>
+<script src="https://utteranc.es/client.js"
+    repo="jasoneveleth/blog"
+    issue-term="pathname"
+    label="Comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+<div class="page-foot">
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: 2023-07-17 <a href="https://github.com/jasoneveleth/blog/blob/dev/2023/07/17/bayes-rule.md">Page Source</a>
+</div>
+
+</div>
+<!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+(() => { // Custom logging
+    const e = {
+        user_agent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        screen_width: window.screen.width,
+        screen_height: window.screen.height,
+        viewport_width: window.innerWidth,
+        viewport_height: window.innerHeight,
+        language: navigator.language,
+        timezone_offset: new Date().getTimezoneOffset(),
+        referrer: document.referrer,
+        page: window.location.href,
+    };
+    fetch("https://logging.jason.pub:5000/analytics", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(e)
+    }).catch(t => console.error("Analytics request failed:", t));
+})();
+if (window.self != window.top) {
+    console.log("we're in an iframe!!!");
+    document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+}
+</script>
+
+  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  
+    <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body, {
+  delimiters: [
+    {left: "$$", right: "$$", display: true},
+    {left: "$", right: "$", display: false}
+  ]
+})</script>
+
+  
+  
+  
+</body>
+</html>

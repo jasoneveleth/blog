@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Otter emoji icon!!! -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+  <!-- Open Graph https://ogp.me/ -->
+  <meta property="og:title" content="Linear Regression" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://www.jasoneveleth.com/blog/assets/otter64px.png" />
+  <meta property="og:image:width" content="64" />
+  <meta property="og:image:height" content="64" />
+  <meta property="og:article:author" content="Jason Eveleth">
+  <meta property="og:article:published_time" content="2021-07-11">
+
+   <link rel="stylesheet" href="/libs/katex/katex.min.css">
+   
+   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   
+
+  <!-- not used -->
+  
+
+  <link href="/css/franklin.css" rel="stylesheet">
+  <link href="/css/global.css" rel="stylesheet">
+
+  <title>Linear Regression</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/search">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">Linear Regression</h1>
+
+
+<div class="post-descr">
+Date: 2021-07-11 ｜
+Author: Jason Eveleth
+</div>
+
+
+<!-- <hr> -->
+<!-- Content appended here -->
+
+<div class="franklin-content"><details class="toc"><summary>Table of Contents</summary>
+<div class="franklin-toc"><ol><li><a href="#theory">Theory</a><li><a href="#examples">Examples</a></ol></div>
+</details>
+<h1 id="theory"><a href="#theory" class="header-anchor">Theory</a></h1>
+<p>We are trying to find the line of best fit given a collection of coordinates. For example, $\{(x_1, y_1), (x_2,y_2), (x_3, y_3), \dots\}$. We would like tofind $m,b$ such that $y = mx + b$ minimizes the sum of the residuals squared. Bythat I mean we want to minimize a function $L(\alpha) = \sum_i (y_i - (mx_i + b))^2$, byfinding the best $m$ and $b$.</p>
+<p>We will use the notation from <a href="/404">here</a>. Here are some fun facts we'll need to know:</p>
+<ol>
+<li><p>$\sum_i x_i^2 =\lVert x \rVert^2$</p>
+<li><p>$\lVert x \rVert^2 = x^Tx$</p>
+<li><p> $(A + B)^T = A^T + B^T$ and $(AB)=B^TA^T$.</p>
+<li><p>$D ( u^Tx) = u^T$, $D (x^Tu) = u^T$, and $D(x^Tx) = D(\bar{x}^Tx) + D(x^T\bar{x})$.<sup id="fnref:1"><a href="#fndef:1" class="fnref">[1]</a></sup></p>
+</ol>
+<p>We need to set up some definitions. Let$$y = \begin{bmatrix}y_1\\ y_2\\ y_3\\ y_4\\ \vdots\end{bmatrix},
+X = \begin{bmatrix}x_1 & 1\\ x_2 & 1\\ x_3 & 1\\ x_4 & 1\\ \vdots & \vdots\end{bmatrix},
+\alpha = \begin{bmatrix}m\\b\end{bmatrix}.$$</p>
+<p>So our goal is:</p>
+<p>$$\underset{\alpha}{\text{argmin}}\, L(\alpha)$$$$=\underset{\alpha}{\text{argmin}}\, \sum ((y_i) - (m x_i + b))^2$$Apply fun fact number #1:$$=\underset{\alpha}{\text{argmin}}\, \left\lVert \begin{bmatrix}(y_1 - (m x_1 + b))\\ (y_2 - (m x_2 + b))\\ (y_3 - (m x_3 + b))\\ (y_4 - (m x_4 + b))\\ \vdots\end{bmatrix}\right\rVert^2$$$$=\underset{\alpha}{\text{argmin}}\, \lVert y - X\alpha\rVert^2$$Apply fun fact #2:$$=\underset{\alpha}{\text{argmin}}\, (y-X\alpha)^T(y - X\alpha)$$Apply fun fact #3:$$=\underset{\alpha}{\text{argmin}}\, (y^T - \alpha^TX^T)(y - X\alpha)$$$$=\underset{\alpha}{\text{argmin}}\, y^Ty - \alpha^TX^Ty - y^TX\alpha + \alpha^TX^TX\alpha$$</p>
+<p>To minimize this, we find the critical points of the function. We do this by finding wherethe derivative of $L$ with respect to $\alpha$ is $0$.</p>
+<p>$$
+\begin{align*}
+0 &= L'(\alpha)\\
+&= D (y^Ty - \alpha^TX^Ty - y^TX\alpha + \alpha^TX^TX\alpha)\\
+&=D (y^Ty) - D (\alpha^TX^Ty) - D (y^TX\alpha) + D (\alpha^TX^TX\alpha)\\
+\end{align*}$$Apply fun fact #4:$$
+\begin{align*}
+&= 0 - (X^Ty)^T - y^TX + D (\alpha^TX^TX\bar{\alpha}) + D (\bar{\alpha}^TX^TX\alpha)\\
+&= -y^TX - y^TX + (X^TX\alpha)^T + \alpha^TX^TX\\
+&=-2y^TX + \alpha^T(X^TX)^T + \alpha^TX^TX\\
+&=-2y^TX + \alpha^TX^TX + \alpha^TX^TX\\
+&=-2y^TX + 2\alpha^TX^TX\\
+\end{align*}
+$$</p>
+<p>And now for the glorious part (who am I kidding, this whole thing has beenglorious),</p>
+<p>$$2y^TX=2\alpha^TX^TX$$$$X^Ty=(X^TX)\alpha$$$$(X^TX)^{-1}X^Ty = \alpha = \begin{bmatrix}m & b\end{bmatrix}$$</p>
+<h1 id="examples"><a href="#examples" class="header-anchor">Examples</a></h1>
+<p>Say we are given this set of coordinates: $\{(1.3, 0.8), (3.2, 3.5), (5.6, 6.4), (8.5, 7.7)\}$. Then we can either do the arithmetic by hand (from the last equation) or open <code>julia</code> and give it the vectors (some output omitted):</p>
+<pre><code class="language-julia">julia&gt; y = [0.8; 3.5; 6.4; 7.7]
+julia&gt; X = [1.3 1; 3.2 1; 5.6 1; 8.5 1]
+julia&gt; inv(X' * X) * X' * y
+2-element Vector{Float64}:
+ 0.9628
+ 0.1228</code></pre>
+<p>Which gives us our desired line of best fit: $y = 0.962823x + 0.122874$.</p>
+<table class="fndef" id="fndef:1"><tr><td class="fndef-backref"><a href="#fnref:1">[1]</a><td class="fndef-content">The bar in $\bar{\alpha}$ or $\bar{x}$ means treat it as a constant, in the same way, that you would if you were doing the product rule with single-valued functions: $D(f(x)g(x)) = D(f(x)\bar{g}(x)) + D(\bar{f}(x) g(x)) = (Df(x))g(x) + (Dg(x))f(x)$.</td></tr></table>
+<script src="https://utteranc.es/client.js"
+    repo="jasoneveleth/blog"
+    issue-term="pathname"
+    label="Comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+<div class="page-foot">
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: 2021-07-11 <a href="https://github.com/jasoneveleth/blog/blob/dev/2021/07/11/linear-regression.md">Page Source</a>
+</div>
+
+</div>
+<!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+(() => { // Custom logging
+    const e = {
+        user_agent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        screen_width: window.screen.width,
+        screen_height: window.screen.height,
+        viewport_width: window.innerWidth,
+        viewport_height: window.innerHeight,
+        language: navigator.language,
+        timezone_offset: new Date().getTimezoneOffset(),
+        referrer: document.referrer,
+        page: window.location.href,
+    };
+    fetch("https://logging.jason.pub:5000/analytics", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(e)
+    }).catch(t => console.error("Analytics request failed:", t));
+})();
+if (window.self != window.top) {
+    console.log("we're in an iframe!!!");
+    document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+}
+</script>
+
+  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  
+    <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body, {
+  delimiters: [
+    {left: "$$", right: "$$", display: true},
+    {left: "$", right: "$", display: false}
+  ]
+})</script>
+
+  
+  
+    <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+  
+  
+</body>
+</html>

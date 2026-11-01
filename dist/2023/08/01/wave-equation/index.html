@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Otter emoji icon!!! -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+  <!-- Open Graph https://ogp.me/ -->
+  <meta property="og:title" content="Wave equation simulation" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://www.jasoneveleth.com/blog/assets/otter64px.png" />
+  <meta property="og:image:width" content="64" />
+  <meta property="og:image:height" content="64" />
+  <meta property="og:article:author" content="Jason Eveleth">
+  <meta property="og:article:published_time" content="2023-08-01">
+
+   <link rel="stylesheet" href="/libs/katex/katex.min.css">
+   
+   <link rel="stylesheet" href="/libs/highlight/styles/github.min.css">
+   
+
+  <!-- not used -->
+  
+
+  <link href="/css/franklin.css" rel="stylesheet">
+  <link href="/css/global.css" rel="stylesheet">
+
+  <title>Wave equation simulation</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/search">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">Wave equation simulation</h1>
+
+
+<div class="post-descr">
+Date: 2023-08-01 ｜
+Author: Jason Eveleth
+</div>
+
+
+<!-- <hr> -->
+<!-- Content appended here -->
+
+<div class="franklin-content"><details class="toc"><summary>Table of Contents</summary>
+<div class="franklin-toc"><ol><li><a href="#inspiration">Inspiration</a><li><a href="#in_action">In action</a><li><a href="#the_rederivation">The rederivation</a><ol><li><a href="#implementation_details">Implementation details</a></ol></ol></div>
+</details>
+<h1 id="inspiration"><a href="#inspiration" class="header-anchor">Inspiration</a></h1>
+<p>Imagine your worst enemy is playing a constant frequency in the center of her room. You're allowed to put speakers (which don't take up space) wherever you want in the room. The question is, what's the best place to put them and what should they play?</p>
+<p>To be fair, this is not the question that I'll be answering in this post, but it was the inspiration. We first simplify the problem into 2D so your enemy is now vibrating a surface with constant frequency. To simulate this problem, we need to solve the wave equation, which I do in this post.</p>
+<p>At first, I tried to figure out the finite difference equations, but I got stuck. Then, I looked it up and I found <a href="https://beltoforion.de/en/recreational_mathematics/2d-wave-equation.php">this wonderful blog post</a>. I've rederived the equations to make sure I believed it and I wrote the code in Julia, which you can find it on <a href="">GitHub</a>. My first attempt at figuring out the finite differences is in the Python notebook, and the final code is in <code>simulation.jl</code>.</p>
+<h1 id="in_action"><a href="#in_action" class="header-anchor">In action</a></h1>
+<video controls src="/assets/wave-equation.mov" alt=""></video>
+
+<h1 id="the_rederivation"><a href="#the_rederivation" class="header-anchor">The rederivation</a></h1>
+<p>See <a href="/404">calculus notation</a> for notation. The wave equation is $$D_{tt}u = c^2 ( D_{xx}u + D_{yy}u)$$</p>
+<p>First, we figure out what the finite difference wave equation looks like.Since we have a second time derivative, we need to keep 2 past states to calculate the difference in the first derivative. Look at this picture ($u_{0,i,j}$ is the newest state)</p>
+<div class="im-most">
+<img src="https://beltoforion.de/en/recreational_mathematics/images/diskretisierung_wellengleichung.webp" alt="Mode of action of the discretized version of the differential operator for the solution of the wave equation" />
+</div>
+<p>Let's do the time derivative first.$$D_tu_{1,i,j} = \frac{\Delta_t u_{1,i,j}}{dt} = \frac{u_{1,i,j} - u_{2, i, j}}{dt}$$So,$$D_{tt}u_{1,i,j} = \frac{\Delta_t D_t u_{1,i,j}}{dt}=\frac{\frac{u_{0,i,j} - u_{1, i, j}}{dt}-\frac{u_{1,i,j} - u_{2, i, j}}{dt}}{dt} = \frac{u_{0,i,j}-2u_{1,i,j}+u_{2,i,j}}{(dt)^2}$$Next, we do space derivatives (ignoring $c^2$ for now),$$
+\begin{align*}
+D_{xx}u_{1,i,j} &+ D_{yy}u_{1,i,j} = \frac{\Delta_x D_x u_{1,i,j}}{dx} + \frac{\Delta_y D_y u_{1,i,j}}{dy}\\ &= \frac{u_{1,i-1,j} - 2u_{1,i,j} + u_{1,i+1,j}}{(dx)^2} + \frac{u_{1,i,j-1} - 2u_{1,i,j} + u_{1,i,j+1}}{(dy)^2}
+\end{align*}$$</p>
+<p>Returning to the wave equation,$$
+\begin{align*}
+D_{tt}u &= c^2 ( D_{xx}u + D_{yy}u)\\
+\frac{u_{0,i,j}-2u_{1,i,j}+u_{2,i,j}}{(dt)^2} &= c^2\left(\frac{u_{1,i-1,j} - 2u_{1,i,j} + u_{1,i+1,j}}{(dx)^2} + \frac{u_{1,i,j-1} - 2u_{1,i,j} + u_{1,i,j+1}}{(dy)^2}\right)\\
+u_{0,i,j} &= 2u_{1,i,j} - u_{2,i,j} +c^2 (dt)^2\left( \frac{u_{1,i-1,j} - 2u_{1,i,j} + u_{1,i+1,j}}{(dx)^2} + \frac{u_{1,i,j-1} - 2u_{1,i,j} + u_{1,i,j+1}}{(dy)^2}\right)
+\end{align*}
+$$</p>
+<p>If we assume $dx = dy$ and $\alpha = \frac{c^2 (dt)^2}{(dx)^2}$ then$$u_{0,i,j} = 2u_{1,i,j} - u_{2,i,j} +\alpha\left( u_{1,i-1,j}+u_{1,i,j-1} - 4u_{1,i,j} + u_{1,i+1,j} + u_{1,i,j+1}\right)$$There are no $u_{0,\_,\_}$ on the RHS. Thus, every value in the newest level can be calculated by the ones in previous levels.</p>
+<p>We deal with the boundary by only calculating <code>u[0,1:lx,1:ly]</code>, and leaving the rest 0. So shifts are calculated like so: <code>u[1,0:lx-2,1:ly]</code>.</p>
+<p>Note: this is actually <a href="https://en.wikipedia.org/wiki/Verlet_integration">Verlet integration</a> (a trick for solving for the next state in terms of the finite differences and the second derivatives).</p>
+<h2 id="implementation_details"><a href="#implementation_details" class="header-anchor">Implementation details</a></h2>
+<p>We can play a frequency by resetting the value of a $u_{0,i,j}$ after the step to the value of a sine wave at the time. We can make a water droplet by setting part of the $u_{0,i,j}$ layer to a negative gaussian at a certain time step. This is achieved with <code>put_drop!()</code> and <code>play_noise!()</code> functions.</p>
+<script src="https://utteranc.es/client.js"
+    repo="jasoneveleth/blog"
+    issue-term="pathname"
+    label="Comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+<div class="page-foot">
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: 2023-08-01 <a href="https://github.com/jasoneveleth/blog/blob/dev/2023/08/01/wave-equation.md">Page Source</a>
+</div>
+
+</div>
+<!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+(() => { // Custom logging
+    const e = {
+        user_agent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        screen_width: window.screen.width,
+        screen_height: window.screen.height,
+        viewport_width: window.innerWidth,
+        viewport_height: window.innerHeight,
+        language: navigator.language,
+        timezone_offset: new Date().getTimezoneOffset(),
+        referrer: document.referrer,
+        page: window.location.href,
+    };
+    fetch("https://logging.jason.pub:5000/analytics", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(e)
+    }).catch(t => console.error("Analytics request failed:", t));
+})();
+if (window.self != window.top) {
+    console.log("we're in an iframe!!!");
+    document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+}
+</script>
+
+  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  
+    <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body, {
+  delimiters: [
+    {left: "$$", right: "$$", display: true},
+    {left: "$", right: "$", display: false}
+  ]
+})</script>
+
+  
+  
+    <script src="/libs/highlight/highlight.min.js"></script>
+<script>hljs.highlightAll();hljs.configure({tabReplace: '    '});</script>
+
+  
+  
+</body>
+</html>

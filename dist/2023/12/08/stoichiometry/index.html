@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Otter emoji icon!!! -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦦</text></svg>">
+
+  <!-- Open Graph https://ogp.me/ -->
+  <meta property="og:title" content="A Linear Algebra Perspective on High School Chemistry" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://www.jasoneveleth.com/blog/assets/otter64px.png" />
+  <meta property="og:image:width" content="64" />
+  <meta property="og:image:height" content="64" />
+  <meta property="og:article:author" content="Jason Eveleth">
+  <meta property="og:article:published_time" content="2023-12-08">
+
+   <link rel="stylesheet" href="/libs/katex/katex.min.css">
+   
+  
+
+  <!-- not used -->
+  
+
+  <link href="/css/franklin.css" rel="stylesheet">
+  <link href="/css/global.css" rel="stylesheet">
+
+  <title>A Linear Algebra Perspective on High School Chemistry</title>
+</head>
+<body>
+<nav class="flex-container blog-nav">
+  <!-- type-a have a fixed width which never changes -->
+  <!-- type-b will grow up to a point -->
+  <!-- type-c start at 0 and absorb remaining space-->
+  <!-- https://jsfiddle.net/dehsq3jb/ -->
+  <div class="type-c"></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
+
+  <div class="type-b content-spacer"></div>
+
+  <div class="type-a nav-link"><a href="/search">Search</a></div>
+  <div class="type-b link-spacer"></div>
+  <div class="type-c"></div>
+</nav>
+
+<main id="panel">
+
+<h1 class="post-title">A Linear Algebra Perspective on High School Chemistry</h1>
+
+
+<div class="post-descr">
+Date: 2023-12-08 ｜
+Author: Jason Eveleth
+</div>
+
+
+<!-- <hr> -->
+<!-- Content appended here -->
+
+<div class="franklin-content"><details class="toc"><summary>Table of Contents</summary>
+<div class="franklin-toc"></div>
+</details>
+<p>Recently, I was on a ski trip and the topic of chemistry came up, and I realized that high school stoichiometry seemed like a algorithm I should recognize.</p>
+<p>In stoichiometry, you're given an equation like this: $$x_1C_6H_{12}O_6 + x_2O_2 = x_3H_2O + x_4CO_2.$$We're trying to determine what the coefficients need to be for the equation to be balanced. From what I remember from high school, you just think really hard until you figure out what they need to be, and that's how you determine the coefficients.</p>
+<p>Taking a more systematic approach, we can move everything over to the other side, giving$$x_1C_6H_{12}O_6 + x_2O_2 - x_3H_2O - x_4CO_2 = 0$$</p>
+<p>We can consider the balance for each element as an equation, and our coefficients as unknowns$$
+\begin{align*}
+C & &6x_1 + 0x_2 - 0x_3 - 1x_4 = 0\\
+H & &12x_1 + 0x_2 - 2x_3 - 0x_4 = 0\\
+O & &6x_1 + 2x_2 - 1x_3 - 2x_4 = 0\\
+\end{align*}
+$$</p>
+<p>Now it's just a problem of Gaussian elimination. This is a homogeneous linear system:</p>
+<p>$$
+\begin{bmatrix}
+6 & 0 & 0 & -1\\
+12 & 0 & -2 & 0\\
+6 & 2 & -1 & -2\\
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\
+x_2\\
+x_3\\
+x_4\\
+\end{bmatrix}
+= \begin{bmatrix}
+0\\0\\0\\
+\end{bmatrix}.
+$$This is so exciting, because now you can use your favorite linear solver on this equation to determine the balance for the original chemical reaction.</p>
+<script src="https://utteranc.es/client.js"
+    repo="jasoneveleth/blog"
+    issue-term="pathname"
+    label="Comment"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+<div class="page-foot">
+  © Jason Eveleth 2023 · Powered by Franklin.jl · Last modified: 2023-12-08 <a href="https://github.com/jasoneveleth/blog/blob/dev/2023/12/08/stoichiometry.md">Page Source</a>
+</div>
+
+</div>
+<!-- CONTENT ENDS HERE -->
+  </main> <!-- end of id=main -->
+
+  <!-- if we're in an iframe -->
+  <script>
+(() => { // Custom logging
+    const e = {
+        user_agent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        screen_width: window.screen.width,
+        screen_height: window.screen.height,
+        viewport_width: window.innerWidth,
+        viewport_height: window.innerHeight,
+        language: navigator.language,
+        timezone_offset: new Date().getTimezoneOffset(),
+        referrer: document.referrer,
+        page: window.location.href,
+    };
+    fetch("https://logging.jason.pub:5000/analytics", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(e)
+    }).catch(t => console.error("Analytics request failed:", t));
+})();
+if (window.self != window.top) {
+    console.log("we're in an iframe!!!");
+    document.querySelectorAll(".blog-nav").forEach(i => i.style.display = "none");
+}
+</script>
+
+  <!-- <script src="/libs/vela/metisMenu.min.js"></script> -->
+  <!-- <script src="/libs/vela/slideout.min.js"></script> -->
+  
+    <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body, {
+  delimiters: [
+    {left: "$$", right: "$$", display: true},
+    {left: "$", right: "$", display: false}
+  ]
+})</script>
+
+  
+  
+  
+</body>
+</html>

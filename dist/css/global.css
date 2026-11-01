@@ -1,0 +1,459 @@
+:root {
+    --content-width: 37rem;
+}
+
+/* NAV */
+
+a {
+  text-decoration: none;
+  color: var(--blue);
+  font-weight: 700;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.logo {
+    /* min-width: */ 
+}
+
+.icon-in-text {
+    vertical-align: text-bottom;
+    height: 1.375rem;
+}
+
+nav {
+    display: flex;
+    justify-content: flex-between;
+    width: 100%;
+    align-items: center;
+    height: 50px;
+}
+
+.content-spacer {
+    width: var(--content-width);
+}
+
+.link-spacer {
+    min-width: 20px;
+    max-width: 30px;
+}
+
+.type-a {
+    flex-shrink: 0;
+}
+
+.type-b {
+    height: 100%;
+}
+
+.type-c {
+    flex-grow: 1;
+    height: 100%;
+}
+
+/* END OF NAV */
+
+h1.page.title,
+hr {
+  position relative
+  line-height: 1.35em;
+}
+
+@media (min-width: 940px) {
+  h1.page.title,
+  hr {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  h1.page.title,
+  hr {
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+  nav {
+        justify-content: flex-between;
+    }
+}
+
+/*
+Below is vela from https://github.com/danzinger/grav-theme-vela
+*/
+
+.pure-button:focus,
+a:active,
+a:hover {
+  outline: 0;
+}
+
+.pure-table,
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+body {
+  margin: 0;
+  font-size: 1rem;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section {
+  display: block;
+}
+
+summary {
+    cursor: pointer;
+    user-select: none;
+}
+
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+[hidden],
+template {
+  display: none;
+}
+
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+b,
+optgroup,
+strong {
+  font-weight: 700;
+}
+
+dfn {
+  font-style: italic;
+}
+
+mark {
+  color: #000;
+  background: #ff0;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+.post-descr {
+    font-size: 0.8rem;
+    color: var(--text-grey);
+    display: inline;
+    margin-right: 20px;
+}
+
+img {
+  border: 0;
+}
+
+.figure {
+    color: grey;
+    margin-bottom: 1em;
+}
+
+.figure p {
+    font-size: 1rem;
+}
+
+.im-quarter,
+.im-full,
+.im-most,
+.im-half,
+.im-800 {
+    display: flex;
+    justify-content: center;
+}
+
+.im-full img {
+    width: 100%;
+}
+
+.im-most img {
+    width: 70%;
+}
+
+.im-half img {
+    width: 50%;
+}
+
+@media (max-width: 800px) {
+.im-800 {
+	position: relative;
+}
+.im-800 img {
+    width: 100vw; /* 100% view width */
+}
+.im-800 svg {
+	width: 100vw;
+	pointer-events: none;
+	filter: blur(5px);
+}
+.im-800-svg::after {
+	content: "Not supported for screens smaller than 800px";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: rgba(0, 0, 0, 0.3); /* Semi-transparent background */
+	color: white;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	font-size: 1.2rem;
+	text-align: center;
+	z-index: 1; /* Ensure it appears above the SVG */
+}
+}
+
+@media not (max-width: 800px) {
+.im-800 img {
+    width: 800px;
+}
+}
+
+.im-quarter img {
+    width: 25%;
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+figure {
+  margin: 1em 40px;
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+}
+
+pre,
+textarea {
+  overflow: auto;
+}
+
+.katex-display {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: 'KaTeX_Typewriter', monospace;
+  font-size: 1em;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font: inherit;
+  margin: 0;
+  color: inherit;
+}
+
+.pure-button,
+input {
+  line-height: normal;
+}
+
+button {
+  overflow: visible;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+html input[type=button],
+input[type=reset],
+input[type=submit] {
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+input[type=checkbox],
+input[type=radio] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+input[type=search] {
+  box-sizing: content-box;
+  -webkit-appearance: textfield;
+}
+
+html {
+  font-family: Roboto, sans-serif;
+  line-height: 1.4;
+  overflow-x: hidden
+}
+
+.date {
+    font-family: monospace;
+    color: rgb(75, 85, 99);
+}
+
+.page-title {
+  margin-bottom: 0;
+}
+
+h2 {
+  font-weight: 500;
+}
+
+h3 {
+  font-weight: 400;
+}
+
+strong {
+  font-weight: 500;
+}
+
+.content {
+  max-width: 1170px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+  padding: 0 1em;
+}
+
+.content a {
+  text-decoration: none;
+  color: #2579c7;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+hr {
+  height: 1px;
+  border: 0;
+  background-color: #ccc;
+}
+
+hr::after {
+  content: '\00a0';
+}
+
+.toc-page {
+  font-size: 110%;
+}
+
+.toc-page ol {
+  font-weight: 600;
+  counter-reset: item;
+}
+
+.toc-page ol ol {
+  font-weight: 300;
+}
+
+.toc-page ol ol ol {
+  font-size: 90%;
+}
+
+.toc-page li {
+  display: block;
+}
+
+.toc-page li::before {
+  content: counters(item, '.') ' ';
+  counter-increment: item;
+}
+
+.notices {
+  padding: 1px 1px 1px 30px;
+  margin: 15px 0;
+}
+
+.notices.yellow {
+  border-left: 10px solid #f0ad4e;
+  background: #fcf8f2;
+  color: #df8a13;
+}
+
+.notices.red {
+  border-left: 10px solid #d9534f;
+  background: #fdf7f7;
+  color: #b52b27;
+}
+
+.notices.blue {
+  border-left: 10px solid #5bc0de;
+  background: #f4f8fa;
+  color: #28a1c5;
+}
+
+.notices.green {
+  border-left: 10px solid #5cb85c;
+  background: #f1f9f1;
+  color: #3d8b3d;
+}
+
+.mathjax--block {
+  float: inherit;
+  display: block;
+}
