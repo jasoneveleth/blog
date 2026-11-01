@@ -26,6 +26,7 @@ pub fn main(init: std.process.Init) !void {
             const src = try std.Io.Dir.cwd().readFileAlloc(init.io, cmd, init.gpa, .limited(4 * 1024 * 1024));
             defer init.gpa.free(src);
             const parsed = try parse.parse(src, init.gpa);
+            defer parsed.deinit();
             const body_result = try render.renderBody(&parsed, init.gpa, "");
             defer init.gpa.free(body_result.html);
             std.debug.print("title: {s}\n", .{parsed.frontmatter.title});
@@ -58,6 +59,7 @@ fn renderPost(
     defer init.gpa.free(src);
 
     const parsed = try parse.parse(src, init.gpa);
+    defer parsed.deinit();
 
     // Always render with empty prepath; apply prepath substitution as post-process.
     const body_result = try render.renderBody(&parsed, init.gpa, "");
@@ -229,6 +231,7 @@ fn buildAll(
             const src = try std.Io.Dir.cwd().readFileAlloc(init.io, md_path, init.gpa, .limited(4 * 1024 * 1024));
             defer init.gpa.free(src);
             const parsed = try parse.parse(src, init.gpa);
+            defer parsed.deinit();
             const stem = rel[0 .. rel.len - 3];
             const url = try std.fmt.allocPrint(init.gpa, "{s}/{s}/", .{ base_url, stem });
             const fm = parsed.frontmatter;

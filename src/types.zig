@@ -200,4 +200,8 @@ pub const Parsed = struct {
         const s = node.start.into();
         return self.text[s .. s + node.len];
     }
+
+    pub fn deinit(self: @This()) void {
+        self.arena.deinit();
+    }
 };
