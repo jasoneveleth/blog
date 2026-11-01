@@ -8,22 +8,38 @@ pub fn main(init: std.process.Init) !void {
     var args = std.process.Args.iterate(init.minimal.args);
     _ = args.next();
 
-    const cmd = args.next() orelse {
-        usage();
-        return;
-    };
+    const first = args.next();
 
-    if (std.mem.eql(u8, cmd, "build")) {
-        const content_dir = args.next() orelse "content";
-        const dist_dir = args.next() orelse "dist";
-        const tmpl_dir = args.next() orelse "content/html";
-        const prepath = args.next() orelse "";
-        try buildAll(init, content_dir, dist_dir, tmpl_dir, prepath);
+    if (first == null or std.mem.startsWith(u8, first.?, "--")) {
+        var content_dir: []const u8 = "content";
+        var dist_dir: []const u8 = "docs";
+        var tmpl_dir: []const u8 = "content/html";
+        var url_prefix: []const u8 = "blog";
+
+        var cur = first;
+        while (cur) |arg| : (cur = args.next()) {
+            if (flagValue(arg, "--content-dir")) |v| {
+                content_dir = v;
+            } else if (flagValue(arg, "--dist-dir")) |v| {
+                dist_dir = v;
+            } else if (flagValue(arg, "--tmpl-dir")) |v| {
+                tmpl_dir = v;
+            } else if (flagValue(arg, "--url-prefix")) |v| {
+                url_prefix = v;
+            } else {
+                std.debug.print("unknown flag: {s}\n", .{arg});
+                usage();
+                return;
+            }
+        }
+
+        try buildAll(init, content_dir, dist_dir, tmpl_dir, url_prefix);
     } else {
+        const md_path = first.?;
         const out_path = args.next();
-        const tmpl_dir = args.next() orelse "content/html";
+
         if (out_path == null) {
-            const src = try std.Io.Dir.cwd().readFileAlloc(init.io, cmd, init.gpa, .limited(4 * 1024 * 1024));
+            const src = try std.Io.Dir.cwd().readFileAlloc(init.io, md_path, init.gpa, .limited(4 * 1024 * 1024));
             defer init.gpa.free(src);
             const parsed = try parse.parse(src, init.gpa);
             defer parsed.deinit();
@@ -34,16 +50,33 @@ pub fn main(init: std.process.Init) !void {
                 parsed.nodes.items.len, body_result.html.len, body_result.hasmath, body_result.hascode,
             });
         } else {
-            try renderPost(init, cmd, out_path.?, tmpl_dir, "");
+            var tmpl_dir: []const u8 = "content/html";
+            while (args.next()) |arg| {
+                if (flagValue(arg, "--tmpl-dir")) |v| {
+                    tmpl_dir = v;
+                } else {
+                    std.debug.print("unknown flag: {s}\n", .{arg});
+                    usage();
+                    return;
+                }
+            }
+            try renderPost(init, md_path, out_path.?, tmpl_dir, "");
         }
     }
+}
+
+fn flagValue(arg: []const u8, flag: []const u8) ?[]const u8 {
+    if (arg.len > flag.len and std.mem.startsWith(u8, arg, flag) and arg[flag.len] == '=')
+        return arg[flag.len + 1 ..];
+    return null;
 }
 
 fn usage() void {
     std.debug.print(
         \\usage:
-        \\  blog <file.md> [out.html] [template_dir]
-        \\  blog build [content_dir] [dist_dir] [template_dir] [prepath]
+        \\  blog [--content-dir=content] [--dist-dir=docs] [--tmpl-dir=content/html] [--url-prefix=blog]
+        \\  blog <file.md>
+        \\  blog <file.md> <out.html> [--tmpl-dir=content/html]
         \\
     , .{});
 }
