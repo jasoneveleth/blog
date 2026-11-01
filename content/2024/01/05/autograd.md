@@ -9,7 +9,7 @@ githubsource = "https://github.com/jasoneveleth/blog/blob/dev/2024/01/05/autogra
 @@toc@@
 
 @@warn
-(Check out my new follow up post: [more gradient descent](/2024/04/07/more-gradient-descent).) This post is correct but contains some misleading statements that I've labeled with an astricks*, and warnings at the beginning of each section. I wrote this post as I was learning differential geometry, thank you for joining me on this journey.
+(Check out my new follow up post: [more gradient descent](/2024/04/07/more-gradient-descent).) This post is correct but contains some misleading statements that I've labeled with a dagger†, and warnings at the beginning of each section. I wrote this post as I was learning differential geometry, thank you for joining me on this journey.
 @@
 
 # What this post is about
@@ -64,12 +64,12 @@ There are several things to take away from this code snippet. We see that in bac
 # What are those `Jt_f(x, gt)` functions?
 
 @@warn
-I make three comments (labeled with an astricks*) that make it seem like the `Jt_func` is an inverse map of the derivative (i.e. a map from the tangent space of the output to the tangent space of the input). The function is just a efficient method of evaluated the transpose of the derivative on $g^{\intercal}$, and since the derivative isn't guaranteed to be orthogonal, it is not an inverse map. It just so happens that $\texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal})^{\intercal}$ is the steepest ascent when $\bm{g}$ is the value in our backwards mode differentiation.
+I make three comments (labeled with a dagger†) that make it seem like the `Jt_func` is an inverse map of the derivative (i.e. a map from the tangent space of the output to the tangent space of the input). The function is just a efficient method of evaluated the transpose of the derivative on $g^{\intercal}$, and since the derivative isn't guaranteed to be orthogonal, it is not an inverse map. It just so happens that $\texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal})^{\intercal}$ is the steepest ascent when $\bm{g}$ is the value in our backwards mode differentiation.
 @@
 
 I'm borrowing the transpose vector Jacobian product (`Jt`) from [JAX documentation](https://jax.readthedocs.io/en/latest/notebooks/autodiff_cookbook.html#jacobian-vector-products-jvps-aka-forward-mode-autodiff). I keep the notation the same so if you read the JAX documentation, their notation will be familiar. *The next few paragraphs are meant to click later in the post; please don't give up just because it doesn't quite make sense now.*
 
-When looking at a function call like `Jt_f(x, gt)`, the $\bm{x}$ tells us where in the input space of some $f:\mathbb{R}^{n}\to \mathbb{R}^{m}$ we are, and, morally[^1] , $\bm{g}^{\intercal}$  is a direction in the output space of that $f$. `Jt_func` turns that direction in the output space, to a direction of the gradient in the input space.* Here's a picture:
+When looking at a function call like `Jt_f(x, gt)`, the $\bm{x}$ tells us where in the input space of some $f:\mathbb{R}^{n}\to \mathbb{R}^{m}$ we are, and, morally[^1] , $\bm{g}^{\intercal}$  is a direction in the output space of that $f$. `Jt_func` turns that direction in the output space, to a direction of the gradient in the input space.† Here's a picture:
 
 @@figure
 @@im-800
@@ -79,7 +79,7 @@ When looking at a function call like `Jt_f(x, gt)`, the $\bm{x}$ tells us where 
 Figure 1: On the right we have our output space. I named a vector in this space $\bm{g}^{\intercal}$ (later I will explain why I use the transpose notation). For now, we will use it as a row vector. On the left, we see the output of `Jt_f(x, gt)`, which is an increment to the input.
 @@
 
-You can see the direction $\bm{g}^{\intercal}$ in the output being transformed into the input space.* This is how we propagate the gradient through `func`. If you have the gradient of $f$ at $\bm{x}$, you can compute $$
+You can see the direction $\bm{g}^{\intercal}$ in the output being transformed into the input space.† This is how we propagate the gradient through `func`. If you have the gradient of $f$ at $\bm{x}$, you can compute $$
 \texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal}) = \bm{g}^{\intercal} \left(\left.\frac{d}{d \bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}\right)
 $$ Where $\left.\frac{d}{d\bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}$ is the Jacobian matrix of $f$ at $\bm{x}$. [Leibniz's notation](https://en.wikipedia.org/wiki/Leibniz%27s_notation) is insane, so we're going to adopt the notation from [Spivak](http://www.strangebeautiful.com/other-texts/spivak-calc-manifolds.pdf), and [other](http://ceres-solver.org/spivak_notation.html) [people](http://www.vendian.org/mncharity/dir3/dxdoc/) [agree](https://mitpress.mit.edu/9780262019347/functional-differential-geometry/). Let me clarify the notation a little bit more. In math, we often confuse functions and expressions, so if $h(x) := 2x + 5$, we would talk about the function $h(x)$, when we should be talking about the function $h$. Normally the derivative operator applies to expressions, so we write $\frac{d}{dx}(2x + 5)$ or $\frac{d}{dx}h(x)$ which means "expand $h$ into an expression and then differentiate the expression". In the notation I’m using, the derivative operator applies to functions, we write $\frac{d}{dx}h$, which is a new function with same input type. We abbreviate $\frac{d}{dx}$ as $D$. Thus, let $$(Df)(\bm{x}) = Df(\bm{x}) = \left.\frac{d}{d\bm{y} }f(\bm{y})\right|_{\bm{y}=\bm{x}}$$ be the Jacobian matrix. Note that I'll leave off the parens and assume that $D$ always applies to it's function before we apply the function to $x$. Finally, let's rewrite the equation: $$
 \texttt{Jt\_func}(\bm{x}, \bm{g}^{\intercal}) := \bm{g}^{\intercal}Df(\bm{x}).
@@ -200,7 +200,7 @@ Df(\bm{x})^{\intercal}:W^*\to V^*\\
 Df(\bm{x})^{\intercal}(\bm{g})=\bm{g}\circ Df(\bm{x})
 \end{align*}
 $$
-Where $\bm{g}\in W^*$. It is important to realize $\bm{g}$ isn't special.* It can be any element of $W^{*}$ . We're now dealing with the dual space. Elements are often referred to as covectors. They are a linear map from their "normal" space to the underlying field. Thus, $\bm{g}:W\to \mathbb{R}$. This means the types the expression make sense: $\bm{g}\circ Df(\bm{x}):V\to \mathbb{R}$, or $\bm{g}\circ Df(\bm{x}):V^*$ . Often people think of the dual space as linear functions that are "taking the inner product with a vector". So $$
+Where $\bm{g}\in W^*$. It is important to realize $\bm{g}$ isn't special.† It can be any element of $W^{*}$ . We're now dealing with the dual space. Elements are often referred to as covectors. They are a linear map from their "normal" space to the underlying field. Thus, $\bm{g}:W\to \mathbb{R}$. This means the types the expression make sense: $\bm{g}\circ Df(\bm{x}):V\to \mathbb{R}$, or $\bm{g}\circ Df(\bm{x}):V^*$ . Often people think of the dual space as linear functions that are "taking the inner product with a vector". So $$
 \bm{g}(\bm{x}) = \langle \bm{g},\bm{x} \rangle.
 $$  This is especially useful because we can then represent $\bm{g}$ as a row vector, which, when combined with a column vector from the nondual space, gives the inner product. This is the reason I've been so careful with keeping the `gt` of shape `(1,n)` because these $\bm{g}$s are members of the dual space and are actually row vectors. From now on, I'll use $\bm{g}^{\intercal}$ as a reminder that it's a row vector. 
 

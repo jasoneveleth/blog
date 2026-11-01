@@ -15,6 +15,7 @@ fn parseDate(s: []const u8) ?types.Date {
 
 fn parseFrontmatter(src: []const u8, allocator: std.mem.Allocator) struct { fm: types.Frontmatter, body_start: usize } {
     var fm = types.Frontmatter{};
+
     if (!std.mem.startsWith(u8, src, "+++\n")) return .{ .fm = fm, .body_start = 0 };
 
     var i: usize = 4;
@@ -270,11 +271,16 @@ fn parseAtDirective(parser: *types.Parser) !types.NodeID {
     while (!parser.atEnd() and parser.src[parser.pos] != '\n' and parser.src[parser.pos] != '@') {
         parser.advance();
     }
+    // Trim trailing whitespace from name (e.g. "@@warn  \n" → name "warn")
+    var name_end = parser.pos;
+    while (name_end > name_start and (parser.src[name_end - 1] == ' ' or parser.src[name_end - 1] == '\t')) {
+        name_end -= 1;
+    }
     const name = types.BufSlice{
         .start = types.BufInd.from(name_start),
-        .end = types.BufInd.from(parser.pos),
+        .end = types.BufInd.from(name_end),
     };
-    const name_str = parser.src[name_start..parser.pos];
+    const name_str = parser.src[name_start..name_end];
 
     // self-closing: @@name@@
     if (!parser.atEnd() and parser.src[parser.pos] == '@') {
@@ -560,9 +566,32 @@ fn parseRawInline(parser: *types.Parser, end_pos: usize) !types.NodeID {
     });
 }
 
+// Scan ahead to check if there's a matching delimiter before \n or end_pos.
+// Skips inline math spans ($ ... $) so * inside math is not mistaken for close.
+fn hasInlineClose(parser: *const types.Parser, start: usize, end_pos: usize, delim: u8) bool {
+    var i = start + 1;
+    var in_math = false;
+    while (i < end_pos and i < parser.src.len) {
+        const c = parser.src[i];
+        if (c == '\n') break;
+        if (c == '$') {
+            in_math = !in_math;
+        } else if (!in_math and c == delim) {
+            return true;
+        }
+        i += 1;
+    }
+    return false;
+}
+
 fn parseBold(parser: *types.Parser, end_pos: usize) !types.NodeID {
     const start = parser.pos;
-    parser.advance(); // skip *
+    // If no matching * before \n, treat * as literal text.
+    if (!hasInlineClose(parser, start, end_pos, '*')) {
+        parser.advance();
+        return parser.new_node(.{ .kind = .text, .start = types.BufInd.from(start), .len = 1 });
+    }
+    parser.advance(); // skip opening *
     var scratch = types.Scratch.init(parser);
     while (parser.pos < end_pos and !parser.atEnd()) {
         const c = parser.src[parser.pos];
@@ -580,7 +609,12 @@ fn parseBold(parser: *types.Parser, end_pos: usize) !types.NodeID {
 
 fn parseItalic(parser: *types.Parser, end_pos: usize) !types.NodeID {
     const start = parser.pos;
-    parser.advance(); // skip _
+    // If no matching _ before \n, treat _ as literal text.
+    if (!hasInlineClose(parser, start, end_pos, '_')) {
+        parser.advance();
+        return parser.new_node(.{ .kind = .text, .start = types.BufInd.from(start), .len = 1 });
+    }
+    parser.advance(); // skip opening _
     var scratch = types.Scratch.init(parser);
     while (parser.pos < end_pos and !parser.atEnd()) {
         const c = parser.src[parser.pos];
@@ -656,11 +690,17 @@ fn parseImage(parser: *types.Parser) !types.NodeID {
     if (!parser.atEnd() and parser.src[parser.pos] == '(') {
         parser.advance();
         url_start = parser.pos;
-        while (!parser.atEnd() and parser.src[parser.pos] != ')' and parser.src[parser.pos] != '\n') {
+        // Allow ) on the next line (e.g. data: URIs with long base64)
+        while (!parser.atEnd() and parser.src[parser.pos] != ')') {
             parser.advance();
         }
         url_end = parser.pos;
+        // Trim trailing whitespace from URL (newline before closing ))
+        while (url_end > url_start and (parser.src[url_end - 1] == '\n' or parser.src[url_end - 1] == '\r' or parser.src[url_end - 1] == ' ' or parser.src[url_end - 1] == '\t')) {
+            url_end -= 1;
+        }
         if (!parser.atEnd() and parser.src[parser.pos] == ')') parser.advance();
+        if (!parser.atEnd() and parser.src[parser.pos] == '\n') parser.advance();
     }
     return parser.new_node(.{
         .kind = .{ .image = .{

@@ -281,7 +281,6 @@ const Renderer = struct {
                 try r.write("</div>\n");
             },
             .toc => try r.renderToc(),
-            // comments deferred to after footnote defs (matches reference order)
             .comments => r.has_comments = true,
             .raw_block => {
                 try r.write(r.parsed.getNodeText(node));
@@ -389,7 +388,6 @@ const Renderer = struct {
                 else => {},
             }
         }
-        // Render comments script after footnote defs
         if (r.has_comments) try r.write(COMMENTS_SCRIPT ++ "\n");
     }
 };

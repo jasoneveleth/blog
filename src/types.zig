@@ -75,7 +75,7 @@ pub const Frontmatter = struct {
 
 pub const Scratch = struct {
     parser: *Parser,
-    scratch: [64]NodeID = undefined,
+    scratch: [128]NodeID = undefined,
     count: usize = 0,
 
     pub fn init(parser: *Parser) Scratch {
