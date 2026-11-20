@@ -793,7 +793,8 @@ code {
 
 .archive-page .franklin-content p {
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  grid-template-columns: auto 1fr;
+  column-gap: 1ch;
   align-items: baseline;
   font-size: 1rem;
   margin-bottom: 0.3em;
