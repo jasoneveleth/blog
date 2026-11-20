@@ -40,11 +40,12 @@ fn parseFrontmatter(src: []const u8, allocator: std.mem.Allocator) struct { fm: 
         const val_raw = std.mem.trim(u8, src[val_start..i], " \t");
         if (i < src.len) i += 1;
 
-        if (std.mem.eql(u8, key, "title") or std.mem.eql(u8, key, "rss") or std.mem.eql(u8, key, "githubsource")) {
+        if (std.mem.eql(u8, key, "title") or std.mem.eql(u8, key, "rss") or std.mem.eql(u8, key, "githubsource") or std.mem.eql(u8, key, "pageclass")) {
             var v = val_raw;
             if (v.len >= 2 and v[0] == '"' and v[v.len - 1] == '"') v = v[1 .. v.len - 1];
             if (std.mem.eql(u8, key, "title")) fm.title = v
             else if (std.mem.eql(u8, key, "rss")) fm.rss = v
+            else if (std.mem.eql(u8, key, "pageclass")) fm.pageclass = v
             else fm.githubsource = v;
         } else if (std.mem.eql(u8, key, "date")) {
             if (parseDate(val_raw)) |d| fm.date = d;

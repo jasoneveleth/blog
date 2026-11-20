@@ -71,6 +71,7 @@ pub const Frontmatter = struct {
     descr: bool = false,
     draft: bool = false,
     githubsource: ?[]const u8 = null,
+    pageclass: ?[]const u8 = null,
 };
 
 pub const Scratch = struct {

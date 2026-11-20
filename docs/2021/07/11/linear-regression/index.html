@@ -35,21 +35,29 @@
   <title>Linear Regression</title>
 </head>
 <body >
-<nav class="flex-container blog-nav">
-  <!-- type-a have a fixed width which never changes -->
-  <!-- type-b will grow up to a point -->
-  <!-- type-c start at 0 and absorb remaining space-->
-  <!-- https://jsfiddle.net/dehsq3jb/ -->
-  <div class="type-c"></div>
-  <div class="type-b link-spacer"></div>
-  <div class="type-a logo"><a href="https://www.jasoneveleth.com">Jason's</a> <a href="https://www.jasoneveleth.com/blog">Blog</a></div>
-
-  <div class="type-b content-spacer"></div>
-
-  <div class="type-a nav-link"><a href="/blog/search">Search</a></div>
-  <div class="type-b link-spacer"></div>
-  <div class="type-c"></div>
+<nav class="blog-nav">
+  <div class="nav-left">
+    
+    <a href="/blog/">← All posts</a>
+    
+    
+  </div>
+  <div class="nav-right">
+    <a href="/blog/search">Search</a>
+    <button class="copy-url-btn" onclick="copyURL(this)" title="Copy link">
+      <svg class="icon-link" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      <svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+  </div>
 </nav>
+<script>
+function copyURL(btn) {
+  navigator.clipboard.writeText(window.location.href).then(function() {
+    btn.classList.add('copied');
+    setTimeout(function() { btn.classList.remove('copied'); }, 1500);
+  });
+}
+</script>
 
 <main id="panel">
 

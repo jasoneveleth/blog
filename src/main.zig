@@ -111,6 +111,7 @@ fn renderPost(
         try init.gpa.dupe(u8, date_str);
     defer init.gpa.free(last_modified);
 
+    const is_index = std.mem.eql(u8, std.fs.path.basename(md_path), "index.md");
     const ctx = template.Context{
         .title = parsed.frontmatter.title,
         .date = date_str,
@@ -120,6 +121,8 @@ fn renderPost(
         .hasmath = body_result.hasmath,
         .hascode = body_result.hascode,
         .descr = parsed.frontmatter.descr,
+        .pageclass = parsed.frontmatter.pageclass,
+        .is_index = is_index,
     };
 
     var page_buf: std.ArrayListUnmanaged(u8) = .empty;

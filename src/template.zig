@@ -10,6 +10,8 @@ pub const Context = struct {
     hasmath: bool = false,
     hascode: bool = false,
     descr: bool = false,
+    pageclass: ?[]const u8 = null,
+    is_index: bool = false,
 
     fn fillValue(ctx: *const Context, key: []const u8) []const u8 {
         if (std.mem.eql(u8, key, "title")) return ctx.title;
@@ -18,6 +20,7 @@ pub const Context = struct {
         if (std.mem.eql(u8, key, "fd_mtime")) return ctx.last_modified;
         if (std.mem.eql(u8, key, "githubsource")) return ctx.githubsource orelse "";
         if (std.mem.eql(u8, key, "description")) return ctx.description;
+        if (std.mem.eql(u8, key, "pageclass")) return ctx.pageclass orelse "";
         return "";
     }
 
@@ -32,6 +35,7 @@ pub const Context = struct {
         if (std.mem.startsWith(u8, directive, "ifdef ")) {
             const key = std.mem.trim(u8, directive[6..], " \t");
             if (std.mem.eql(u8, key, "descr")) return ctx.descr;
+            if (std.mem.eql(u8, key, "pageclass")) return ctx.pageclass != null;
             return false;
         }
         if (std.mem.startsWith(u8, directive, "isdef ")) {
@@ -40,10 +44,14 @@ pub const Context = struct {
             return false;
         }
         if (std.mem.startsWith(u8, directive, "isnotpage ")) {
-            return true; // for posts, we're never on /tag/* or other excluded pages
+            const key = std.mem.trim(u8, directive[10..], " \t");
+            if (std.mem.eql(u8, key, "index.md")) return !ctx.is_index;
+            return true;
         }
         if (std.mem.startsWith(u8, directive, "ispage ")) {
-            return false; // posts aren't search.md
+            const key = std.mem.trim(u8, directive[7..], " \t");
+            if (std.mem.eql(u8, key, "index.md")) return ctx.is_index;
+            return false;
         }
         return false;
     }
