@@ -239,11 +239,12 @@ nav {
   color: var(--blue);
   display: flex;
   align-items: center;
+  gap: 0.3em;
   font-weight: 700;
 }
 
 .copy-url-btn .icon-check { display: none; }
-.copy-url-btn.copied .icon-link { display: none; }
+.copy-url-btn.copied .icon-clipboard { display: none; }
 .copy-url-btn.copied .icon-check { display: flex; }
 
 .icon-in-text {
@@ -369,7 +370,7 @@ h3 {
 }
 
 .date {
-  font-family: monospace;
+  font-variant-numeric: tabular-nums;
   color: rgb(75, 85, 99);
 }
 
@@ -770,10 +771,17 @@ code {
     ARCHIVE PAGE
 ================================================================== */
 
+.blog-description {
+  font-size: 1rem;
+  color: var(--text-grey);
+  margin-top: 0.25em;
+  margin-bottom: 2em;
+}
+
 .archive-page .post-title {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
-  line-height: 2.1rem;
+  line-height: 2.4rem;
 }
 
 .archive-page .franklin-content h2 {

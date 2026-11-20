@@ -1,7 +1,9 @@
 +++
-title = "Archive"
+title = "Jason's Blog"
 pageclass = "archive-page"
 +++
+
+~~~<p class="blog-description">My writing on math, computer science, and whatever I'm currently interested in.</p>~~~
 
 ## 2025
 ~~~<span class='date'>11/03</span>~~~ [Solving the Game of 24](2025/11/03/game-of-24-journey)
