@@ -24,12 +24,15 @@
   <!-- not used -->
   {{insert style.html }}
 
-  <link href="/css/franklin.css" rel="stylesheet">
-  <link href="/css/global.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+
+  <link href="/css/blog.css" rel="stylesheet">
 
   <title>{{ fill title }}</title>
 </head>
-<body>
+<body {{ifdef pageclass}}class="{{fill pageclass}}"{{end}}>
 {{insert nav.html}}
 <h1 class="post-title">{{fill title}}</h1>
 

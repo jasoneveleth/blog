@@ -1,5 +1,6 @@
 +++
 title = "Archive"
+pageclass = "archive-page"
 +++
 
 ## 2025
