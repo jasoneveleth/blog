@@ -773,7 +773,7 @@ code {
 
 .blog-description {
   font-size: 1rem;
-  color: var(--text-grey);
+  color: #6b7280;
   margin-top: 0.25em;
   margin-bottom: 2em;
 }
@@ -792,6 +792,9 @@ code {
 }
 
 .archive-page .franklin-content p {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
   font-size: 1rem;
   margin-bottom: 0.3em;
   line-height: 1.5em;
