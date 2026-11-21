@@ -5,6 +5,8 @@ pageclass = "archive-page"
 
 ~~~<p class="blog-description">My writing on math, computer science, and whatever I'm currently interested in.</p>~~~
 
+~~~<div class="search-wrap"><input type="search" id="search-input" class="search-input" placeholder="Search posts…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Search posts"><p id="search-empty" class="search-empty" hidden>No matching posts.</p></div>~~~
+
 ## 2025
 ~~~<span class='date'>11/03</span>~~~ [Solving the Game of 24](2025/11/03/game-of-24-journey)
 

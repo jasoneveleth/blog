@@ -60,7 +60,7 @@ pub fn main(init: std.process.Init) !void {
                     return;
                 }
             }
-            try renderPost(init, md_path, out_path.?, tmpl_dir, "");
+            try renderPost(init, md_path, out_path.?, tmpl_dir, "", "");
         }
     }
 }
@@ -87,6 +87,7 @@ fn renderPost(
     out_path: []const u8,
     tmpl_dir: []const u8,
     prepath: []const u8,
+    search_index: []const u8,
 ) !void {
     const src = try std.Io.Dir.cwd().readFileAlloc(init.io, md_path, init.gpa, .limited(4 * 1024 * 1024));
     defer init.gpa.free(src);
@@ -123,6 +124,7 @@ fn renderPost(
         .descr = parsed.frontmatter.descr,
         .pageclass = parsed.frontmatter.pageclass,
         .is_index = is_index,
+        .search_index = search_index,
     };
 
     var page_buf: std.ArrayListUnmanaged(u8) = .empty;
@@ -201,6 +203,51 @@ fn applyPrepath(html: []const u8, prepath: []const u8, gpa: std.mem.Allocator) !
 
 const SitemapEntry = struct { url: []u8, date: []u8 };
 
+const PostInfo = struct { title: []u8, url: []u8, date: []u8, content: []u8 };
+
+// Build the JSON array consumed by the client search engine (window.SEARCH_INDEX).
+// We escape '<' as well so the inline <script> block can't be terminated early.
+fn buildSearchIndex(gpa: std.mem.Allocator, posts: []const PostInfo) ![]u8 {
+    var buf: std.ArrayListUnmanaged(u8) = .empty;
+    errdefer buf.deinit(gpa);
+    try buf.append(gpa, '[');
+    for (posts, 0..) |p, i| {
+        if (i > 0) try buf.append(gpa, ',');
+        try buf.appendSlice(gpa, "{\"title\":");
+        try jsonString(gpa, &buf, p.title);
+        try buf.appendSlice(gpa, ",\"url\":");
+        try jsonString(gpa, &buf, p.url);
+        try buf.appendSlice(gpa, ",\"date\":");
+        try jsonString(gpa, &buf, p.date);
+        try buf.appendSlice(gpa, ",\"content\":");
+        try jsonString(gpa, &buf, p.content);
+        try buf.append(gpa, '}');
+    }
+    try buf.append(gpa, ']');
+    return buf.toOwnedSlice(gpa);
+}
+
+fn jsonString(gpa: std.mem.Allocator, buf: *std.ArrayListUnmanaged(u8), s: []const u8) !void {
+    try buf.append(gpa, '"');
+    for (s) |c| switch (c) {
+        '"' => try buf.appendSlice(gpa, "\\\""),
+        '\\' => try buf.appendSlice(gpa, "\\\\"),
+        '\n' => try buf.appendSlice(gpa, "\\n"),
+        '\r' => try buf.appendSlice(gpa, "\\r"),
+        '\t' => try buf.appendSlice(gpa, "\\t"),
+        '<' => try buf.appendSlice(gpa, "\\u003c"),
+        else => if (c < 0x20) {
+            const hex = "0123456789abcdef";
+            try buf.appendSlice(gpa, "\\u00");
+            try buf.append(gpa, hex[c >> 4]);
+            try buf.append(gpa, hex[c & 0xf]);
+        } else {
+            try buf.append(gpa, c);
+        },
+    };
+    try buf.append(gpa, '"');
+}
+
 fn buildAll(
     init: std.process.Init,
     content_dir: []const u8,
@@ -231,6 +278,17 @@ fn buildAll(
         sitemap_entries.deinit(init.gpa);
     }
 
+    var posts: std.ArrayListUnmanaged(PostInfo) = .empty;
+    defer {
+        for (posts.items) |p| { init.gpa.free(p.title); init.gpa.free(p.url); init.gpa.free(p.date); init.gpa.free(p.content); }
+        posts.deinit(init.gpa);
+    }
+
+    // The index page is rendered last so it can embed the collected search index.
+    var index_md: ?[]u8 = null;
+    var index_out: ?[]u8 = null;
+    defer { if (index_md) |p| init.gpa.free(p); if (index_out) |p| init.gpa.free(p); }
+
     // Walk content dir and render markdown files.
     var dir = try std.Io.Dir.cwd().openDir(init.io, content_dir, .{ .iterate = true });
     defer dir.close(init.io);
@@ -251,16 +309,23 @@ fn buildAll(
         defer init.gpa.free(rel);
 
         const md_path = try std.fmt.allocPrint(init.gpa, "{s}/{s}", .{ content_dir, rel });
-        defer init.gpa.free(md_path);
         const out_path = try getOutPath(init.gpa, dist_dir, rel);
+
+        // Defer the index page: it needs the full search index, built below.
+        if (std.mem.eql(u8, std.fs.path.basename(rel), "index.md")) {
+            index_md = md_path;
+            index_out = out_path;
+            continue;
+        }
+        defer init.gpa.free(md_path);
         defer init.gpa.free(out_path);
 
-        renderPost(init, md_path, out_path, tmpl_dir, prepath) catch |e| {
+        renderPost(init, md_path, out_path, tmpl_dir, prepath, "") catch |e| {
             std.debug.print("error rendering {s}: {}\n", .{ md_path, e });
             continue;
         };
 
-        // Collect sitemap entry for posts (depth-3 slug paths only).
+        // Collect sitemap + search entries for posts (depth-3 slug paths only).
         var slash_count: usize = 0;
         for (rel) |c| if (c == '/') { slash_count += 1; };
         if (slash_count == 3) {
@@ -269,14 +334,31 @@ fn buildAll(
             const parsed = try parse.parse(src, init.gpa);
             defer parsed.deinit();
             const stem = rel[0 .. rel.len - 3];
-            const url = try std.fmt.allocPrint(init.gpa, "{s}/{s}/", .{ base_url, stem });
             const fm = parsed.frontmatter;
+            const url = try std.fmt.allocPrint(init.gpa, "{s}/{s}/", .{ base_url, stem });
             const date = try std.fmt.allocPrint(init.gpa, "{d:0>4}-{d:0>2}-{d:0>2}", .{ fm.date.year, fm.date.month, fm.date.day });
             try sitemap_entries.append(init.gpa, .{ .url = url, .date = date });
+
+            if (!fm.draft) {
+                try posts.append(init.gpa, .{
+                    .title = try init.gpa.dupe(u8, fm.title),
+                    .url = try std.fmt.allocPrint(init.gpa, "/{s}/", .{stem}),
+                    .date = try std.fmt.allocPrint(init.gpa, "{d:0>4}-{d:0>2}-{d:0>2}", .{ fm.date.year, fm.date.month, fm.date.day }),
+                    .content = try render.extractPlainText(&parsed, init.gpa),
+                });
+            }
         }
     }
 
     try writeSitemap(init, dist_dir, sitemap_entries.items);
+
+    if (index_md) |imd| {
+        const index_json = try buildSearchIndex(init.gpa, posts.items);
+        defer init.gpa.free(index_json);
+        renderPost(init, imd, index_out.?, tmpl_dir, prepath, index_json) catch |e| {
+            std.debug.print("error rendering {s}: {}\n", .{ imd, e });
+        };
+    }
 }
 
 fn writeSitemap(init: std.process.Init, dist_dir: []const u8, entries: []const SitemapEntry) !void {

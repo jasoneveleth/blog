@@ -428,3 +428,56 @@ pub fn renderBody(
     r.deinit();
     return .{ .html = html, .hasmath = hasmath, .hascode = hascode };
 }
+
+// Walk the whole document tree and collect readable plaintext for the search
+// index. Block-level nodes are separated by spaces; raw HTML and math source are
+// skipped so the index stays close to the rendered prose.
+pub fn extractPlainText(parsed: *const types.Parsed, allocator: std.mem.Allocator) ![]u8 {
+    var out: std.ArrayListUnmanaged(u8) = .empty;
+    errdefer out.deinit(allocator);
+    try plainNode(parsed, parsed.root, &out, allocator);
+    return out.toOwnedSlice(allocator);
+}
+
+fn plainSpace(out: *std.ArrayListUnmanaged(u8), allocator: std.mem.Allocator) !void {
+    if (out.items.len > 0 and out.items[out.items.len - 1] != ' ')
+        try out.append(allocator, ' ');
+}
+
+fn plainSlice(parsed: *const types.Parsed, ns: types.NodeSlice, out: *std.ArrayListUnmanaged(u8), allocator: std.mem.Allocator) error{OutOfMemory}!void {
+    for (parsed.getSlice(ns)) |child_id| try plainNode(parsed, child_id, out, allocator);
+}
+
+fn plainNode(parsed: *const types.Parsed, id: types.NodeID, out: *std.ArrayListUnmanaged(u8), allocator: std.mem.Allocator) error{OutOfMemory}!void {
+    const node = parsed.getNode(id);
+    switch (node.kind) {
+        .doc => |ns| try plainSlice(parsed, ns, out, allocator),
+        .para => |ns| {
+            try plainSlice(parsed, ns, out, allocator);
+            try plainSpace(out, allocator);
+        },
+        .heading => |h| {
+            try plainSlice(parsed, h.content, out, allocator);
+            try plainSpace(out, allocator);
+        },
+        .list => |l| try plainSlice(parsed, l.items, out, allocator),
+        .list_item => |ns| {
+            try plainSlice(parsed, ns, out, allocator);
+            try plainSpace(out, allocator);
+        },
+        .blockquote => |ns| try plainSlice(parsed, ns, out, allocator),
+        .div => |d| try plainSlice(parsed, d.children, out, allocator),
+        .footnote_def => |f| try plainSlice(parsed, f.content, out, allocator),
+        .code_block => {
+            try out.appendSlice(allocator, parsed.getNodeText(node));
+            try plainSpace(out, allocator);
+        },
+        .bold => |ns| try plainSlice(parsed, ns, out, allocator),
+        .italic => |ns| try plainSlice(parsed, ns, out, allocator),
+        .link => |lk| try plainSlice(parsed, lk.content, out, allocator),
+        .image => |im| try out.appendSlice(allocator, parsed.getText(im.alt)),
+        .text, .code_inline, .escape => try out.appendSlice(allocator, parsed.getNodeText(node)),
+        // Skip math source, raw HTML blocks/inlines, toc, comments, footnote refs.
+        else => {},
+    }
+}

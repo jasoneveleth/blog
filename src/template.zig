@@ -12,8 +12,10 @@ pub const Context = struct {
     descr: bool = false,
     pageclass: ?[]const u8 = null,
     is_index: bool = false,
+    search_index: []const u8 = "", // JSON array of posts, injected on the index page
 
     fn fillValue(ctx: *const Context, key: []const u8) []const u8 {
+        if (std.mem.eql(u8, key, "searchindex")) return ctx.search_index;
         if (std.mem.eql(u8, key, "title")) return ctx.title;
         if (std.mem.eql(u8, key, "date")) return ctx.date;
         if (std.mem.eql(u8, key, "author")) return ctx.author;

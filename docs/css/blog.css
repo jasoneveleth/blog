@@ -802,6 +802,88 @@ code {
 }
 
 /* ==================================================================
+    SEARCH
+================================================================== */
+
+.search-wrap {
+  margin: 0.25em 0 0.75em;
+}
+
+.archive-page .franklin-content .search-wrap p {
+  display: block;
+}
+
+/* The archive `display: grid` rule outranks the UA [hidden] rule, so hidden
+   entries would stay visible without this. */
+.archive-page .franklin-content p[hidden] {
+  display: none;
+}
+
+/* Tighten the gap between the search bar and the first year heading. */
+.archive-page .franklin-content h2:first-of-type {
+  margin-top: 1em;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.35em 0.15em;
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-color);
+  transition: border-color 0.15s ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-grey);
+}
+
+.search-input:focus {
+  outline: none;
+  border-bottom-color: var(--blue);
+}
+
+.search-empty {
+  margin: 0.75em 0 0;
+  color: var(--text-grey);
+  font-size: 0.95rem;
+}
+
+/* Snippet that slides out from under a matched title. */
+.search-snippet {
+  grid-column: 2;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-0.4em);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #4b5563;
+  transition: max-height 0.25s ease, opacity 0.2s ease, transform 0.25s ease,
+    margin-top 0.25s ease;
+}
+
+.search-snippet.open {
+  max-height: 10em;
+  opacity: 1;
+  transform: none;
+  margin-top: 0.25em;
+  margin-bottom: 0.4em;
+}
+
+.search-snippet mark {
+  background: #fde68a;
+  color: inherit;
+  padding: 0 0.1em;
+  border-radius: 2px;
+}
+
+/* ==================================================================
     MEDIA QUERIES
 ================================================================== */
 
