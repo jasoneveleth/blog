@@ -30,6 +30,32 @@
 
   <link href="/css/blog.css" rel="stylesheet">
 
+  <!-- Runs in <head> so the theme is set before first paint (no flash). -->
+  <script>
+  (function() {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var saved = null;
+    // localStorage can throw (private mode, blocked storage); fall back to system.
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+    function apply(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.querySelectorAll('link.hljs-theme').forEach(function(l) {
+        l.disabled = l.getAttribute('data-theme-for') !== theme;
+      });
+    }
+    apply(saved === 'dark' || saved === 'light' ? saved : (mq.matches ? 'dark' : 'light'));
+    mq.addEventListener('change', function(e) {
+      if (!saved) apply(e.matches ? 'dark' : 'light');
+    });
+    window.toggleTheme = function() {
+      var cur = document.documentElement.getAttribute('data-theme');
+      saved = cur === 'dark' ? 'light' : 'dark';
+      apply(saved);
+      try { localStorage.setItem('theme', saved); } catch (e) {}
+    };
+  })();
+  </script>
+
   <title>{{ fill title }}</title>
 </head>
 <body {{ifdef pageclass}}class="{{fill pageclass}}"{{end}}>
